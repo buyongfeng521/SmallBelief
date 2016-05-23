@@ -1,0 +1,2 @@
+# SmallBelief
+My amateur coding
