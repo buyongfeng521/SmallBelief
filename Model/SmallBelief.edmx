@@ -4,7 +4,17 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SmallBeliefModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SmallBeliefModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="t_admin_user">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="user_psw" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_login_time" Type="datetime" />
+          <Property Name="create_time" Type="datetime" />
+        </EntityType>
         <EntityType Name="t_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -19,10 +29,10 @@
           <Property Name="create_time" Type="datetime" />
         </EntityType>
         <EntityContainer Name="SmallBeliefModelStoreContainer">
+          <EntitySet Name="t_admin_user" EntityType="Self.t_admin_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user" EntityType="Self.t_user" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SmallBeliefModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -41,7 +51,18 @@
         </EntityType>
         <EntityContainer Name="SmallBeliefEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="t_user" EntityType="Self.t_user" />
+          <EntitySet Name="t_admin_user" EntityType="SmallBeliefModel.t_admin_user" />
         </EntityContainer>
+        <EntityType Name="t_admin_user">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="user_psw" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_login_time" Type="DateTime" Precision="3" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -59,6 +80,17 @@
                 <ScalarProperty Name="user_phone" ColumnName="user_phone" />
                 <ScalarProperty Name="last_login_time" ColumnName="last_login_time" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_admin_user">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_admin_user">
+              <MappingFragment StoreEntitySet="t_admin_user">
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="last_login_time" ColumnName="last_login_time" />
+                <ScalarProperty Name="user_psw" ColumnName="user_psw" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

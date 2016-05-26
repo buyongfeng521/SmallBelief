@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormatModel\AjaxMsg.cs" />
+    <Compile Include="FormatModel\RetInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmallBelief.Context.cs">
       <AutoGen>True</AutoGen>
@@ -63,6 +65,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SmallBelief.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="StaticModel\OperateMsgModel.cs" />
+    <Compile Include="t_admin_user.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_user.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
@@ -95,6 +101,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CommonModel\" />
     <Folder Include="DTOModel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

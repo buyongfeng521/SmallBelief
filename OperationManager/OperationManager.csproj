@@ -77,19 +77,80 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="content\admin.html" />
+    <Content Include="content\boot\css\bootstrap-theme.css" />
+    <Content Include="content\boot\css\bootstrap-theme.min.css" />
+    <Content Include="content\boot\css\bootstrap.css" />
+    <Content Include="content\boot\css\bootstrap.min.css" />
+    <Content Include="content\boot\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="content\boot\js\bootstrap.js" />
+    <Content Include="content\boot\js\bootstrap.min.js" />
+    <Content Include="content\boot\js\npm.js" />
+    <Content Include="content\boot\js\umd\alert.js" />
+    <Content Include="content\boot\js\umd\button.js" />
+    <Content Include="content\boot\js\umd\carousel.js" />
+    <Content Include="content\boot\js\umd\collapse.js" />
+    <Content Include="content\boot\js\umd\dropdown.js" />
+    <Content Include="content\boot\js\umd\modal.js" />
+    <Content Include="content\boot\js\umd\popover.js" />
+    <Content Include="content\boot\js\umd\scrollspy.js" />
+    <Content Include="content\boot\js\umd\tab.js" />
+    <Content Include="content\boot\js\umd\tooltip.js" />
+    <Content Include="content\boot\js\umd\util.js" />
+    <Content Include="content\css\font-awesome.min.css" />
+    <Content Include="content\css\main.css" />
+    <Content Include="content\css\metisMenu.min.css" />
+    <Content Include="content\fonts\fontawesome-webfont.svg" />
+    <Content Include="content\js\jquery-2.2.4.min.js" />
+    <Content Include="content\js\jquery.MsgProcess.js" />
+    <Content Include="content\js\main.js" />
+    <Content Include="content\js\metisMenu.min.js" />
+    <Content Include="content\js\morris-data.js" />
+    <Content Include="content\js\morris.min.js" />
+    <Content Include="content\js\raphael-min.js" />
     <Content Include="Global.asax" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AjaxRequestAttribute.cs" />
+    <Compile Include="Models\LoginCheckAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
+    <Content Include="Views\_Layout.cshtml" />
+    <Content Include="content\boot\css\bootstrap-theme.css.map" />
+    <Content Include="content\boot\css\bootstrap.css.map" />
+    <Content Include="content\boot\css\bootstrap.min.css.map" />
+    <Content Include="content\boot\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="content\boot\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="content\boot\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="content\boot\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="content\fonts\fontawesome-webfont.eot" />
+    <Content Include="content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="content\fonts\fontawesome-webfont.woff" />
+    <Content Include="content\fonts\FontAwesome.otf" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Settings\AdminUser.cshtml" />
+    <Content Include="Views\Settings\UserInfo.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -99,13 +160,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{9683f616-d48f-4ee1-b652-96e8f51f572f}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFBLL\EFBLL.csproj">
+      <Project>{d1a8e2bd-2f5e-46ac-968d-8a708f9df89c}</Project>
+      <Name>EFBLL</Name>
     </ProjectReference>
     <ProjectReference Include="..\HelperCommon\HelperCommon.csproj">
       <Project>{e191dd19-1a31-41cf-9cc8-1413728b3219}</Project>

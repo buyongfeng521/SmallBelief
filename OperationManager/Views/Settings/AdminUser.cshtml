@@ -1,0 +1,150 @@
+﻿@model List<Model.t_admin_user>
+@{
+    ViewBag.Title = "AdminUser";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<!--head-->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">管理员</h1>
+    </div>
+</div>
+
+<!--content-->
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("AdminUser", "Settings", FormMethod.Get, new { @class = "form-inline" }))
+        { 
+            <div class="form-group">
+                <label class="sr-only">keywords</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords">
+            </div>
+            <button class="btn btn-default">搜索</button>
+
+            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加管理员</a>
+        }
+        <hr />
+        <div class="dataTable_wrapper">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>编号</th>
+                    <th>用户名</th>
+                    <th>创建时间</th>
+                    <th>最后一次登录时间</th>
+                    <th>操作</th>
+                </tr>
+                @{
+                    int num = 0;
+                    foreach (var item in Model)
+                    { 
+                        num++;
+                        <tr>
+                            <td>@num</td>
+                            <td>@item.user_name</td>
+                            <td>@item.create_time</td>
+                            <td>@item.last_login_time</td>
+                            <td>
+                                <a href="javascript:" title="修改" onclick="EditShow(this,@item.ID)">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:" title="删除" onclick="Del(@item.ID)">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalAdd" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">管理员信息</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Hidden("hideID")
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" class="form-control" id="user_name" name="user_name" placeholder="用户名">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" class="form-control" id="user_psw" placeholder="密码">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="btnSave">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        //Show
+        $("#btnAdd").click(function () {
+            $("#user_name").val("");
+            $("#user_psw").val("");
+            $("#hideID").val("");
+            $("#modalAdd").modal("show");
+        });
+        //Save
+        $("#btnSave").click(function () {
+            var uName = $("#user_name").val();
+            var uPsw = $("#user_psw").val();
+            var uID = $("#hideID").val();
+            var url = "/Settings/AdminUserAdd";
+            var uData = { "user_name": uName, "user_psw": uPsw };
+            if(uID){
+                url = "/Settings/AdminUserEdit";
+                uData = { "user_name": uName, "user_psw": uPsw,"user_id":uID };
+            }
+            if (uName && uPsw) {
+                
+                $.post(url, uData, function (data) {
+                    $.procAjaxData(data, function () {
+                        location.href = "/Settings/AdminUser";
+                    });
+                });
+            }
+            else {
+                alert("请输入信息");
+            }
+        });
+
+    })
+
+    function EditShow(obj,id){
+        $("#user_name").val($(obj).parent().prev().prev().prev().html());
+        $("#user_psw").val("**********************");
+        $("#hideID").val(id);
+        $("#modalAdd").modal("show");
+    }
+
+    function Del(id) {
+        if(id){
+            if (confirm("确定删除？")) {
+                $.post("/Settings/AdminUserDel",{"id":id},function(data){
+                    $.procAjaxData(data,function(){
+                        location.href = "/Settings/AdminUser";
+                    })
+                })   
+            }
+        }
+    }
+</script>
+
+
