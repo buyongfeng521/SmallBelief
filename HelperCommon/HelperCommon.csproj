@@ -48,8 +48,13 @@
     <Compile Include="OperateContext.cs" />
     <Compile Include="OperateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UploadHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{9683f616-d48f-4ee1-b652-96e8f51f572f}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DapperBLL\DapperBLL.csproj">
       <Project>{de752fef-0778-4a70-8ee5-04f391531f2e}</Project>
       <Name>DapperBLL</Name>
