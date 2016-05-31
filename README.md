@@ -1,9 +1,17 @@
 # SmallBelief
 
-> My amateur coding
+> 自己的练习项目
 
 ```
 Hi,My love...
 ```
+
+
+#### 商品模块
+* 商品列表
+* 商品分类
+* 商品品牌
+
+#### 设置
 
 
