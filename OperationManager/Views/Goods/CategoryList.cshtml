@@ -1,20 +1,20 @@
 ﻿
 @{
-    ViewBag.Title = "GoodsList";
+    ViewBag.Title = "CategoryList";
     Layout = "~/Views/_Layout.cshtml";
 }
 
 <!--head-->
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">商品列表</h1>
+        <h1 class="page-header">商品分类</h1>
     </div>
 </div>
 
 <!--content-->
 <div class="row">
     <div class="col-lg-12">
-        @using (Html.BeginForm("GoodsList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
+        @using (Html.BeginForm("CategoryList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
         {
             <div class="form-group">
                 <label class="sr-only">keywords</label>
@@ -22,29 +22,23 @@
             </div>
             <button class="btn btn-default">搜索</button>
 
-            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加商品</a>
+            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加分类</a>
         }
         <hr />
         <div class="dataTable_wrapper">
             <table class="table table-bordered table-hover">
                 <tr>
                     <th>编号</th>
-                    <th>商品名称</th>
-                    <th>是否热销</th>
-                    <th>是否明星</th>
-                    <th>库存</th>
-                    <th>锁定库存</th>
-                    <th>是否上架</th>
+                    <th>分类名称</th>
+                    <th>分类描述</th>
+                    <th>创建时间</th>
                     <th>操作</th>
                 </tr>
                 <tr>
                     <td>1</td>
-                    <td>商品001</td>
-                    <td>√</td>
-                    <td>√</td>
-                    <td>100</td>
-                    <td>50</td>
-                    <td>√</td>
+                    <td>分类001</td>
+                    <td>我就是一个分类</td>
+                    <td>2015-15-16</td>
                     <td>
                         <a href="#">修改</a>
                         <a href="#">上架</a>
@@ -56,5 +50,4 @@
         </div>
     </div>
 </div>
-
 
