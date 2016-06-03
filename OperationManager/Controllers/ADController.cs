@@ -8,6 +8,9 @@ namespace OperationManager.Controllers
 {
     public class ADController : Controller
     {
-        
+        public ActionResult ADList()
+        {
+            return View();
+        }
 	}
 }

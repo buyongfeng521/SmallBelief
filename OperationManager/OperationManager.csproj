@@ -157,6 +157,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Goods\GoodsList.cshtml" />
     <Content Include="Views\Goods\CategoryList.cshtml" />
+    <Content Include="Views\AD\ADList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -166,7 +167,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\AD\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
