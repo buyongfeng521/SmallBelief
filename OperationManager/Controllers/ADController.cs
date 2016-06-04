@@ -12,5 +12,13 @@ namespace OperationManager.Controllers
         {
             return View();
         }
+
+
+        public ActionResult BannerList()
+        {
+            return View();
+        }
+
+
 	}
 }

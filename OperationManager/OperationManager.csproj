@@ -158,6 +158,7 @@
     <Content Include="Views\Goods\GoodsList.cshtml" />
     <Content Include="Views\Goods\CategoryList.cshtml" />
     <Content Include="Views\AD\ADList.cshtml" />
+    <Content Include="Views\AD\BannerList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,21 +1,20 @@
 ﻿
 @{
-    ViewBag.Title = "ADList";
+    ViewBag.Title = "BannerList";
     Layout = "~/Views/_Layout.cshtml";
 }
-
 
 <!--head-->
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">广告列表</h1>
+        <h1 class="page-header">Banner列表</h1>
     </div>
 </div>
 
 <!--content-->
 <div class="row">
     <div class="col-lg-12">
-        @using (Html.BeginForm("ADList", "AD", FormMethod.Get, new { @class = "form-inline" }))
+        @using (Html.BeginForm("BannerList", "AD", FormMethod.Get, new { @class = "form-inline" }))
         {
             <div class="form-group">
                 <label class="sr-only">keywords</label>
@@ -23,23 +22,23 @@
             </div>
             <button class="btn btn-default">搜索</button>
 
-            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加广告</a>
+            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加Banner</a>
         }
         <hr />
         <div class="dataTable_wrapper">
             <table class="table table-bordered table-hover">
                 <tr>
                     <th>编号</th>
-                    <th>广告名称</th>
+                    <th>banner名称</th>
                     <th>点击类型</th>
                     <th>创建时间</th>
                     <th>操作</th>
                 </tr>
                 <tr>
                     <td>1</td>
-                    <td>广告001</td>
+                    <td>banner001</td>
                     <td>URL</td>
-                    <td>2015-15-16</td>
+                    <td>2016-12-16</td>
                     <td>
                         <a href="#">修改</a>
                         <a href="#">删除</a>
@@ -50,3 +49,4 @@
         </div>
     </div>
 </div>
+
