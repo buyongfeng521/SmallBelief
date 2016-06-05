@@ -127,7 +127,9 @@
     <Compile Include="Controllers\ADController.cs" />
     <Compile Include="Controllers\GoodsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -159,6 +161,9 @@
     <Content Include="Views\Goods\CategoryList.cshtml" />
     <Content Include="Views\AD\ADList.cshtml" />
     <Content Include="Views\AD\BannerList.cshtml" />
+    <Content Include="Views\Order\CartList.cshtml" />
+    <Content Include="Views\Order\OrderList.cshtml" />
+    <Content Include="Views\User\UserList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

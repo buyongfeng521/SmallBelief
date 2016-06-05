@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "OrderList";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<!--head-->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">订单列表</h1>
+    </div>
+</div>
+
+<!--content-->
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("OrderList", "Order", FormMethod.Get, new { @class = "form-inline" }))
+        {
+            <div class="form-group">
+                <label class="sr-only">keywords</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">
+            </div>
+            <button class="btn btn-default">搜索</button>
+        }
+        <hr />
+        <div class="dataTable_wrapper">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>编号</th>
+                    <th>订单号</th>
+                    <th>订单类型</th>
+                    <th>订单金额</th>
+                    <th>订单状态</th>
+                    <th>操作</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>SN2016001314998</td>
+                    <td>预定订单</td>
+                    <td>1000</td>
+                    <td>未付款</td>
+                    <td>
+                        <a href="#">查看</a>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>
+
