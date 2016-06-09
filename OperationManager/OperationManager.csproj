@@ -166,6 +166,8 @@
     <Content Include="Views\Order\OrderList.cshtml" />
     <Content Include="Views\User\UserList.cshtml" />
     <Content Include="Views\Coupon\CouponList.cshtml" />
+    <Content Include="Views\Goods\GoodsAdd.cshtml" />
+    <Content Include="Views\Goods\GoodsEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -58,3 +58,17 @@
 </div>
 
 
+<script>
+    function del(id) {
+        if (confirm('确定删除？')) {
+            var url = '/Goods/GoodsDelete';
+            $.post(url, { "id": id }, function (data) {
+                $.procAjaxData(data, function () {
+                    location.href = "/Goods/GoodsList";
+                })
+            });
+        }
+    }
+</script>
+
+
