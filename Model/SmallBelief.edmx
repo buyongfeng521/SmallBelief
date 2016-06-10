@@ -15,6 +15,38 @@
           <Property Name="last_login_time" Type="datetime" />
           <Property Name="create_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_category">
+          <Key>
+            <PropertyRef Name="cat_id" />
+          </Key>
+          <Property Name="cat_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cat_name" Type="nvarchar" MaxLength="20" />
+          <Property Name="cat_img" Type="nvarchar" MaxLength="200" />
+          <Property Name="cat_note" Type="nvarchar" MaxLength="256" />
+          <Property Name="sort" Type="int" />
+          <Property Name="add_time" Type="datetime" />
+        </EntityType>
+        <EntityType Name="t_goods">
+          <Key>
+            <PropertyRef Name="goods_id" />
+          </Key>
+          <Property Name="goods_id" Type="int" Nullable="false" />
+          <Property Name="cat_id" Type="int" />
+          <Property Name="goods_name" Type="nvarchar" MaxLength="200" />
+          <Property Name="shop_price" Type="decimal" Precision="18" Scale="18" />
+          <Property Name="goods_number" Type="int" />
+          <Property Name="goods_lock_number" Type="int" />
+          <Property Name="goods_unit" Type="nvarchar" MaxLength="10" />
+          <Property Name="goods_img" Type="nvarchar" MaxLength="200" />
+          <Property Name="goods_brief" Type="nvarchar" MaxLength="100" />
+          <Property Name="goods_desc" Type="nvarchar(max)" />
+          <Property Name="sort" Type="int" />
+          <Property Name="is_hot" Type="bit" />
+          <Property Name="is_best" Type="bit" />
+          <Property Name="is_on_sale" Type="bit" />
+          <Property Name="is_del" Type="bit" />
+          <Property Name="add_time" Type="datetime" />
+        </EntityType>
         <EntityType Name="t_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -28,9 +60,27 @@
           <Property Name="last_login_time" Type="datetime" />
           <Property Name="create_time" Type="datetime" />
         </EntityType>
+        <Association Name="FK_t_goods_t_category">
+          <End Role="t_category" Type="Self.t_category" Multiplicity="0..1" />
+          <End Role="t_goods" Type="Self.t_goods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_category">
+              <PropertyRef Name="cat_id" />
+            </Principal>
+            <Dependent Role="t_goods">
+              <PropertyRef Name="cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="SmallBeliefModelStoreContainer">
           <EntitySet Name="t_admin_user" EntityType="Self.t_admin_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user" EntityType="Self.t_user" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_t_goods_t_category" Association="Self.FK_t_goods_t_category">
+            <End Role="t_category" EntitySet="t_category" />
+            <End Role="t_goods" EntitySet="t_goods" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -52,6 +102,12 @@
         <EntityContainer Name="SmallBeliefEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="t_user" EntityType="Self.t_user" />
           <EntitySet Name="t_admin_user" EntityType="SmallBeliefModel.t_admin_user" />
+          <EntitySet Name="t_category" EntityType="SmallBeliefModel.t_category" />
+          <EntitySet Name="t_goods" EntityType="SmallBeliefModel.t_goods" />
+          <AssociationSet Name="FK_t_goods_t_category" Association="SmallBeliefModel.FK_t_goods_t_category">
+            <End Role="t_category" EntitySet="t_category" />
+            <End Role="t_goods" EntitySet="t_goods" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -63,6 +119,52 @@
           <Property Name="last_login_time" Type="DateTime" Precision="3" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="t_category">
+          <Key>
+            <PropertyRef Name="cat_id" />
+          </Key>
+          <Property Name="cat_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cat_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="cat_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="cat_note" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="sort" Type="Int32" />
+          <Property Name="add_time" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="t_goods" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_category" ToRole="t_goods" />
+        </EntityType>
+        <EntityType Name="t_goods">
+          <Key>
+            <PropertyRef Name="goods_id" />
+          </Key>
+          <Property Name="goods_id" Type="Int32" Nullable="false" />
+          <Property Name="cat_id" Type="Int32" />
+          <Property Name="goods_name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="shop_price" Type="Decimal" Precision="18" Scale="18" />
+          <Property Name="goods_number" Type="Int32" />
+          <Property Name="goods_lock_number" Type="Int32" />
+          <Property Name="goods_unit" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="goods_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="goods_brief" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="goods_desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="sort" Type="Int32" />
+          <Property Name="is_hot" Type="Boolean" />
+          <Property Name="is_best" Type="Boolean" />
+          <Property Name="is_on_sale" Type="Boolean" />
+          <Property Name="is_del" Type="Boolean" />
+          <Property Name="add_time" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
+        </EntityType>
+        <Association Name="FK_t_goods_t_category">
+          <End Type="SmallBeliefModel.t_category" Role="t_category" Multiplicity="0..1" />
+          <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_category">
+              <PropertyRef Name="cat_id" />
+            </Principal>
+            <Dependent Role="t_goods">
+              <PropertyRef Name="cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -91,6 +193,40 @@
                 <ScalarProperty Name="user_psw" ColumnName="user_psw" />
                 <ScalarProperty Name="user_name" ColumnName="user_name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_category">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_category">
+              <MappingFragment StoreEntitySet="t_category">
+                <ScalarProperty Name="add_time" ColumnName="add_time" />
+                <ScalarProperty Name="sort" ColumnName="sort" />
+                <ScalarProperty Name="cat_note" ColumnName="cat_note" />
+                <ScalarProperty Name="cat_img" ColumnName="cat_img" />
+                <ScalarProperty Name="cat_name" ColumnName="cat_name" />
+                <ScalarProperty Name="cat_id" ColumnName="cat_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_goods">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_goods">
+              <MappingFragment StoreEntitySet="t_goods">
+                <ScalarProperty Name="add_time" ColumnName="add_time" />
+                <ScalarProperty Name="is_del" ColumnName="is_del" />
+                <ScalarProperty Name="is_on_sale" ColumnName="is_on_sale" />
+                <ScalarProperty Name="is_best" ColumnName="is_best" />
+                <ScalarProperty Name="is_hot" ColumnName="is_hot" />
+                <ScalarProperty Name="sort" ColumnName="sort" />
+                <ScalarProperty Name="goods_desc" ColumnName="goods_desc" />
+                <ScalarProperty Name="goods_brief" ColumnName="goods_brief" />
+                <ScalarProperty Name="goods_img" ColumnName="goods_img" />
+                <ScalarProperty Name="goods_unit" ColumnName="goods_unit" />
+                <ScalarProperty Name="goods_lock_number" ColumnName="goods_lock_number" />
+                <ScalarProperty Name="goods_number" ColumnName="goods_number" />
+                <ScalarProperty Name="shop_price" ColumnName="shop_price" />
+                <ScalarProperty Name="goods_name" ColumnName="goods_name" />
+                <ScalarProperty Name="cat_id" ColumnName="cat_id" />
+                <ScalarProperty Name="goods_id" ColumnName="goods_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

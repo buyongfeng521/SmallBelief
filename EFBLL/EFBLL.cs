@@ -18,6 +18,22 @@ namespace EFBLL
         }
     }
 
+	public partial class t_categoryBLL : EFBLLBase<t_category>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_categoryDAL();
+        }
+    }
+
+	public partial class t_goodsBLL : EFBLLBase<t_goods>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_goodsDAL();
+        }
+    }
+
 	public partial class t_userBLL : EFBLLBase<t_user>
     {
 		protected override void SetDAL()

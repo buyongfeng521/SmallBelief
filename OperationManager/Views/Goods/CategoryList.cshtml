@@ -1,4 +1,4 @@
-﻿
+﻿@model List<Model.t_category>
 @{
     ViewBag.Title = "CategoryList";
     Layout = "~/Views/_Layout.cshtml";
@@ -7,7 +7,7 @@
 <!--head-->
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">商品分类</h1>
+        <h3 class="page-header"><strong>商品分类</strong></h3>
     </div>
 </div>
 
@@ -22,7 +22,7 @@
             </div>
             <button class="btn btn-default">搜索</button>
 
-            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加分类</a>
+            <a href="javascript:" class="btn btn-info pull-right" onclick="addCat()" >增加分类</a>
         }
         <hr />
         <div class="dataTable_wrapper">
@@ -34,28 +34,109 @@
                     <th>创建时间</th>
                     <th>操作</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>分类001</td>
-                    <td>我就是一个分类</td>
-                    <td>2015-15-16</td>
-                    <td>
-                        <a href="#">修改</a>
-                        <a href="#">上架</a>
-                        <a href="#">删除</a>
-                    </td>
-                </tr>
+                
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.cat_name</td>
+                                <td>@item.cat_note</td>
+                                <td>@item.add_time</td>
+                                <td>
+                                    <a href="javascript:" onclick="editCat(@item.cat_id)">修改</a>
+                                    <a href="javascript:" onclick="del(@item.cat_id)">删除</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                
 
             </table>
         </div>
     </div>
 </div>
 
+
+
+<!--Modal-->
+<!--CatModal-->
+<div class="modal fade" id="modalCat">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">分类新增</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmCat">
+                    @Html.Hidden("hideCatID")
+                    <div class="form-group">
+                        <label>分类名称</label>
+                        <input type="text" class="form-control" name="cat_name" id="cat_name" placeholder="分类名称">
+                    </div>
+                    <div class="form-group">
+                        <label>分类描述</label>
+                        <textarea class="form-control" rows="3" name="cat_note" id="cat_note" placeholder="分类描述"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>排序</label>
+                        <input type="number" class="form-control" name="sort" id="sort" placeholder="排序" value="0">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="save()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function addCat() {
+        $("#hideCatID").val("");
+        $("#cat_name").val("");
+        $("#cat_note").val("");
+        $("#sort").val("0");
+
+        $("#modalCat").modal("show");
+    }
+
+    function editCat(id){
+        var urlModel = "/Goods/CategoryGet";
+        $.post(urlModel,{"id":id},function(data){
+            $("#hideCatID").val(data.cat_id);
+            $("#cat_name").val(data.cat_name);
+            $("#cat_note").val(data.cat_note);
+            $("#sort").val(data.sort);
+
+            $("#modalCat").modal("show");
+        })
+    }
+
+    function save() {
+        var urlProcess = "/Goods/CategoryProcess";
+        $.post(urlProcess, $("#frmCat").serialize(), function (data) {
+            $.procAjaxData(data, function () {
+                location.href = "/Goods/CategoryList";
+            });
+        });
+    }
+
+</script>
+
+
+
 <script>
     function del(id) {
-        if (confirm('确定删除？')) {
-            var url = '/Goods/CategoryDelete';
-            $.post(url, { "id": id }, function () {
+        if (confirm("确定删除？")) {
+            var url = "/Goods/CategoryDelete";
+            $.post(url, { "id": id }, function (data) {
                 $.procAjaxData(data, function () {
                     location.href = "/Goods/CategoryList";
                 })

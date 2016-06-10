@@ -27,5 +27,7 @@ namespace Model
     
         public virtual DbSet<t_user> t_user { get; set; }
         public virtual DbSet<t_admin_user> t_admin_user { get; set; }
+        public virtual DbSet<t_category> t_category { get; set; }
+        public virtual DbSet<t_goods> t_goods { get; set; }
     }
 }

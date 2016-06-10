@@ -26,6 +26,36 @@ namespace EFBLL
         }
 
         
+        private t_categoryBLL t_categorybll;
+        public t_categoryBLL t_categoryBLL
+        {
+	        get
+	        {
+		        if(t_categorybll == null)
+		        {
+			        t_categorybll = new t_categoryBLL();
+		        }
+		        return t_categorybll;
+	        }
+	        set{}
+        }
+
+        
+        private t_goodsBLL t_goodsbll;
+        public t_goodsBLL t_goodsBLL
+        {
+	        get
+	        {
+		        if(t_goodsbll == null)
+		        {
+			        t_goodsbll = new t_goodsBLL();
+		        }
+		        return t_goodsbll;
+	        }
+	        set{}
+        }
+
+        
         private t_userBLL t_userbll;
         public t_userBLL t_userBLL
         {

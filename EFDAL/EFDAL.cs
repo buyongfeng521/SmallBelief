@@ -13,6 +13,14 @@ namespace EFDAL
     {
     }
 
+	public partial class t_categoryDAL : EFDALBase<t_category>
+    {
+    }
+
+	public partial class t_goodsDAL : EFDALBase<t_goods>
+    {
+    }
+
 	public partial class t_userDAL : EFDALBase<t_user>
     {
     }
