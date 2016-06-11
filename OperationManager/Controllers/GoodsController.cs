@@ -127,17 +127,20 @@ namespace OperationManager.Controllers
                     return Json(ajax);
                 }
                 //2.0 do
-                t_category model = new t_category() 
-                {
-                    cat_id = iCat_id,
-                    cat_name = cat_name.Trim(),
-                    cat_img = editModel.cat_img,
-                    cat_note = cat_note.Trim(),
-                    sort = sort,
-                    add_time = editModel.add_time
-                };
+                editModel.cat_name = cat_name.Trim();
+                editModel.cat_note = cat_note.Trim();
+                editModel.sort = sort;
+                //t_category model = new t_category() 
+                //{
+                //    cat_id = iCat_id,
+                //    cat_name = cat_name.Trim(),
+                //    cat_img = editModel.cat_img,
+                //    cat_note = cat_note.Trim(),
+                //    sort = sort,
+                //    add_time = editModel.add_time
+                //};
 
-                if (OperateContext.EFBLLSession.t_categoryBLL.Modify(model))
+                if (OperateContext.EFBLLSession.t_categoryBLL.Modify(editModel))
                 {
                     ajax.Status = "ok";
                     ajax.Msg = CommonBasicMsg.EditSuc;
