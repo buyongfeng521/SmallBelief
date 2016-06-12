@@ -18,21 +18,53 @@
                 商品主信息
             </div>
             <div class="panel-body">
-                <form>
+                <form id="frmGoodsInfo">
+                    @Html.Hidden("goods_id")
                     <div class="form-group">
-                        <label for="exampleInputEmail1">商品名称</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" name="" placeholder="商品名称">
+                        <label>商品名称：</label>
+                        <input type="text" class="form-control" id="goods_name" name="goods_name" placeholder="商品名称">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        <label>商品分类：</label>
+                        @Html.DropDownList("cat_id", ViewBag.ListCat as IEnumerable<SelectListItem>, new { @class = "form-control" })
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputFile">File input</label>
-                        <input type="file" id="exampleInputFile">
-                        <p class="help-block">Example block-level help text here.</p>
+                        <label>商品价格：</label>
+                        <div class="form-group input-group">
+                            <input type="number" class="form-control" id="shop_price" name="shop_price" placeholder="商品价格">
+                            <span class="input-group-addon">.00</span>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-success">保存</button>
+                    <div class="form-group">
+                        <label>商品库存：</label>
+                        <input type="number" class="form-control" id="goods_number" name="goods_number" placeholder="商品库存">
+                    </div>
+                    <div class="form-group">
+                        <label>商品单位：</label>
+                        <input type="text" class="form-control" id="goods_unit" name="goods_unit" placeholder="商品单位">
+                    </div>
+                    <div class="form-group">
+                        <label>商品图片：</label>
+                        <input type="file" id="goods_img" name="goods_img">
+                    </div>
+                    <div class="form-group">
+                        <label>商品属性：</label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="is_on_sale" name="is_on_sale" checked>上架
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="is_hot" name="is_hot">热销
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="is_best" name="is_best">明星
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>商品简介：</label>
+                        <input type="text" class="form-control" id="goods_brief" name="goods_brief" placeholder="商品简介">
+                    </div>
+
+                    <button type="button" class="btn btn-success" onclick="saveInfo()">保存</button>
                 </form>
             </div>
         </div>
@@ -43,7 +75,20 @@
                 商品相册
             </div>
             <div class="panel-body">
-                
+                <input type="file" name="gallery" id="gallery" multiple class="file-loading" />
+                <hr />
+                <div class="col-sm-12" id="divGallery">
+
+                    <div class="alert alert-dismissible col-sm-4">
+                        <button type="button" class="close" onclick="delGallery(this,'')"><span>&times;</span></button>
+                        <img src="http://7xj3q7.com1.z0.glb.clouddn.com/201606121714414795239.jpg" alt="..." class="img-thumbnail">
+                    </div>
+                    <div class="alert alert-dismissible col-sm-4">
+                        <button type="button" class="close"><span>&times;</span></button>
+                        <img src="http://7xj3q7.com1.z0.glb.clouddn.com/201606121714414795239.jpg" alt="..." class="img-thumbnail">
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -62,4 +107,73 @@
         </div>
     </div>
 </div>
+
+<script src="~/Scripts/Common/ViewCommon.js"></script>
+<script>
+    $(function () {
+        //主图
+        View_File_Input_Init("goods_img", 600);
+        //相册
+        View_Files_Input_Init("gallery", "/Goods/GoodsGalleryUpload",600,10);
+    })
+
+    $("#gallery").on("filebatchuploadsuccess", function (event, data, previewId, index) {
+        var goods_id = $("#goods_id").val();
+        response = data.response;
+        if (response.Status = "ok" && goods_id) {
+            if (response.Data) {
+                $.post("/Goods/GoodsGalleryToData", { "goods_id": goods_id, "gallerys": response.Data }, function (reData) {
+                    $.procAjaxData(reData, function (sucData) {
+                        //aler(sucData.Data);
+                        var arr = sucData.Data.split(',');
+                        for(var i=0;i<arr.length;i++){
+                            GalleryCreateHtml(arr[i]);
+                        }
+                        $("#gallery").fileinput("reset");
+                    }, function () {
+                        $("#gallery").fileinput("reset");
+                    })
+                });
+            }
+        }
+        else {
+            $("#gallery").fileinput("reset");
+            alert("无效商品或上传失败");
+        }
+    });
+
+    function delGallery(obj,src) {
+        $(obj).parent().remove();
+        var url = "/Goods/GoodsGalleryDel";
+        $.post(url, { "img": src }, function (data) {
+            $.procAjaxData(data);
+        });
+    }
+
+
+    function GalleryCreateHtml(src) {
+        var imgDiv = $('<div class="alert alert-dismissible col-sm-4"></div>');
+        var imgClose = $("<button type='button' class='close' onclick='delGallery(this," + "\"" + src + "\"" + ")'><span>&times;</span></button>");
+        var imgImg = $("<img src='http://7xj3q7.com1.z0.glb.clouddn.com/" + src + "' class='img-thumbnail'>");
+        imgDiv.append(imgClose);
+        imgDiv.append(imgImg);
+        $("#divGallery").append(imgDiv);
+    }
+
+</script>
+
+<script src="~/Scripts/jquery.form.js"></script>
+<script>
+    function saveInfo() {
+        $("#frmGoodsInfo").ajaxSubmit({
+            type: "post",
+            url: "/Goods/GoodsAdd",
+            success: function (data) {
+                $.procAjaxData(data, function (data) {
+                    $("#goods_id").val(data.Data);
+                });
+            }
+        });
+    }
+</script>
 

@@ -10,6 +10,8 @@
         <EntityTypeShape EntityType="SmallBeliefModel.t_category" Width="1.5" PointX="3.375" PointY="5" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_goods" Width="1.5" PointX="5.625" PointY="4" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_goods_t_category" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_goods_gallery" Width="1.5" PointX="7.875" PointY="5.25" />
+        <AssociationConnector Association="SmallBeliefModel.FK_t_goods_gallery_t_goods" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -14,6 +14,11 @@ namespace Model
     
     public partial class t_goods
     {
+        public t_goods()
+        {
+            this.t_goods_gallery = new HashSet<t_goods_gallery>();
+        }
+    
         public int goods_id { get; set; }
         public Nullable<int> cat_id { get; set; }
         public string goods_name { get; set; }
@@ -32,5 +37,6 @@ namespace Model
         public Nullable<System.DateTime> add_time { get; set; }
     
         public virtual t_category t_category { get; set; }
+        public virtual ICollection<t_goods_gallery> t_goods_gallery { get; set; }
     }
 }

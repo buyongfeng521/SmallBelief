@@ -1,4 +1,5 @@
-﻿
+﻿@using Webdiyer.WebControls.Mvc;
+@model PagedList<Model.t_goods>
 @{
     ViewBag.Title = "GoodsList";
     Layout = "~/Views/_Layout.cshtml";
@@ -37,22 +38,81 @@
                     <th>是否上架</th>
                     <th>操作</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>商品001</td>
-                    <td>√</td>
-                    <td>√</td>
-                    <td>100</td>
-                    <td>50</td>
-                    <td>√</td>
-                    <td>
-                        <a href="#">修改</a>
-                        <a href="#">上架</a>
-                        <a href="#">删除</a>
-                    </td>
-                </tr>
-
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.goods_name</td>
+                            <td>
+                                @if (item.is_hot == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                { 
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (item.is_best == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>@item.goods_number</td>
+                            <td>@item.goods_lock_number</td>
+                            <td>
+                                @if (item.is_on_sale == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                <a href="javascript:">修改</a>
+                                &nbsp;&nbsp;
+                                @if (item.is_on_sale == true)
+                                {
+                                    <a href="javascript:" class="text-danger">下架</a>
+                                }
+                                else
+                                { 
+                                    <a href="javascript:" class="text-success">上架</a>    
+                                }
+                                
+                                &nbsp;&nbsp;
+                                <a href="javascript:">删除</a>
+                            </td>
+                        </tr>
+                    }
+                }
             </table>
+
+            <div class="text-center">
+                <nav>
+                    @Html.Pager(Model, new PagerOptions
+                    {
+                        PageIndexParameterName = "index",
+                        ContainerTagName = "ul",
+                        CssClass = "pagination",
+
+                        CurrentPagerItemWrapperFormatString = "<li class=\"active\"><a href=\"javascript:form.submit();\">{0}</a></li>",
+                        PagerItemWrapperFormatString = "<li>{0}</li>",
+                        Id = "bootstrappager"
+                    })
+                </nav>
+            </div>
+
         </div>
     </div>
 </div>

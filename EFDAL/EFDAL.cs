@@ -21,6 +21,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_goods_galleryDAL : EFDALBase<t_goods_gallery>
+    {
+    }
+
 	public partial class t_userDAL : EFDALBase<t_user>
     {
     }

@@ -39,6 +39,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MvcPager">
+      <HintPath>..\packages\MvcPager.MVC4.CN.2.0.0.1\lib\MvcPager.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -78,6 +81,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="content\admin.html" />
+    <Content Include="content\bootstrap-fileinput\css\default.css" />
+    <Content Include="content\bootstrap-fileinput\css\fileinput.css" />
+    <Content Include="content\bootstrap-fileinput\css\fileinput.min.css" />
+    <Content Include="content\bootstrap-fileinput\css\normalize.css" />
+    <Content Include="content\bootstrap-fileinput\fonts\icomoon.svg" />
+    <Content Include="content\bootstrap-fileinput\img\loading-sm.gif" />
+    <Content Include="content\bootstrap-fileinput\img\loading.gif" />
+    <Content Include="content\bootstrap-fileinput\js\fileinput.js" />
+    <Content Include="content\bootstrap-fileinput\js\fileinput.min.js" />
+    <Content Include="content\bootstrap-fileinput\js\fileinput_locale_zh.js" />
     <Content Include="content\boot\css\bootstrap-theme.css" />
     <Content Include="content\boot\css\bootstrap-theme.min.css" />
     <Content Include="content\boot\css\bootstrap.css" />
@@ -109,10 +122,15 @@
     <Content Include="content\js\morris.min.js" />
     <Content Include="content\js\raphael-min.js" />
     <Content Include="Global.asax" />
+    <Content Include="content\bootstrap-fileinput\fonts\icomoon.eot" />
+    <Content Include="content\bootstrap-fileinput\fonts\icomoon.ttf" />
+    <Content Include="content\bootstrap-fileinput\fonts\icomoon.woff" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Common\ViewCommon.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />

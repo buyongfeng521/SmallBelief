@@ -56,6 +56,21 @@ namespace EFBLL
         }
 
         
+        private t_goods_galleryBLL t_goods_gallerybll;
+        public t_goods_galleryBLL t_goods_galleryBLL
+        {
+	        get
+	        {
+		        if(t_goods_gallerybll == null)
+		        {
+			        t_goods_gallerybll = new t_goods_galleryBLL();
+		        }
+		        return t_goods_gallerybll;
+	        }
+	        set{}
+        }
+
+        
         private t_userBLL t_userbll;
         public t_userBLL t_userBLL
         {

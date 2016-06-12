@@ -17,10 +17,20 @@ namespace Model.CommonModel
         //Del
         public const string DelSuc = "删除成功";
         public const string DelFail = "删除失败";
+        //Upload
+        public const string UploadSuc = "上传成功";
+        public const string UploadFail = "上传失败";
 
         //Void
         public const string VoidID = "无效ID";
         public const string VoidModel = "无效实体";
+        public const string VoidGallerys = "无效的图片集合";
+
+
+        //Goods
+        public const string VoidGoods = "不存在此商品";
+
+        //Img
 
 
     }

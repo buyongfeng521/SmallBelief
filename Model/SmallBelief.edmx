@@ -30,10 +30,10 @@
           <Key>
             <PropertyRef Name="goods_id" />
           </Key>
-          <Property Name="goods_id" Type="int" Nullable="false" />
+          <Property Name="goods_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="cat_id" Type="int" />
           <Property Name="goods_name" Type="nvarchar" MaxLength="200" />
-          <Property Name="shop_price" Type="decimal" Precision="18" Scale="18" />
+          <Property Name="shop_price" Type="decimal" Precision="18" Scale="2" />
           <Property Name="goods_number" Type="int" />
           <Property Name="goods_lock_number" Type="int" />
           <Property Name="goods_unit" Type="nvarchar" MaxLength="10" />
@@ -45,6 +45,15 @@
           <Property Name="is_best" Type="bit" />
           <Property Name="is_on_sale" Type="bit" />
           <Property Name="is_del" Type="bit" />
+          <Property Name="add_time" Type="datetime" />
+        </EntityType>
+        <EntityType Name="t_goods_gallery">
+          <Key>
+            <PropertyRef Name="gallery_id" />
+          </Key>
+          <Property Name="gallery_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="goods_id" Type="int" />
+          <Property Name="img" Type="nvarchar" MaxLength="200" />
           <Property Name="add_time" Type="datetime" />
         </EntityType>
         <EntityType Name="t_user">
@@ -60,6 +69,18 @@
           <Property Name="last_login_time" Type="datetime" />
           <Property Name="create_time" Type="datetime" />
         </EntityType>
+        <Association Name="FK_t_goods_gallery_t_goods">
+          <End Role="t_goods" Type="Self.t_goods" Multiplicity="0..1" />
+          <End Role="t_goods_gallery" Type="Self.t_goods_gallery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_goods">
+              <PropertyRef Name="goods_id" />
+            </Principal>
+            <Dependent Role="t_goods_gallery">
+              <PropertyRef Name="goods_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_t_goods_t_category">
           <End Role="t_category" Type="Self.t_category" Multiplicity="0..1" />
           <End Role="t_goods" Type="Self.t_goods" Multiplicity="*" />
@@ -76,7 +97,12 @@
           <EntitySet Name="t_admin_user" EntityType="Self.t_admin_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_goods_gallery" EntityType="Self.t_goods_gallery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user" EntityType="Self.t_user" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_t_goods_gallery_t_goods" Association="Self.FK_t_goods_gallery_t_goods">
+            <End Role="t_goods" EntitySet="t_goods" />
+            <End Role="t_goods_gallery" EntitySet="t_goods_gallery" />
+          </AssociationSet>
           <AssociationSet Name="FK_t_goods_t_category" Association="Self.FK_t_goods_t_category">
             <End Role="t_category" EntitySet="t_category" />
             <End Role="t_goods" EntitySet="t_goods" />
@@ -108,6 +134,11 @@
             <End Role="t_category" EntitySet="t_category" />
             <End Role="t_goods" EntitySet="t_goods" />
           </AssociationSet>
+          <EntitySet Name="t_goods_gallery" EntityType="SmallBeliefModel.t_goods_gallery" />
+          <AssociationSet Name="FK_t_goods_gallery_t_goods" Association="SmallBeliefModel.FK_t_goods_gallery_t_goods">
+            <End Role="t_goods" EntitySet="t_goods" />
+            <End Role="t_goods_gallery" EntitySet="t_goods_gallery" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -138,7 +169,7 @@
           <Property Name="goods_id" Type="Int32" Nullable="false" />
           <Property Name="cat_id" Type="Int32" />
           <Property Name="goods_name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="shop_price" Type="Decimal" Precision="18" Scale="18" />
+          <Property Name="shop_price" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="goods_number" Type="Int32" />
           <Property Name="goods_lock_number" Type="Int32" />
           <Property Name="goods_unit" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
@@ -152,6 +183,7 @@
           <Property Name="is_del" Type="Boolean" />
           <Property Name="add_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
+          <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
         </EntityType>
         <Association Name="FK_t_goods_t_category">
           <End Type="SmallBeliefModel.t_category" Role="t_category" Multiplicity="0..1" />
@@ -162,6 +194,28 @@
             </Principal>
             <Dependent Role="t_goods">
               <PropertyRef Name="cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="t_goods_gallery">
+          <Key>
+            <PropertyRef Name="gallery_id" />
+          </Key>
+          <Property Name="gallery_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="goods_id" Type="Int32" />
+          <Property Name="img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="add_time" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="t_goods" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods_gallery" ToRole="t_goods" />
+        </EntityType>
+        <Association Name="FK_t_goods_gallery_t_goods">
+          <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="0..1" />
+          <End Type="SmallBeliefModel.t_goods_gallery" Role="t_goods_gallery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_goods">
+              <PropertyRef Name="goods_id" />
+            </Principal>
+            <Dependent Role="t_goods_gallery">
+              <PropertyRef Name="goods_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -227,6 +281,16 @@
                 <ScalarProperty Name="goods_name" ColumnName="goods_name" />
                 <ScalarProperty Name="cat_id" ColumnName="cat_id" />
                 <ScalarProperty Name="goods_id" ColumnName="goods_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_goods_gallery">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_goods_gallery">
+              <MappingFragment StoreEntitySet="t_goods_gallery">
+                <ScalarProperty Name="add_time" ColumnName="add_time" />
+                <ScalarProperty Name="img" ColumnName="img" />
+                <ScalarProperty Name="goods_id" ColumnName="goods_id" />
+                <ScalarProperty Name="gallery_id" ColumnName="gallery_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

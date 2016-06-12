@@ -34,6 +34,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_goods_galleryBLL : EFBLLBase<t_goods_gallery>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_goods_galleryDAL();
+        }
+    }
+
 	public partial class t_userBLL : EFBLLBase<t_user>
     {
 		protected override void SetDAL()

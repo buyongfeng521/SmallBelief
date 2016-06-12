@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>MvcPager.MVC4.CN</id>
+    <version>2.0.0.1</version>
+    <title>MvcPager分页控件（MVC 4.0+）</title>
+    <authors>Webdiyer</authors>
+    <owners>Webdiyer</owners>
+    <licenseUrl>http://mvcpager.codeplex.com/license</licenseUrl>
+    <projectUrl>http://www.webdiyer.com/mvcpager/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>MvcPager分页控件是在ASP.NET MVC Web应用程序中实现分页功能的一系列扩展方法，该分页控件的最初的实现方法借鉴了网上流行的部分源代码， 尤其是ScottGu的PagedList&lt;T&gt;类和相关方法，经过站长不断完善和改进后推出的比较成熟而且功能强大的ASP.NET MVC分页解决方案。
+
+MvcPager主要功能有：
+
+实现最基本的url route分页功能；
+支持手工输入或选择页索引并对输入的页索引进行有效性验证；
+支持使用jQuery实现Ajax分页，生成的Html代码更精简；
+Ajax分页模式下支持在分页过程中通过GET或POST方法提交表单数据，实现查询功能；
+Ajax分页模式下支持浏览器历史记录功能（暂不支持IE7及早期版本和Opera浏览器）；
+Ajax分页模式下，若客户端浏览器不支持或禁用Javascript功能时优雅降级为普通分页
+搜索引擎友好，无论是普通分页还是Ajax分页，搜索引擎都可以直接搜索到所有页面。
+支持最新的ASP.NET MVC 4.0 和 5.0 RC1；
+支持IE、Firefox、Opera、Chrome及Safari等常用浏览器；</description>
+    <summary>ASP.NET MVC 分页控件简体中文版 for ASP.NET MVC 4.0</summary>
+    <releaseNotes>MvcPager 2.0版在原1.5版的基础上进行了比较大的升级，重写了大量代码，新增了不少功能，优化了最终生成的html代码，尤其是在Ajax分页模式下，最终生成的html代码比1.5版减少了二倍以上，且html代码更符合html 5规范，主要更新说明如下：
+新增 IPagedList&lt;T&gt;接口；
+新增 DisplayNameFor HtmlHelper扩展方法使其支持 IPagedList&lt;T&gt;和PagedList&lt;T&gt;；
+Ajax分页模式时浏览器历史记录支持（暂不支持IE7以下及Opera浏览器，下一版本中完善）；
+Ajax分页模式下支持在分页过程中，通过GET和POST自动提交查询条件，实现多条件查询功能；
+ToPagedList扩展方法新增了当前页索引超出总页数时改变当前页索引为最后一页的页索引，同时返回最后一页数据的功能；
+当MvcPager当前使用的路由定义中页索引参数的默认值为UrlParameter.Optional或页索引参数在路由参数中不存在时，生成的首页url将自动移除页索引参数，使其与默认首页url保持一致，利于SEO优化；
+PagerOptions新增FirstPageRouteName属性，指定第一页默认的路由名称，去掉页索引参数，优化SEO；
+解决分页时url中中文参数被反复编码的bug。
+移除PagerOptions.UseJqueryAjax属性；
+PagerOptions的SeperatorHtml属性更名为PagerItemsSeperator；
+移除HtmlHelper的AjaxPager扩展方法，Ajax分页模式统一使用AjaxHelper的Pager扩展方法，不再支持Microsoft Ajax，仅支持jQuery，与官方保持一致；
+Ajax.Pager扩展方法不再接受AjaxOptions参数，改为MvcAjaxOptions，MvcAjaxOptions继承自AjaxOptions;
+MvcAjaxOptions新增属性EnablePartialLoading，用于支持Ajax分页模式下局部加载功能；
+MvcAjaxOptions新增属性DataFormId，用于标识在Ajax分页模式下，分页时向服务器端通过Ajax提交的数据所在的Form和ID，用于实现Ajax分页模式下的查询功能；
+解决了PagerOptions.AlwaysShowFirstLastPageNumber为true时，第一页页索引按钮和更多页按钮显示不正确的问题；
+新增了两个PagedList构造函数；
+为IEnumerable&lt;T&gt;接口添加ToPagedList扩展方法；
+新增HtmlHelper扩展方法RegisterMvcPagerScriptResource，用于注册MvcPager的客户端jQuery插件脚本；
+MvcPager 2.0 for ASP.NET 4.0目标编译框架为.Net Framework 4.0，可用于目标框架为.Net Framework 4.0或4.5的ASP.NET MVC 4.0项目中；
+取消对ASP.NET MVC 2.0的支持，仅支持ASP.NET MVC 3.0以上版本；</releaseNotes>
+    <copyright>2009-2013 Webdiyer</copyright>
+    <language>zh-CN</language>
+    <tags>MvcPager Mvc分页 Mvc分页控件</tags>
+  </metadata>
+</package>
