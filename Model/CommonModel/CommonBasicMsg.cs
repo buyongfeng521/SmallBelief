@@ -20,6 +20,9 @@ namespace Model.CommonModel
         //Upload
         public const string UploadSuc = "上传成功";
         public const string UploadFail = "上传失败";
+        //Save
+        public const string SaveSuc = "保存成功";
+        public const string SaveFail = "保存失败";
 
         //Void
         public const string VoidID = "无效ID";

@@ -1,7 +1,9 @@
-﻿
+﻿@model Model.t_goods
 @{
     ViewBag.Title = "GoodsAdd";
     Layout = "~/Views/_Layout.cshtml";
+    <link href="~/content/wangEditor-2.1.12/css/wangEditor.css" rel="stylesheet" />
+    <script src="~/content/wangEditor-2.1.12/js/wangEditor.js"></script>
 }
 
 
@@ -19,10 +21,10 @@
             </div>
             <div class="panel-body">
                 <form id="frmGoodsInfo">
-                    @Html.Hidden("goods_id")
+                    @Html.Hidden("goods_id",@Model.goods_id)
                     <div class="form-group">
                         <label>商品名称：</label>
-                        <input type="text" class="form-control" id="goods_name" name="goods_name" placeholder="商品名称">
+                        <input type="text" class="form-control" id="goods_name" name="goods_name" value="@Model.goods_name" placeholder="商品名称">
                     </div>
                     <div class="form-group">
                         <label>商品分类：</label>
@@ -31,37 +33,65 @@
                     <div class="form-group">
                         <label>商品价格：</label>
                         <div class="form-group input-group">
-                            <input type="number" class="form-control" id="shop_price" name="shop_price" placeholder="商品价格">
+                            <input type="number" class="form-control" id="shop_price" name="shop_price" value="@Model.shop_price" placeholder="商品价格">
                             <span class="input-group-addon">.00</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>商品库存：</label>
-                        <input type="number" class="form-control" id="goods_number" name="goods_number" placeholder="商品库存">
+                        <input type="number" class="form-control" id="goods_number" name="goods_number" value="@Model.goods_number" placeholder="商品库存">
                     </div>
                     <div class="form-group">
                         <label>商品单位：</label>
-                        <input type="text" class="form-control" id="goods_unit" name="goods_unit" placeholder="商品单位">
+                        <input type="text" class="form-control" id="goods_unit" name="goods_unit" value="@Model.goods_unit" placeholder="商品单位">
                     </div>
                     <div class="form-group">
                         <label>商品图片：</label>
                         <input type="file" id="goods_img" name="goods_img">
+                        @if (!string.IsNullOrEmpty(Model.goods_name))
+                        {
+                            <div>
+                                <img src='@System.Configuration.ConfigurationManager.AppSettings["Domain"]@Model.goods_img' class="img-rounded" height="50" width="50">
+                            </div>
+                        }
                     </div>
                     <div class="form-group">
                         <label>商品属性：</label>
                         <label class="checkbox-inline">
-                            <input type="checkbox" id="is_on_sale" name="is_on_sale" checked>上架
+                            @if (string.IsNullOrEmpty(Model.goods_name))
+                            { 
+                                <input type="checkbox" id="is_on_sale" name="is_on_sale" checked><span>上架</span>    
+                            }
+                            else
+                            {
+                                @Html.CheckBox("is_on_sale", Model.is_on_sale == true ? true : false)<span>上架</span>
+                            }
                         </label>
                         <label class="checkbox-inline">
-                            <input type="checkbox" id="is_hot" name="is_hot">热销
+                            @if (string.IsNullOrEmpty(Model.goods_name))
+                            {
+                                <input type="checkbox" id="is_hot" name="is_hot"><span>热销</span>
+                            }
+                            else
+                            { 
+                                @Html.CheckBox("is_hot", Model.is_hot == true ? true : false)<span>热销</span>
+                            }
                         </label>
                         <label class="checkbox-inline">
-                            <input type="checkbox" id="is_best" name="is_best">明星
+                            
+                            @if (string.IsNullOrEmpty(Model.goods_name))
+                            {
+                                <input type="checkbox" id="is_best" name="is_best"><span>明星</span>
+                            }
+                            else
+                            {
+                                @Html.CheckBox("is_best", Model.is_best == true ? true : false)<span>明星</span>
+                            }
                         </label>
                     </div>
                     <div class="form-group">
                         <label>商品简介：</label>
-                        <input type="text" class="form-control" id="goods_brief" name="goods_brief" placeholder="商品简介">
+                        <input type="text" class="form-control" id="goods_brief" name="goods_brief" value="@Model.goods_brief" placeholder="商品简介">
                     </div>
 
                     <button type="button" class="btn btn-success" onclick="saveInfo()">保存</button>
@@ -78,16 +108,16 @@
                 <input type="file" name="gallery" id="gallery" multiple class="file-loading" />
                 <hr />
                 <div class="col-sm-12" id="divGallery">
-
-                    <div class="alert alert-dismissible col-sm-4">
-                        <button type="button" class="close" onclick="delGallery(this,'')"><span>&times;</span></button>
-                        <img src="http://7xj3q7.com1.z0.glb.clouddn.com/201606121714414795239.jpg" alt="..." class="img-thumbnail">
-                    </div>
-                    <div class="alert alert-dismissible col-sm-4">
-                        <button type="button" class="close"><span>&times;</span></button>
-                        <img src="http://7xj3q7.com1.z0.glb.clouddn.com/201606121714414795239.jpg" alt="..." class="img-thumbnail">
-                    </div>
-
+                    @if(ViewBag.ListGallery != null)
+                    { 
+                        foreach (var item in ViewBag.ListGallery)
+                        { 
+                            <div class="alert alert-dismissible col-sm-4">
+                                <button type="button" class="close" onclick="delGallery(this,'@item.img')"><span>&times;</span></button>
+                                <img src='@System.Configuration.ConfigurationManager.AppSettings["Domain"]@item.img' class="img-thumbnail">
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -102,7 +132,12 @@
                 商品详情
             </div>
             <div class="panel-body">
-                
+                <form>
+                    <div id="divGoodsDetail" style="height:500px;">
+                        @Html.Raw(Model.goods_desc)
+                    </div>
+                    <button type="button" style="margin-top:15px" class="btn btn-success" onclick="saveDetail()">保存</button>
+                </form>
             </div>
         </div>
     </div>
@@ -170,10 +205,44 @@
             url: "/Goods/GoodsAdd",
             success: function (data) {
                 $.procAjaxData(data, function (data) {
-                    $("#goods_id").val(data.Data);
+                    //$("#goods_id").val(data.Data);
+                    location.href = "/Goods/GoodsAdd?goods_id="+data.Data;
                 });
             }
         });
     }
 </script>
+
+
+<script type="text/javascript">
+    var editor = new wangEditor('divGoodsDetail');
+
+    // 上传图片（举例）
+    editor.config.uploadImgUrl = '/Common/UploadImages';
+
+    // 设置 headers（举例）
+    editor.config.uploadHeaders = {
+        'Accept': 'text/x-json'
+    };
+
+    editor.create();
+
+    function saveDetail() {
+        var goods_detail = editor.$txt.html();
+        var goods_id = $("#goods_id").val();
+        if (goods_id) {
+            var url = "/Goods/GoodsDetail";
+            $.post(url, { "goods_id": goods_id, "goods_detail": goods_detail }, function (data) {
+                $.procAjaxData(data)
+            })
+        }
+        else {
+            alert("不存在此商品");
+        }
+        
+    }
+</script>
+
+
+
 

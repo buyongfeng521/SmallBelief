@@ -121,10 +121,22 @@
     <Content Include="content\js\morris-data.js" />
     <Content Include="content\js\morris.min.js" />
     <Content Include="content\js\raphael-min.js" />
+    <Content Include="content\wangEditor-2.1.12\css\fonts\icomoon.svg" />
+    <Content Include="content\wangEditor-2.1.12\css\wangEditor.css" />
+    <Content Include="content\wangEditor-2.1.12\css\wangEditor.min.css" />
+    <Content Include="content\wangEditor-2.1.12\js\lib\jquery-1.10.2.min.js" />
+    <Content Include="content\wangEditor-2.1.12\js\lib\jquery-2.2.1.js" />
+    <Content Include="content\wangEditor-2.1.12\js\wangEditor.js" />
+    <Content Include="content\wangEditor-2.1.12\js\wangEditor.min.js" />
     <Content Include="Global.asax" />
     <Content Include="content\bootstrap-fileinput\fonts\icomoon.eot" />
     <Content Include="content\bootstrap-fileinput\fonts\icomoon.ttf" />
     <Content Include="content\bootstrap-fileinput\fonts\icomoon.woff" />
+    <Content Include="content\wangEditor-2.1.12\css\fonts\icomoon.eot" />
+    <Content Include="content\wangEditor-2.1.12\css\fonts\icomoon.ttf" />
+    <Content Include="content\wangEditor-2.1.12\css\fonts\icomoon.woff" />
+    <Content Include="content\wangEditor-2.1.12\css\wangEditor.less" />
+    <Content Include="content\wangEditor-2.1.12\emotions.data" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Common\ViewCommon.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -143,6 +155,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ADController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\CouponController.cs" />
     <Compile Include="Controllers\GoodsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -195,11 +208,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Common\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{9683f616-d48f-4ee1-b652-96e8f51f572f}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DapperBLL\DapperBLL.csproj">
+      <Project>{de752fef-0778-4a70-8ee5-04f391531f2e}</Project>
+      <Name>DapperBLL</Name>
     </ProjectReference>
     <ProjectReference Include="..\EFBLL\EFBLL.csproj">
       <Project>{d1a8e2bd-2f5e-46ac-968d-8a708f9df89c}</Project>

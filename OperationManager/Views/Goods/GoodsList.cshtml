@@ -23,7 +23,7 @@
             </div>
             <button class="btn btn-default">搜索</button>
 
-            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加商品</a>
+            <a href="/Goods/GoodsAdd" class="btn btn-info pull-right">增加商品</a>
         }
         <hr />
         <div class="dataTable_wrapper">
@@ -79,19 +79,19 @@
                                 }
                             </td>
                             <td>
-                                <a href="javascript:">修改</a>
+                                <a href="/Goods/GoodsAdd?goods_id=@item.goods_id">修改</a>
                                 &nbsp;&nbsp;
                                 @if (item.is_on_sale == true)
                                 {
-                                    <a href="javascript:" class="text-danger">下架</a>
+                                    <a href="javascript:" class="text-danger" onclick="down(@item.goods_id)">下架</a>
                                 }
                                 else
                                 { 
-                                    <a href="javascript:" class="text-success">上架</a>    
+                                    <a href="javascript:" class="text-success" onclick="up(@item.goods_id)">上架</a>    
                                 }
                                 
                                 &nbsp;&nbsp;
-                                <a href="javascript:">删除</a>
+                                <a href="javascript:" onclick="del(@item.goods_id)">删除</a>
                             </td>
                         </tr>
                     }
@@ -120,8 +120,8 @@
 
 <script>
     function del(id) {
-        if (confirm('确定删除？')) {
-            var url = '/Goods/GoodsDelete';
+        if (confirm("确定删除？")) {
+            var url = "/Goods/GoodsDelete";
             $.post(url, { "id": id }, function (data) {
                 $.procAjaxData(data, function () {
                     location.href = "/Goods/GoodsList";
@@ -129,6 +129,29 @@
             });
         }
     }
+
+    function up(id){
+        if(confirm("确定上架？")){
+            var url = "/Goods/GoodsUp";
+            $.post(url,{"id":id},function(data){
+                $.procAjaxData(data,function(){
+                    location.href = "/Goods/GoodsList";
+                })
+            })
+        }
+    }
+
+    function down(id){
+        if(confirm("确定下架？")){
+            var url = "/Goods/GoodsDown";
+            $.post(url,{"id":id},function(data){
+                $.procAjaxData(data,function(){
+                    location.href = "/Goods/GoodsList";
+                })
+            })
+        }
+    }
+
 </script>
 
 

@@ -40,14 +40,28 @@ namespace OperationManager.Controllers
         }
 
         [HttpGet]
-        public ActionResult GoodsAdd()
+        public ActionResult GoodsAdd(int goods_id = 0)
         {
-            ViewBag.ListCat = SelectHelper.GetCategorySelList();
-            return View();
+            if (goods_id == 0)
+            {
+                ViewBag.ListCat = SelectHelper.GetCategorySelList();
+                return View(new t_goods());
+            }
+            else
+            {
+                t_goods goodsModel = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == goods_id);
+
+                ViewBag.ListCat = SelectHelper.GetCategorySelListBy(goodsModel.cat_id.ToString());
+
+                List<t_goods_gallery> listGallery = OperateContext.EFBLLSession.t_goods_galleryBLL.GetListBy(g=>g.goods_id == goods_id);
+                ViewBag.ListGallery = listGallery;
+                return View(goodsModel);
+            }
+            
         }
 
         [HttpPost]
-        public ActionResult GoodsAdd(string goods_name = "", int cat_id = 0, string shop_price = "", string goods_number = "",string goods_unit = "",
+        public ActionResult GoodsAdd(int goods_id = 0,string goods_name = "", int cat_id = 0, string shop_price = "", string goods_number = "",string goods_unit = "",
             HttpPostedFileBase goods_img = null,string is_on_sale = "",string is_hot="",string is_best="",string goods_brief="")
         {
             AjaxMsg ajax = new AjaxMsg();
@@ -86,78 +100,111 @@ namespace OperationManager.Controllers
                 ajax.Msg = "商品库存不能负数";
                 return Json(ajax);
             }
-            if (goods_img == null)
-            {
-                ajax.Msg = "商品图片不能为空";
-                return Json(ajax);
-            }
-            if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_name == goods_name.Trim()) > 0)
-            {
-                ajax.Msg = "已存在此名称的商品";
-                return Json(ajax);
-            }
+            
             #endregion
 
             //2.0 do
             dShop_price = Math.Round(dShop_price, 2, MidpointRounding.AwayFromZero);
-            string strImg = UploadHelper.UploadImage(goods_img);
-            if (string.IsNullOrEmpty(strImg))
+
+            #region I Edit
+            if (goods_id > 0)
             {
-                ajax.Msg = "上传图片失败";
-                return Json(ajax);
-            }
-            t_goods goodsModel = new t_goods() 
+                string strImg = "";
+                if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_id != goods_id && g.goods_name == goods_name.Trim()) > 0)
+                {
+                    ajax.Msg = "已存在此名称的商品";
+                    return Json(ajax);
+                }
+                if (goods_img != null)
+                {
+                    strImg = UploadHelper.UploadImage(goods_img);
+                }
+                t_goods editModel = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == goods_id);
+                if (editModel != null)
+                {
+                    editModel.goods_name = goods_name.Trim();
+                    editModel.cat_id = cat_id;
+                    editModel.shop_price = dShop_price;
+                    editModel.goods_number = iGoods_number;
+
+                    editModel.goods_unit = goods_unit.Trim();
+                    if (!string.IsNullOrEmpty(strImg))
+                    {
+                        editModel.goods_img = strImg;
+                    }
+
+                    editModel.is_on_sale = is_on_sale == "true" ? true : false;
+                    editModel.is_hot = is_hot == "true" ? true : false;
+                    editModel.is_best = is_best == "true" ? true : false;
+                    editModel.goods_brief = goods_brief.Trim();
+                    if (OperateContext.EFBLLSession.t_goodsBLL.Modify(editModel))
+                    {
+                        ajax.Data = editModel.goods_id;
+                        ajax.Status = "ok";
+                        ajax.Msg = CommonBasicMsg.EditSuc;
+                    }
+                    else
+                    {
+                        ajax.Msg = CommonBasicMsg.EditFail;
+                    }
+                }
+                else
+                {
+                    ajax.Msg = CommonBasicMsg.VoidGoods;
+                }
+            } 
+            #endregion
+            
+            #region II Add
+            else
             {
-                goods_name = goods_name.Trim(),
-                cat_id = cat_id,
-                shop_price = dShop_price,
-                goods_number = iGoods_number,
-                goods_lock_number = 0,
-                goods_unit = goods_unit.Trim(),
-                goods_img = strImg,
-                is_on_sale = is_on_sale == "on"?true:false,
-                is_hot = is_hot == "on"?true:false,
-                is_best = is_best == "on"? true:false,
-                goods_brief = goods_brief.Trim(),
-                goods_desc = "",
-                sort = 0,
-                is_del = false,
-                add_time = DateTime.Now
-            };
-            if (OperateContext.EFBLLSession.t_goodsBLL.Add(goodsModel))
-            {
-                ajax.Data = goodsModel.goods_id;
-                ajax.Status = "ok";
-                ajax.Msg = CommonBasicMsg.AddSuc;
-            }
+                if (goods_img == null)
+                {
+                    ajax.Msg = "商品图片不能为空";
+                    return Json(ajax);
+                }
+                if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_name == goods_name.Trim()) > 0)
+                {
+                    ajax.Msg = "已存在此名称的商品";
+                    return Json(ajax);
+                }
+                string strImg = UploadHelper.UploadImage(goods_img);
+                if (string.IsNullOrEmpty(strImg))
+                {
+                    ajax.Msg = "上传图片失败";
+                    return Json(ajax);
+                }
+                t_goods goodsModel = new t_goods()
+                {
+                    goods_name = goods_name.Trim(),
+                    cat_id = cat_id,
+                    shop_price = dShop_price,
+                    goods_number = iGoods_number,
+                    goods_lock_number = 0,
+                    goods_unit = goods_unit.Trim(),
+                    goods_img = strImg,
+                    is_on_sale = is_on_sale == "on" ? true : false,
+                    is_hot = is_hot == "on" ? true : false,
+                    is_best = is_best == "on" ? true : false,
+                    goods_brief = goods_brief.Trim(),
+                    goods_desc = "",
+                    sort = 0,
+                    is_del = false,
+                    add_time = DateTime.Now
+                };
+                if (OperateContext.EFBLLSession.t_goodsBLL.Add(goodsModel))
+                {
+                    ajax.Data = goodsModel.goods_id;
+                    ajax.Status = "ok";
+                    ajax.Msg = CommonBasicMsg.AddSuc;
+                }
+            } 
+            #endregion
 
             return Json(ajax);
         }
 
-        [HttpGet]
-        public ActionResult GoodsEdit(int id = 0)
-        {
-
-            return View();
-        }
-        [HttpPost]
-        public ActionResult GoodsEdit()
-        {
-            return View();
-        }
-
-        public ActionResult GoodsDelete(int id = 0)
-        {
-            AjaxMsg ajax = new AjaxMsg();
-
-            if (id > 0)
-            { 
-                
-            }
-
-            return Json(ajax);
-        }
-
+        
         public ActionResult GoodsGalleryUpload(IEnumerable<HttpPostedFileBase> gallery)
         {
             AjaxMsg ajax = new AjaxMsg();
@@ -260,6 +307,107 @@ namespace OperationManager.Controllers
                 }
             }
 
+            return Json(ajax);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult GoodsDetail(int goods_id = 0,string goods_detail = "")
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            if (goods_id > 0)
+            {
+                t_goods goodsModel = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == goods_id);
+                if (goodsModel != null)
+                {
+                    goodsModel.goods_desc = goods_detail.Trim();
+                    if (OperateContext.EFBLLSession.t_goodsBLL.Modify(goodsModel))
+                    {
+                        ajax.Msg = CommonBasicMsg.SaveSuc;
+                        ajax.Status = "ok";
+                    }
+                }
+                else
+                {
+                    ajax.Msg = CommonBasicMsg.VoidGoods;
+                }
+            }
+
+            return Json(ajax);
+        }
+
+        [HttpPost]
+        public ActionResult GoodsDelete(int id = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            if (id > 0)
+            {
+                if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_id == id) > 0)
+                {
+                    string sqlDel = @"delete from t_goods_gallery where goods_id = @goods_id
+                                    delete from t_goods where goods_id = @goods_id";
+                    if (DapperContext<t_goods>.DapperBLL.ExecuteSql(sqlDel, new { goods_id = id }))
+                    {
+                        ajax.Status = "ok";
+                        ajax.Msg = CommonBasicMsg.DelSuc;
+                    }
+                }
+            }
+
+            return Json(ajax);
+        }
+
+        [HttpPost]
+        public ActionResult GoodsUp(int id = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            if (id > 0)
+            {
+                t_goods upModel = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == id);
+                if (upModel != null)
+                {
+                    upModel.is_on_sale = true;
+                    if (OperateContext.EFBLLSession.t_goodsBLL.Modify(upModel))
+                    {
+                        ajax.Status = "ok";
+                        ajax.Msg = "上架成功";
+                    }
+                }
+                else
+                {
+                    ajax.Msg = CommonBasicMsg.VoidGoods;
+                }
+            }
+
+            return Json(ajax);
+        }
+
+        [HttpPost]
+        public ActionResult GoodsDown(int id = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            if (id > 0)
+            {
+                t_goods upModel = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == id);
+                if (upModel != null)
+                {
+                    upModel.is_on_sale = false;
+                    if (OperateContext.EFBLLSession.t_goodsBLL.Modify(upModel))
+                    {
+                        ajax.Status = "ok";
+                        ajax.Msg = "下架成功";
+                    }
+                }
+                else
+                {
+                    ajax.Msg = CommonBasicMsg.VoidGoods;
+                }
+            }
+            
             return Json(ajax);
         }
         
