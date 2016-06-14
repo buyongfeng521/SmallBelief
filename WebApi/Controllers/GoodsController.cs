@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HelperCommon;
+using Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,9 +11,11 @@ namespace WebApi.Controllers
 {
     public class GoodsController : ApiController
     {
-        public string Get() 
+        [HttpGet]
+        public List<t_admin_user> GoodsListGet()
         {
-            return "我就是我";
+            List<t_admin_user> listUsers = OperateContext.EFBLLSession.t_admin_userBLL.GetListBy(u=>u.ID > 0);
+            return listUsers;
         }
     }
 }
