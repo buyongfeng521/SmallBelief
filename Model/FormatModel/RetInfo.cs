@@ -8,6 +8,13 @@ namespace Model.FormatModel
 {
     public class RetInfo<T>
     {
+        public RetInfo()
+        {
+            status = false;
+            //Data = default(T);
+            recordCount = 0;
+            unauthorized = false;
+        }
         /// <summary>操作成功或失败</summary>
         public bool status { get; set; }
         /// <summary>失败原因、操作引导信息、成功信息</summary>
