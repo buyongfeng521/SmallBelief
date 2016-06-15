@@ -12,6 +12,9 @@ using WebApi.Models;
 
 namespace WebApi.Controllers
 {
+    /// <summary>
+    /// 商品模块
+    /// </summary>
     public class GoodsController : ApiController
     {
         /// <summary>

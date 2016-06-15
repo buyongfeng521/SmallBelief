@@ -10,8 +10,16 @@ using System.Web.Http;
 
 namespace WebApi
 {
+    /// <summary>
+    /// Global
+    /// </summary>
     public class Global : HttpApplication
     {
+        /// <summary>
+        /// Start
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Application_Start(object sender, EventArgs e)
         {
             // 在应用程序启动时运行的代码
@@ -20,12 +28,20 @@ namespace WebApi
             RouteConfig.RegisterRoutes(RouteTable.Routes);            
         }
 
+        /// <summary>
+        /// Init
+        /// </summary>
         public override void Init()
         {
             PostAuthenticateRequest += MvcApplication_PostAuthenticateRequest;
             base.Init();
         }
 
+        /// <summary>
+        /// MvcAppication
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void MvcApplication_PostAuthenticateRequest(object sender, EventArgs e)
         {
             HttpContext.Current.SetSessionStateBehavior(

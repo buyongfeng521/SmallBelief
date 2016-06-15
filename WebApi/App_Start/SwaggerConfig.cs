@@ -8,8 +8,14 @@ using System;
 
 namespace WebApi
 {
+    /// <summary>
+    /// SwaggerConfig
+    /// </summary>
     public class SwaggerConfig
     {
+        /// <summary>
+        /// Register Swagger
+        /// </summary>
         public static void Register()
         {
             var thisAssembly = typeof(SwaggerConfig).Assembly;
@@ -227,6 +233,10 @@ namespace WebApi
                     });
         }
 
+        /// <summary>
+        /// XmlPath
+        /// </summary>
+        /// <returns></returns>
         private static string GetXmlCommentsPath()
         {
             return string.Format(@"{0}\bin\WebApi.XML", AppDomain.CurrentDomain.BaseDirectory);
