@@ -1,4 +1,6 @@
-﻿
+﻿@using Webdiyer.WebControls.Mvc;
+@model PagedList<Model.t_user>
+
 @{
     ViewBag.Title = "UserList";
     Layout = "~/Views/_Layout.cshtml";
@@ -22,7 +24,6 @@
             </div>
             <button class="btn btn-default">搜索</button>
             
-            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加会员</a>
         }
         <hr />
         <div class="dataTable_wrapper">
@@ -32,24 +33,103 @@
                     <th>会员名称</th>
                     <th>手机号码</th>
                     <th>注册时间</th>
-                    <th>会员状态</th>
                     <th>操作</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>小菜</td>
-                    <td>18601681037</td>
-                    <td>2016-6-5</td>
-                    <td>正常</td>
-                    <td>
-                        <a href="#">修改</a>
-                        <a href="#">查看</a>
-                    </td>
-                </tr>
+                @{
+                    int i = 0;
+                    foreach(var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.user_name</td>
+                            <td>@item.user_phone</td>
+                            <td>@item.create_time</td>
+                            <td>
+                                <a href="javascript:" onclick="viewUser(@item.ID)">查看</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                
 
             </table>
+
+            <div class="text-center">
+                <nav>
+                    @Html.Pager(Model, new PagerOptions
+                    {
+                        PageIndexParameterName = "index",
+                        ContainerTagName = "ul",
+                        CssClass = "pagination",
+
+                        CurrentPagerItemWrapperFormatString = "<li class=\"active\"><a href=\"javascript:form.submit();\">{0}</a></li>",
+                        PagerItemWrapperFormatString = "<li>{0}</li>",
+                        Id = "bootstrappager"
+                    })
+                </nav>
+            </div>
+
         </div>
     </div>
 </div>
+
+<!--Modal-->
+<div class="modal fade" id="modalUserInfo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">会员信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名：</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="pUserName">小菜</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">手机号码：</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="pUserPhone">18601352457</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">注册时间：</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="pCreateTime">2016-06-15</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">最后登录时间：</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="pLastLoginTime">2016-06-15</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function viewUser(id){
+        if(id){
+            var url = "/User/GetUserBy?id=" + id;
+            $.get(url,function(data){
+                if(data){
+                    $("#pUserName").text(data.user_name);
+                    $("#pUserPhone").text(data.user_phone);
+                    $("#pCreateTime").text(data.create_time);
+                    $("#pLastLoginTime").text(data.last_login_time);
+                    $("#modalUserInfo").modal("show");
+                }
+            });
+        }
+        
+    }
+</script>
 
 

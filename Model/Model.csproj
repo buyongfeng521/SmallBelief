@@ -51,6 +51,7 @@
     <Compile Include="CommonModel\CommonBasicMsg.cs" />
     <Compile Include="DTOModel\CategoryDTO.cs" />
     <Compile Include="DTOModel\GoodsDTO.cs" />
+    <Compile Include="DTOModel\UserDTO.cs" />
     <Compile Include="FormatModel\AjaxMsg.cs" />
     <Compile Include="FormatModel\RetInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
