@@ -14,7 +14,10 @@ namespace WebApi.Controllers
 {
     public class GoodsController : ApiController
     {
-
+        /// <summary>
+        /// 获得所有商品分类
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public RetInfo<List<CategoryDTO>> CategoryListGet()
         {
@@ -46,6 +49,10 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 获得热销商品
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public RetInfo<List<GoodsDTO>> GoodsHotListGet()
         {
@@ -76,6 +83,10 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 获得明星商品
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public RetInfo<List<GoodsDTO>> GoodsBestListGet()
         {
