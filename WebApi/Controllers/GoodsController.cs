@@ -22,7 +22,8 @@ namespace WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<List<CategoryDTO>> CategoryListGet()
+        [CustomAuthorize]
+        public RetInfo<List<CategoryDTO>> CategoryListGet(string token = "111")
         {
             RetInfo<List<CategoryDTO>> ret = new RetInfo<List<CategoryDTO>>();
 

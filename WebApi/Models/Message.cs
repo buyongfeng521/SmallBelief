@@ -10,14 +10,10 @@ namespace WebApi.Models
     /// </summary>
     public class Message
     {
-        /// <summary>
-        /// OK
-        /// </summary>
+        
         public const string Suc = "ok";
-        /// <summary>
-        /// 数据空
-        /// </summary>
         public const string NullData = "数据为空";
+        public const string NoLogin = "用户未登录";
 
     }
 }
