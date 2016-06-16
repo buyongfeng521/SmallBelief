@@ -126,9 +126,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CustomAuthorizeAttribute.cs" />
-    <Compile Include="Models\CustomerVerifyAttribute.cs" />
     <Compile Include="Models\Message.cs" />
-    <Compile Include="Models\RequireAuthorizeAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
