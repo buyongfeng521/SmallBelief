@@ -29,6 +29,10 @@ namespace Model.CommonModel
         public const string VoidModel = "无效实体";
         public const string VoidGallerys = "无效的图片集合";
 
+        //Login
+        public const string LoginSuc = "登陆成功";
+        public const string LoginFail = "用户名或密码错误";
+
 
         //Goods
         public const string VoidGoods = "不存在此商品";
