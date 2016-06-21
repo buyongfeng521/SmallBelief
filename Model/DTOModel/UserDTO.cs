@@ -14,6 +14,7 @@ namespace Model.DTOModel
         public string user_psw { get; set; }
         public int user_age { get; set; }
         public string user_phone { get; set; }
+        public string token { get; set; }
         public string last_login_time { get; set; }
         public string create_time { get; set; }
     }

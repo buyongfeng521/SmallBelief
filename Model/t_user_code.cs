@@ -12,16 +12,12 @@ namespace Model
     using System;
     using System.Collections.Generic;
     
-    public partial class t_user
+    public partial class t_user_code
     {
         public int ID { get; set; }
-        public string user_name { get; set; }
-        public string user_real_name { get; set; }
-        public string user_psw { get; set; }
-        public Nullable<int> user_age { get; set; }
         public string user_phone { get; set; }
-        public Nullable<System.DateTime> last_login_time { get; set; }
+        public string v_code { get; set; }
+        public Nullable<bool> is_use { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
-        public string token { get; set; }
     }
 }

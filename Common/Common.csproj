@@ -51,6 +51,7 @@
     <Compile Include="ParameterRebinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QiNiuHelper.cs" />
+    <Compile Include="RegHelper.cs" />
     <Compile Include="SecurityHelper.cs" />
   </ItemGroup>
   <ItemGroup>

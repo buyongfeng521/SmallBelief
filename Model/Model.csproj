@@ -86,6 +86,9 @@
     <Compile Include="t_user.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_user_code.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="SmallBelief.edmx">

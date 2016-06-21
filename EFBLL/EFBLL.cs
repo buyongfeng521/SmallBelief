@@ -50,5 +50,13 @@ namespace EFBLL
         }
     }
 
+	public partial class t_user_codeBLL : EFBLLBase<t_user_code>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_user_codeDAL();
+        }
+    }
+
 
 }

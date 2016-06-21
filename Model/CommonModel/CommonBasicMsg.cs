@@ -32,6 +32,8 @@ namespace Model.CommonModel
         //Login
         public const string LoginSuc = "登陆成功";
         public const string LoginFail = "用户名或密码错误";
+        public const string RegisterSuc = "注册成功";
+        public const string RegisterFail = "注册失败";
 
 
         //Goods

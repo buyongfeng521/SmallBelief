@@ -86,6 +86,21 @@ namespace EFBLL
         }
 
         
+        private t_user_codeBLL t_user_codebll;
+        public t_user_codeBLL t_user_codeBLL
+        {
+	        get
+	        {
+		        if(t_user_codebll == null)
+		        {
+			        t_user_codebll = new t_user_codeBLL();
+		        }
+		        return t_user_codebll;
+	        }
+	        set{}
+        }
+
+        
     }
 
 }

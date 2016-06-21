@@ -29,5 +29,9 @@ namespace EFDAL
     {
     }
 
+	public partial class t_user_codeDAL : EFDALBase<t_user_code>
+    {
+    }
+
 
 }
