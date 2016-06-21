@@ -20,8 +20,8 @@ namespace WebApi.Controllers
         /// <summary>
         /// 登录
         /// </summary>
-        /// <param name="user_phone"></param>
-        /// <param name="user_psw"></param>
+        /// <param name="user_phone">手机号</param>
+        /// <param name="user_psw">密码</param>
         /// <returns></returns>
         [HttpPost]
         public RetInfo<UserDTO> Login(string user_phone, string user_psw)
@@ -56,7 +56,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// 发送验证码
         /// </summary>
-        /// <param name="user_phone"></param>
+        /// <param name="user_phone">手机号</param>
         /// <returns></returns>
         [HttpPost]
         public RetInfo<string> VCodeSend(string user_phone)
@@ -116,9 +116,9 @@ namespace WebApi.Controllers
         /// <summary>
         /// 注册
         /// </summary>
-        /// <param name="user_phone"></param>
-        /// <param name="user_psw"></param>
-        /// <param name="v_code"></param>
+        /// <param name="user_phone">手机号</param>
+        /// <param name="user_psw">密码</param>
+        /// <param name="v_code">验证码</param>
         /// <returns></returns>
         [HttpPost]
         public RetInfo<UserDTO> Register(string user_phone, string user_psw,string v_code)
