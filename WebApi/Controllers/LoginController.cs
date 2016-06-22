@@ -72,23 +72,35 @@ namespace WebApi.Controllers
                         if (OperateContext.EFBLLSession.t_userBLL.GetCountBy(u => u.user_phone == user_phone.Trim()) <= 0)
                         {
                             //发送短信
-                            t_user_code userCode = new t_user_code()
+                            //发送短信
+                            string strCode = new Random().Next(10000, 99999).ToString();
+                            //"{\"code\":\"1234\",\"product\":\"窝在家\"}"
+                            string strContent = string.Format("{\"code\":\"{0}\"}", strCode);
+                            if (SMSHelper.SendMsgByTaoBao(user_phone, strContent, "SMS_10895108"))
                             {
-                                user_phone = user_phone.Trim(),
-                                v_code = new Random().Next(10000,99999).ToString(),
-                                is_use = false,
-                                create_time = DateTime.Now
-                            };
-                            if (OperateContext.EFBLLSession.t_user_codeBLL.Add(userCode))
-                            {
-                                ret.status = true;
-                                ret.msg = "发送成功";
-                                ret.Data = userCode.v_code;
+                                t_user_code userCode = new t_user_code()
+                                {
+                                    user_phone = user_phone.Trim(),
+                                    v_code = strCode,
+                                    is_use = false,
+                                    create_time = DateTime.Now
+                                };
+                                if (OperateContext.EFBLLSession.t_user_codeBLL.Add(userCode))
+                                {
+                                    ret.status = true;
+                                    ret.msg = "发送成功";
+                                    ret.Data = userCode.v_code;
+                                }
+                                else
+                                {
+                                    ret.msg = "发送失败";
+                                }
                             }
                             else
                             {
-                                ret.msg = "发送失败";
+                                ret.msg = "短信失败";
                             }
+                            
                         }
                         else
                         {
