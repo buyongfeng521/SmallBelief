@@ -28,6 +28,7 @@ namespace Model.CommonModel
         public const string VoidID = "无效ID";
         public const string VoidModel = "无效实体";
         public const string VoidGallerys = "无效的图片集合";
+        public const string VoidUser = "无效用户";
 
         //Login
         public const string LoginSuc = "登陆成功";

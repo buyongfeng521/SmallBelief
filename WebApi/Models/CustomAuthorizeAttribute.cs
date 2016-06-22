@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelperCommon;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace WebApi.Models
         public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
         {
             //用户判断
-            string v = HttpContext.Current.Request["token"];
-            if (string.IsNullOrEmpty(v))
+            string token = HttpContext.Current.Request["token"];
+            if (string.IsNullOrEmpty(token) || OperateContext.EFBLLSession.t_userBLL.GetCountBy(u => u.token == token) <= 0)
             {
                 HandleUnauthorizedRequest(actionContext);
             }

@@ -20,6 +20,7 @@
             <PropertyRef Name="cat_id" />
           </Key>
           <Property Name="cat_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cat_type" Type="tinyint" />
           <Property Name="cat_name" Type="nvarchar" MaxLength="20" />
           <Property Name="cat_img" Type="nvarchar" MaxLength="200" />
           <Property Name="cat_note" Type="nvarchar" MaxLength="256" />
@@ -175,6 +176,7 @@
           <Property Name="sort" Type="Int32" />
           <Property Name="add_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_goods" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_category" ToRole="t_goods" />
+          <Property Name="cat_type" Type="Byte" />
         </EntityType>
         <EntityType Name="t_goods">
           <Key>
@@ -278,6 +280,7 @@
           <EntitySetMapping Name="t_category">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_category">
               <MappingFragment StoreEntitySet="t_category">
+                <ScalarProperty Name="cat_type" ColumnName="cat_type" />
                 <ScalarProperty Name="add_time" ColumnName="add_time" />
                 <ScalarProperty Name="sort" ColumnName="sort" />
                 <ScalarProperty Name="cat_note" ColumnName="cat_note" />
