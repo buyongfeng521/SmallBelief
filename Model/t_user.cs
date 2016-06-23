@@ -23,5 +23,6 @@ namespace Model
         public Nullable<System.DateTime> last_login_time { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public string token { get; set; }
+        public string user_img { get; set; }
     }
 }

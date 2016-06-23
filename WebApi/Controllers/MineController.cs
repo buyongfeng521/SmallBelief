@@ -29,9 +29,7 @@ namespace WebApi.Controllers
 
             try
             {
-
-
-                if (!string.IsNullOrEmpty(nickname))
+                if (!string.IsNullOrWhiteSpace(nickname))
                 {
                     t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
                     if (user != null)

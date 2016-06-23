@@ -67,6 +67,7 @@
           <Property Name="user_psw" Type="nvarchar" MaxLength="50" />
           <Property Name="user_age" Type="int" />
           <Property Name="user_phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="user_img" Type="nvarchar" MaxLength="200" />
           <Property Name="token" Type="nvarchar" MaxLength="50" />
           <Property Name="last_login_time" Type="datetime" />
           <Property Name="create_time" Type="datetime" />
@@ -138,6 +139,7 @@
           <Property Name="last_login_time" Type="DateTime" Precision="3" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="token" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="user_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="SmallBeliefEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="t_user" EntityType="Self.t_user" />
@@ -254,6 +256,7 @@
           <EntitySetMapping Name="t_user">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_user">
               <MappingFragment StoreEntitySet="t_user">
+                <ScalarProperty Name="user_img" ColumnName="user_img" />
                 <ScalarProperty Name="token" ColumnName="token" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="user_name" ColumnName="user_name" />
