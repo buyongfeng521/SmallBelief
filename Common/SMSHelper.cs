@@ -34,7 +34,7 @@ namespace Common
                 AlibabaAliqinFcSmsNumSendResponse rsp = client.Execute(req);
                 //Console.WriteLine(rsp.Body);
             }
-            catch
+            catch(Exception ex)
             {
 
             }

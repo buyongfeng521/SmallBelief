@@ -25,7 +25,6 @@ namespace Model
         public string cat_note { get; set; }
         public Nullable<int> sort { get; set; }
         public Nullable<System.DateTime> add_time { get; set; }
-        public Nullable<byte> cat_type { get; set; }
     
         public virtual ICollection<t_goods> t_goods { get; set; }
     }

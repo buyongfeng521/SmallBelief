@@ -25,11 +25,14 @@ namespace Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<t_user> t_user { get; set; }
         public virtual DbSet<t_admin_user> t_admin_user { get; set; }
+        public virtual DbSet<t_area> t_area { get; set; }
         public virtual DbSet<t_category> t_category { get; set; }
+        public virtual DbSet<t_city> t_city { get; set; }
         public virtual DbSet<t_goods> t_goods { get; set; }
         public virtual DbSet<t_goods_gallery> t_goods_gallery { get; set; }
+        public virtual DbSet<t_province> t_province { get; set; }
+        public virtual DbSet<t_user> t_user { get; set; }
         public virtual DbSet<t_user_code> t_user_code { get; set; }
     }
 }

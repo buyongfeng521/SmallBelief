@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SmallBeliefModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SmallBeliefModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="t_admin_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -15,17 +15,34 @@
           <Property Name="last_login_time" Type="datetime" />
           <Property Name="create_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_area">
+          <Key>
+            <PropertyRef Name="AreaId" />
+          </Key>
+          <Property Name="AreaId" Type="int" Nullable="false" />
+          <Property Name="AreaCode" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="AreaName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CityCode" Type="varchar" MaxLength="6" Nullable="false" />
+        </EntityType>
         <EntityType Name="t_category">
           <Key>
             <PropertyRef Name="cat_id" />
           </Key>
           <Property Name="cat_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="cat_type" Type="tinyint" />
           <Property Name="cat_name" Type="nvarchar" MaxLength="20" />
           <Property Name="cat_img" Type="nvarchar" MaxLength="200" />
           <Property Name="cat_note" Type="nvarchar" MaxLength="256" />
           <Property Name="sort" Type="int" />
           <Property Name="add_time" Type="datetime" />
+        </EntityType>
+        <EntityType Name="t_city">
+          <Key>
+            <PropertyRef Name="CityId" />
+          </Key>
+          <Property Name="CityId" Type="int" Nullable="false" />
+          <Property Name="CityCode" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProvinceCode" Type="varchar" MaxLength="6" Nullable="false" />
         </EntityType>
         <EntityType Name="t_goods">
           <Key>
@@ -57,6 +74,14 @@
           <Property Name="img" Type="nvarchar" MaxLength="200" />
           <Property Name="add_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_province">
+          <Key>
+            <PropertyRef Name="ProvinceId" />
+          </Key>
+          <Property Name="ProvinceId" Type="int" Nullable="false" />
+          <Property Name="ProvinceCode" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="ProvinceName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="t_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -64,13 +89,13 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="user_name" Type="nvarchar" MaxLength="100" />
           <Property Name="user_real_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="user_img" Type="nvarchar" MaxLength="200" />
           <Property Name="user_psw" Type="nvarchar" MaxLength="50" />
           <Property Name="user_age" Type="int" />
           <Property Name="user_phone" Type="nvarchar" MaxLength="20" />
-          <Property Name="user_img" Type="nvarchar" MaxLength="200" />
-          <Property Name="token" Type="nvarchar" MaxLength="50" />
           <Property Name="last_login_time" Type="datetime" />
           <Property Name="create_time" Type="datetime" />
+          <Property Name="token" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="t_user_code">
           <Key>
@@ -108,9 +133,12 @@
         </Association>
         <EntityContainer Name="SmallBeliefModelStoreContainer">
           <EntitySet Name="t_admin_user" EntityType="Self.t_admin_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_area" EntityType="Self.t_area" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_city" EntityType="Self.t_city" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods_gallery" EntityType="Self.t_goods_gallery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_province" EntityType="Self.t_province" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user" EntityType="Self.t_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user_code" EntityType="Self.t_user_code" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_t_goods_gallery_t_goods" Association="Self.FK_t_goods_gallery_t_goods">
@@ -126,36 +154,24 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SmallBeliefModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="t_user">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="user_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="user_real_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="user_psw" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="user_age" Type="Int32" />
-          <Property Name="user_phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="last_login_time" Type="DateTime" Precision="3" />
-          <Property Name="create_time" Type="DateTime" Precision="3" />
-          <Property Name="token" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="user_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityContainer Name="SmallBeliefEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="t_user" EntityType="Self.t_user" />
           <EntitySet Name="t_admin_user" EntityType="SmallBeliefModel.t_admin_user" />
+          <EntitySet Name="t_area" EntityType="SmallBeliefModel.t_area" />
           <EntitySet Name="t_category" EntityType="SmallBeliefModel.t_category" />
+          <EntitySet Name="t_city" EntityType="SmallBeliefModel.t_city" />
           <EntitySet Name="t_goods" EntityType="SmallBeliefModel.t_goods" />
+          <EntitySet Name="t_goods_gallery" EntityType="SmallBeliefModel.t_goods_gallery" />
+          <EntitySet Name="t_province" EntityType="SmallBeliefModel.t_province" />
+          <EntitySet Name="t_user" EntityType="SmallBeliefModel.t_user" />
+          <EntitySet Name="t_user_code" EntityType="SmallBeliefModel.t_user_code" />
           <AssociationSet Name="FK_t_goods_t_category" Association="SmallBeliefModel.FK_t_goods_t_category">
             <End Role="t_category" EntitySet="t_category" />
             <End Role="t_goods" EntitySet="t_goods" />
           </AssociationSet>
-          <EntitySet Name="t_goods_gallery" EntityType="SmallBeliefModel.t_goods_gallery" />
           <AssociationSet Name="FK_t_goods_gallery_t_goods" Association="SmallBeliefModel.FK_t_goods_gallery_t_goods">
             <End Role="t_goods" EntitySet="t_goods" />
             <End Role="t_goods_gallery" EntitySet="t_goods_gallery" />
           </AssociationSet>
-          <EntitySet Name="t_user_code" EntityType="SmallBeliefModel.t_user_code" />
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -166,6 +182,15 @@
           <Property Name="user_psw" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="last_login_time" Type="DateTime" Precision="3" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="t_area">
+          <Key>
+            <PropertyRef Name="AreaId" />
+          </Key>
+          <Property Name="AreaId" Type="Int32" Nullable="false" />
+          <Property Name="AreaCode" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="AreaName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CityCode" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="t_category">
           <Key>
@@ -178,7 +203,15 @@
           <Property Name="sort" Type="Int32" />
           <Property Name="add_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_goods" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_category" ToRole="t_goods" />
-          <Property Name="cat_type" Type="Byte" />
+        </EntityType>
+        <EntityType Name="t_city">
+          <Key>
+            <PropertyRef Name="CityId" />
+          </Key>
+          <Property Name="CityId" Type="Int32" Nullable="false" />
+          <Property Name="CityCode" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="CityName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProvinceCode" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="t_goods">
           <Key>
@@ -203,6 +236,49 @@
           <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
           <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
         </EntityType>
+        <EntityType Name="t_goods_gallery">
+          <Key>
+            <PropertyRef Name="gallery_id" />
+          </Key>
+          <Property Name="gallery_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="goods_id" Type="Int32" />
+          <Property Name="img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="add_time" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="t_goods" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods_gallery" ToRole="t_goods" />
+        </EntityType>
+        <EntityType Name="t_province">
+          <Key>
+            <PropertyRef Name="ProvinceId" />
+          </Key>
+          <Property Name="ProvinceId" Type="Int32" Nullable="false" />
+          <Property Name="ProvinceCode" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="ProvinceName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="t_user">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="user_real_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="user_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="user_psw" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="user_age" Type="Int32" />
+          <Property Name="user_phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="last_login_time" Type="DateTime" Precision="3" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+          <Property Name="token" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="t_user_code">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="v_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="is_use" Type="Boolean" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+        </EntityType>
         <Association Name="FK_t_goods_t_category">
           <End Type="SmallBeliefModel.t_category" Role="t_category" Multiplicity="0..1" />
           <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="*" />
@@ -215,16 +291,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="t_goods_gallery">
-          <Key>
-            <PropertyRef Name="gallery_id" />
-          </Key>
-          <Property Name="gallery_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="goods_id" Type="Int32" />
-          <Property Name="img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="add_time" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="t_goods" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods_gallery" ToRole="t_goods" />
-        </EntityType>
         <Association Name="FK_t_goods_gallery_t_goods">
           <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="0..1" />
           <End Type="SmallBeliefModel.t_goods_gallery" Role="t_goods_gallery" Multiplicity="*" />
@@ -237,38 +303,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="t_user_code">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="user_phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="v_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="is_use" Type="Boolean" />
-          <Property Name="create_time" Type="DateTime" Precision="3" />
-        </EntityType>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SmallBeliefModelStoreContainer" CdmEntityContainer="SmallBeliefEntities">
-          <EntitySetMapping Name="t_user">
-            <EntityTypeMapping TypeName="SmallBeliefModel.t_user">
-              <MappingFragment StoreEntitySet="t_user">
-                <ScalarProperty Name="user_img" ColumnName="user_img" />
-                <ScalarProperty Name="token" ColumnName="token" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="user_name" ColumnName="user_name" />
-                <ScalarProperty Name="user_real_name" ColumnName="user_real_name" />
-                <ScalarProperty Name="user_psw" ColumnName="user_psw" />
-                <ScalarProperty Name="user_age" ColumnName="user_age" />
-                <ScalarProperty Name="user_phone" ColumnName="user_phone" />
-                <ScalarProperty Name="last_login_time" ColumnName="last_login_time" />
-                <ScalarProperty Name="create_time" ColumnName="create_time" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="t_admin_user">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_admin_user">
               <MappingFragment StoreEntitySet="t_admin_user">
@@ -280,16 +320,35 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="t_area">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_area">
+              <MappingFragment StoreEntitySet="t_area">
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+                <ScalarProperty Name="AreaCode" ColumnName="AreaCode" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="t_category">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_category">
               <MappingFragment StoreEntitySet="t_category">
-                <ScalarProperty Name="cat_type" ColumnName="cat_type" />
                 <ScalarProperty Name="add_time" ColumnName="add_time" />
                 <ScalarProperty Name="sort" ColumnName="sort" />
                 <ScalarProperty Name="cat_note" ColumnName="cat_note" />
                 <ScalarProperty Name="cat_img" ColumnName="cat_img" />
                 <ScalarProperty Name="cat_name" ColumnName="cat_name" />
                 <ScalarProperty Name="cat_id" ColumnName="cat_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_city">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_city">
+              <MappingFragment StoreEntitySet="t_city">
+                <ScalarProperty Name="ProvinceCode" ColumnName="ProvinceCode" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -322,6 +381,31 @@
                 <ScalarProperty Name="img" ColumnName="img" />
                 <ScalarProperty Name="goods_id" ColumnName="goods_id" />
                 <ScalarProperty Name="gallery_id" ColumnName="gallery_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_province">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_province">
+              <MappingFragment StoreEntitySet="t_province">
+                <ScalarProperty Name="ProvinceName" ColumnName="ProvinceName" />
+                <ScalarProperty Name="ProvinceCode" ColumnName="ProvinceCode" />
+                <ScalarProperty Name="ProvinceId" ColumnName="ProvinceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_user">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_user">
+              <MappingFragment StoreEntitySet="t_user">
+                <ScalarProperty Name="token" ColumnName="token" />
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="last_login_time" ColumnName="last_login_time" />
+                <ScalarProperty Name="user_phone" ColumnName="user_phone" />
+                <ScalarProperty Name="user_age" ColumnName="user_age" />
+                <ScalarProperty Name="user_psw" ColumnName="user_psw" />
+                <ScalarProperty Name="user_img" ColumnName="user_img" />
+                <ScalarProperty Name="user_real_name" ColumnName="user_real_name" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonModel\CommonBasicMsg.cs" />
+    <Compile Include="CommonModel\TestModel.cs" />
     <Compile Include="DTOModel\CategoryDTO.cs" />
     <Compile Include="DTOModel\GoodsDTO.cs" />
     <Compile Include="DTOModel\UserDTO.cs" />
@@ -74,13 +75,22 @@
     <Compile Include="t_admin_user.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_area.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_category.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_city.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_goods.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_goods_gallery.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_province.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_user.cs">

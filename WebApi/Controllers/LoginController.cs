@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Http;
 
 namespace WebApi.Controllers
@@ -56,12 +57,22 @@ namespace WebApi.Controllers
         /// <summary>
         /// 发送验证码
         /// </summary>
-        /// <param name="user_phone">手机号</param>
         /// <returns></returns>
         [HttpPost]
-        public RetInfo<string> VCodeSend(string user_phone)
+        public RetInfo<string> VCodeSend()
         {
             RetInfo<string> ret = new RetInfo<string>();
+
+            string strtContent = Request.Content.ReadAsStringAsync().Result;
+
+            string str = Request.Content.ToString();
+            //Model.CommonModel.TestModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<TestModel>(strtContent);
+            //string user_phone = model.user_phone;
+            string user_phone = "";
+
+           
+            
+            //var content = req.Content.ReadAsStringAsync().Result;
 
             try
             {
@@ -74,8 +85,8 @@ namespace WebApi.Controllers
                             //发送短信
                             //发送短信
                             string strCode = new Random().Next(10000, 99999).ToString();
-                            //"{\"code\":\"1234\",\"product\":\"窝在家\"}"
-                            string strContent = string.Format("{\"code\":\"{0}\"}", strCode);
+                           //string strContent = string.Format("{\"code\":\"{0}\"}", strCode);
+                            string strContent = "{\"code\":\"" + strCode + "\"}";
                             if (SMSHelper.SendMsgByTaoBao(user_phone, strContent, "SMS_10895108"))
                             {
                                 t_user_code userCode = new t_user_code()
@@ -89,7 +100,7 @@ namespace WebApi.Controllers
                                 {
                                     ret.status = true;
                                     ret.msg = "发送成功";
-                                    ret.Data = userCode.v_code;
+                                    //ret.Data = userCode.v_code;
                                 }
                                 else
                                 {
@@ -122,6 +133,7 @@ namespace WebApi.Controllers
                 ret.msg = ex.ToString();
             }
 
+            ret.Data = strtContent;
             return ret;
         }
 

@@ -13,7 +13,7 @@ namespace HelperCommon
     public class OperateHelper
     {
         #region Http上下文相关属性
-        static HttpContext ContextHttp
+        public static HttpContext ContextHttp
         {
             get
             {

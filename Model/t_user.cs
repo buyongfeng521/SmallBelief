@@ -17,12 +17,12 @@ namespace Model
         public int ID { get; set; }
         public string user_name { get; set; }
         public string user_real_name { get; set; }
+        public string user_img { get; set; }
         public string user_psw { get; set; }
         public Nullable<int> user_age { get; set; }
         public string user_phone { get; set; }
         public Nullable<System.DateTime> last_login_time { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public string token { get; set; }
-        public string user_img { get; set; }
     }
 }
