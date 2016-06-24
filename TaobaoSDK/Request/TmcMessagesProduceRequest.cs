@@ -1,7 +1,6 @@
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using Top.Api.Util;
 
 namespace Top.Api.Request
