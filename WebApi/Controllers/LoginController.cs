@@ -21,15 +21,16 @@ namespace WebApi.Controllers
         /// <summary>
         /// 登录
         /// </summary>
-        /// <param name="user_phone">手机号</param>
-        /// <param name="user_psw">密码</param>
+        /// <param name="obj">{"user_phone":"手机号码","user_psw":"密码"}</param>
         /// <returns></returns>
         [HttpPost]
-        public RetInfo<UserDTO> Login(string user_phone, string user_psw)
+        public RetInfo<UserDTO> Login(dynamic obj)
         {
             RetInfo<UserDTO> ret = new RetInfo<UserDTO>();
             try
             {
+                string user_phone = obj.user_phone;
+                string user_psw = obj.user_psw;
                 string strPsw = Common.SecurityHelper.GetMD5(user_psw);
                 t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.user_phone == user_phone && u.user_psw == strPsw);
                 if (user != null)
@@ -55,24 +56,29 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// 发送验证码
+        /// 发送
         /// </summary>
+        /// <param name="obj">{"user_phone":"手机号"}</param>
         /// <returns></returns>
         [HttpPost]
-        public RetInfo<string> VCodeSend()
+        public RetInfo<string> VCodeSend(dynamic obj)
         {
             RetInfo<string> ret = new RetInfo<string>();
 
-            string strtContent = Request.Content.ReadAsStringAsync().Result;
+            //string strtContent = Request.Content.ReadAsStringAsync().Result;
 
-            string str = Request.Content.ToString();
-            //Model.CommonModel.TestModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<TestModel>(strtContent);
-            //string user_phone = model.user_phone;
-            string user_phone = "";
+            //string str = Request.Content.ToString();
+            ////Model.CommonModel.TestModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<TestModel>(strtContent);
+            ////string user_phone = model.user_phone;
+
+            //string user_phone = "";
 
            
             
             //var content = req.Content.ReadAsStringAsync().Result;
+
+
+            string user_phone = obj.user_phone;
 
             try
             {
@@ -133,24 +139,25 @@ namespace WebApi.Controllers
                 ret.msg = ex.ToString();
             }
 
-            ret.Data = strtContent;
+            ret.Data = "";
             return ret;
         }
 
         /// <summary>
         /// 注册
         /// </summary>
-        /// <param name="user_phone">手机号</param>
-        /// <param name="user_psw">密码</param>
-        /// <param name="v_code">验证码</param>
+        /// <param name="obj">{"user_phone":"手机号码","user_psw":"密码","v_code":"验证码"}</param>
         /// <returns></returns>
         [HttpPost]
-        public RetInfo<UserDTO> Register(string user_phone, string user_psw,string v_code)
+        public RetInfo<UserDTO> Register(dynamic obj)
         {
             RetInfo<UserDTO> ret = new RetInfo<UserDTO>();
 
             try
             {
+                string user_phone = obj.user_phone;
+                string user_psw = obj.user_psw;
+                string v_code = obj.v_code;
                 if (string.IsNullOrEmpty(user_phone) || string.IsNullOrEmpty(user_psw) || string.IsNullOrEmpty(v_code))
                 {
                     ret.msg = "无效的注册信息";
