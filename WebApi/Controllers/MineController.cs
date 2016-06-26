@@ -19,16 +19,17 @@ namespace WebApi.Controllers
         /// <summary>
         /// 修改昵称
         /// </summary>
-        /// <param name="token">Token</param>
-        /// <param name="nickname">昵称</param>
+        /// <param name="obj">{"token":"用户Token","nickname":"昵称"}</param>
         /// <returns></returns>
         [HttpPost]
-        public RetInfo<object> UserNickNameModify(string token, string nickname)
+        public RetInfo<object> UserNickNameModify(dynamic obj)
         { 
             RetInfo<object> ret = new RetInfo<object>();
 
             try
             {
+                string token = obj.token;
+                string nickname = obj.nickname;
                 if (!string.IsNullOrWhiteSpace(nickname))
                 {
                     t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
@@ -73,18 +74,19 @@ namespace WebApi.Controllers
         /// <summary>
         /// 修改密码
         /// </summary>
-        /// <param name="token">Token</param>
-        /// <param name="old_psw">旧密码</param>
-        /// <param name="new_psw">新密码</param>
+        /// <param name="obj">{"token":"用户token","old_psw":"旧密码","new_psw":"新密码"}</param>
         /// <returns></returns>
         [HttpPost]
-        public RetInfo<object> UserPswModify(string token, string old_psw, string new_psw)
+        public RetInfo<object> UserPswModify(dynamic obj)
         {
             RetInfo<object> ret = new RetInfo<object>();
 
             try
             {
-
+                //string token, string old_psw, string new_psw
+                string token = obj.token;
+                string old_psw = obj.old_psw;
+                string new_psw = obj.new_psw;
                 if (old_psw != null && !string.IsNullOrEmpty(old_psw.Trim()) && new_psw != null && !string.IsNullOrEmpty(new_psw.Trim()))
                 {
                     t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
