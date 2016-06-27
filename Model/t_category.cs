@@ -20,6 +20,7 @@ namespace Model
         }
     
         public int cat_id { get; set; }
+        public Nullable<byte> cat_type { get; set; }
         public string cat_name { get; set; }
         public string cat_img { get; set; }
         public string cat_note { get; set; }

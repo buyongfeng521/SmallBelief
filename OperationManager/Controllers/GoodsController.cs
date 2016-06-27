@@ -422,12 +422,14 @@ namespace OperationManager.Controllers
             Expression<Func<t_category, bool>> where = c => c.cat_name.Contains(keywords);
             List<t_category> listCat = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(where);
 
+            ViewBag.TypeList = SelectHelper.GetEnumSelectListItem(Enums.CategoryType.零用品);
+
             ViewBag.Keywords = keywords;
             return View(listCat);
         }
 
         [HttpPost]
-        public ActionResult CategoryProcess(string cat_name = "", string cat_note = "", int sort = 0,string hideCatID = "")
+        public ActionResult CategoryProcess(string cat_name = "", string cat_note = "", int sort = 0, string hideCatID = "", int ddlType = 0)
         {
             AjaxMsg ajax = new AjaxMsg();
             if (string.IsNullOrEmpty(cat_name.Trim()))
@@ -451,6 +453,7 @@ namespace OperationManager.Controllers
                     cat_img = "",
                     cat_note = cat_note.Trim(),
                     sort = sort,
+                    cat_type = (byte)ddlType,
                     add_time = DateTime.Now
                 };
                 if (OperateContext.EFBLLSession.t_categoryBLL.Add(addModel))
@@ -485,6 +488,7 @@ namespace OperationManager.Controllers
                 editModel.cat_name = cat_name.Trim();
                 editModel.cat_note = cat_note.Trim();
                 editModel.sort = sort;
+                editModel.cat_type = (byte)ddlType;
                 //t_category model = new t_category() 
                 //{
                 //    cat_id = iCat_id,

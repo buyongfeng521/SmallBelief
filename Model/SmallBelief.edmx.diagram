@@ -6,16 +6,13 @@
     <edmx:Diagrams>
       <Diagram DiagramId="7a627714e7ad451abefe612e32080dad" Name="Diagram1">
         <EntityTypeShape EntityType="SmallBeliefModel.t_admin_user" Width="1.5" PointX="5.75" PointY="5.75" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_area" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_category" Width="1.5" PointX="0.75" PointY="2" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_city" Width="1.5" PointX="2.75" PointY="6.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_goods" Width="1.5" PointX="3" PointY="1" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_goods_gallery" Width="1.5" PointX="5.25" PointY="2.25" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_province" Width="1.5" PointX="7.75" PointY="0.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_user" Width="1.5" PointX="7.75" PointY="3.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_user_code" Width="1.5" PointX="7.75" PointY="7.75" />
-        <AssociationConnector Association="SmallBeliefModel.FK_t_goods_t_category" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_goods_gallery_t_goods" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_category" Width="1.5" PointX="0.75" PointY="1.875" />
+        <AssociationConnector Association="SmallBeliefModel.FK_t_goods_t_category" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
