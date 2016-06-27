@@ -128,7 +128,52 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 修改头像
+        /// </summary>
+        /// <param name="obj">{"token":"用户Token","user_img":"用户头像（七牛）"}</param>
+        /// <returns></returns>
+        public RetInfo<object> UserImgModify(dynamic obj)
+        {
+            RetInfo<object> ret = new RetInfo<object>();
 
+            try
+            {
+                string token = obj.token;
+                string user_img = obj.user_img;
+                if (!string.IsNullOrWhiteSpace(user_img))
+                {
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                    if (user != null)
+                    {
+                        user.user_img = user_img;
+                        if (OperateContext.EFBLLSession.t_userBLL.Modify(user))
+                        {
+                            ret.msg = CommonBasicMsg.EditSuc;
+                            ret.status = true;
+                        }
+                        else
+                        {
+                            ret.msg = CommonBasicMsg.EditFail;
+                        }
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.VoidUser;
+                    }
+                }
+                else
+                {
+                    ret.msg = "请上传有效的头像";
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
 
 
     }
