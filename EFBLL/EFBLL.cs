@@ -42,6 +42,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_settingBLL : EFBLLBase<t_setting>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_settingDAL();
+        }
+    }
+
 	public partial class t_userBLL : EFBLLBase<t_user>
     {
 		protected override void SetDAL()

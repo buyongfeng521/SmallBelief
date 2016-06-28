@@ -13,7 +13,7 @@ using WebApi.Models;
 
 namespace WebApi.Controllers
 {
-    [CustomAuthorize]
+
     public class MineController : ApiController
     {
         /// <summary>
@@ -30,37 +30,44 @@ namespace WebApi.Controllers
             {
                 string token = obj.token;
                 string nickname = obj.nickname;
-                if (!string.IsNullOrWhiteSpace(nickname))
+                if (APIHelper.IsLogin(token))
                 {
-                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
-                    if (user != null)
+                    if (!string.IsNullOrWhiteSpace(nickname))
                     {
-                        if (OperateContext.EFBLLSession.t_userBLL.GetCountBy(u => u.ID != user.ID && u.user_name == nickname.Trim()) <= 0)
+                        t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+                        if (user != null)
                         {
-                            user.user_name = nickname.Trim();
-                            if (OperateContext.EFBLLSession.t_userBLL.Modify(user))
+                            if (OperateContext.EFBLLSession.t_userBLL.GetCountBy(u => u.ID != user.ID && u.user_name == nickname.Trim()) <= 0)
                             {
-                                ret.msg = CommonBasicMsg.EditSuc;
-                                ret.status = true;
+                                user.user_name = nickname.Trim();
+                                if (OperateContext.EFBLLSession.t_userBLL.Modify(user))
+                                {
+                                    ret.msg = CommonBasicMsg.EditSuc;
+                                    ret.status = true;
+                                }
+                                else
+                                {
+                                    ret.msg = CommonBasicMsg.EditFail;
+                                }
                             }
                             else
                             {
-                                ret.msg = CommonBasicMsg.EditFail;
+                                ret.msg = "已存在此昵称";
                             }
                         }
                         else
                         {
-                            ret.msg = "已存在此昵称";
+                            ret.msg = CommonBasicMsg.VoidUser;
                         }
                     }
                     else
                     {
-                        ret.msg = CommonBasicMsg.VoidUser;
+                        ret.msg = "昵称不能为空";
                     }
                 }
                 else
                 {
-                    ret.msg = "昵称不能为空";
+                    ret.msg = Message.NoLogin;
                 }
             }
             catch (Exception ex)
@@ -87,37 +94,46 @@ namespace WebApi.Controllers
                 string token = obj.token;
                 string old_psw = obj.old_psw;
                 string new_psw = obj.new_psw;
-                if (old_psw != null && !string.IsNullOrEmpty(old_psw.Trim()) && new_psw != null && !string.IsNullOrEmpty(new_psw.Trim()))
+                if (APIHelper.IsLogin(token))
                 {
-                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
-                    if (user != null)
+
+
+                    if (old_psw != null && !string.IsNullOrEmpty(old_psw.Trim()) && new_psw != null && !string.IsNullOrEmpty(new_psw.Trim()))
                     {
-                        if (user.user_psw == SecurityHelper.GetMD5(old_psw.Trim()))
+                        t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                        if (user != null)
                         {
-                            user.user_psw = SecurityHelper.GetMD5(new_psw.Trim());
-                            if (OperateContext.EFBLLSession.t_userBLL.Modify(user))
+                            if (user.user_psw == SecurityHelper.GetMD5(old_psw.Trim()))
                             {
-                                ret.msg = CommonBasicMsg.EditSuc;
-                                ret.status = true;
+                                user.user_psw = SecurityHelper.GetMD5(new_psw.Trim());
+                                if (OperateContext.EFBLLSession.t_userBLL.Modify(user))
+                                {
+                                    ret.msg = CommonBasicMsg.EditSuc;
+                                    ret.status = true;
+                                }
+                                else
+                                {
+                                    ret.msg = CommonBasicMsg.EditFail;
+                                }
                             }
                             else
                             {
-                                ret.msg = CommonBasicMsg.EditFail;
+                                ret.msg = "旧密码错误";
                             }
                         }
                         else
                         {
-                            ret.msg = "旧密码错误";
+                            ret.msg = CommonBasicMsg.VoidUser;
                         }
                     }
                     else
                     {
-                        ret.msg = CommonBasicMsg.VoidUser;
+                        ret.msg = "请输入有效的密码";
                     }
                 }
                 else
                 {
-                    ret.msg = "请输入有效的密码";
+                    ret.msg = Message.NoLogin;
                 }
             }
             catch (Exception ex)
@@ -141,30 +157,37 @@ namespace WebApi.Controllers
             {
                 string token = obj.token;
                 string user_img = obj.user_img;
-                if (!string.IsNullOrWhiteSpace(user_img))
+                if (APIHelper.IsLogin(token))
                 {
-                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
-                    if (user != null)
+                    if (!string.IsNullOrWhiteSpace(user_img))
                     {
-                        user.user_img = user_img;
-                        if (OperateContext.EFBLLSession.t_userBLL.Modify(user))
+                        t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                        if (user != null)
                         {
-                            ret.msg = CommonBasicMsg.EditSuc;
-                            ret.status = true;
+                            user.user_img = user_img;
+                            if (OperateContext.EFBLLSession.t_userBLL.Modify(user))
+                            {
+                                ret.msg = CommonBasicMsg.EditSuc;
+                                ret.status = true;
+                            }
+                            else
+                            {
+                                ret.msg = CommonBasicMsg.EditFail;
+                            }
                         }
                         else
                         {
-                            ret.msg = CommonBasicMsg.EditFail;
+                            ret.msg = CommonBasicMsg.VoidUser;
                         }
                     }
                     else
                     {
-                        ret.msg = CommonBasicMsg.VoidUser;
+                        ret.msg = "请上传有效的头像";
                     }
                 }
                 else
                 {
-                    ret.msg = "请上传有效的头像";
+                    ret.msg = Message.NoLogin;
                 }
             }
             catch (Exception ex)

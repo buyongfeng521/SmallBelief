@@ -25,6 +25,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_settingDAL : EFDALBase<t_setting>
+    {
+    }
+
 	public partial class t_userDAL : EFDALBase<t_user>
     {
     }

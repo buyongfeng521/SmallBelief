@@ -53,6 +53,7 @@
     <Compile Include="CommonModel\TestModel.cs" />
     <Compile Include="DTOModel\CategoryDTO.cs" />
     <Compile Include="DTOModel\GoodsDTO.cs" />
+    <Compile Include="DTOModel\OnlineDTO.cs" />
     <Compile Include="DTOModel\UserDTO.cs" />
     <Compile Include="FormatModel\AjaxMsg.cs" />
     <Compile Include="FormatModel\RetInfo.cs" />
@@ -83,6 +84,9 @@
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_goods_gallery.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_setting.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_user.cs">

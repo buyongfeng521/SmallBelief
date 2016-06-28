@@ -1,6 +1,7 @@
 ﻿using Common;
 using HelperCommon;
 using Model;
+using Model.CommonModel;
 using Model.FormatModel;
 using Model.StaticModel;
 using OperationManager.Models;
@@ -136,6 +137,73 @@ namespace OperationManager.Controllers
         }
 
         #endregion
+
+
+
+        #region APP设置
+
+        [HttpGet]
+        public ActionResult AppSet()
+        {
+            t_setting service_tel_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "service_tel");
+            ViewBag.service_tel = service_tel_model.set_value;
+
+            t_setting wx_id_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "wx_id");
+            ViewBag.wx_id = wx_id_model.set_value;
+
+            t_setting wx_public_id_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "wx_public_id");
+            ViewBag.wx_public_id = wx_public_id_model.set_value;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AppSet(string service_tel, string wx_id, string wx_public_id)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+            //1.0 check
+            if (string.IsNullOrWhiteSpace(service_tel))
+            {
+                ajax.Msg = "客服电话不能为空";
+                return Json(ajax);
+            }
+            if (string.IsNullOrWhiteSpace(wx_id))
+            {
+                ajax.Msg = "微信号不能为空";
+                return Json(ajax);
+            }
+            if (string.IsNullOrWhiteSpace(wx_public_id))
+            {
+                ajax.Msg = "微信公众号不能为空";
+                return Json(ajax);
+            }
+            //1.0 do
+            t_setting service_tel_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "service_tel");
+            service_tel_model.set_value = service_tel;
+
+            t_setting wx_id_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "wx_id");
+            wx_id_model.set_value = wx_id;
+
+            t_setting wx_public_id_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "wx_public_id");
+            wx_public_id_model.set_value = wx_public_id;
+
+            if (OperateContext.EFBLLSession.t_settingBLL.Modify(service_tel_model) && OperateContext.EFBLLSession.t_settingBLL.Modify(wx_id_model)
+                && OperateContext.EFBLLSession.t_settingBLL.Modify(wx_public_id_model))
+            {
+                ajax.Msg = CommonBasicMsg.SaveSuc;
+                ajax.Status = "ok";
+            }
+            else
+            {
+                ajax.Msg = CommonBasicMsg.SaveFail;
+            }
+
+            return Json(ajax);
+        }
+
+        #endregion
+
+
 
 	}
 }

@@ -71,6 +71,21 @@ namespace EFBLL
         }
 
         
+        private t_settingBLL t_settingbll;
+        public t_settingBLL t_settingBLL
+        {
+	        get
+	        {
+		        if(t_settingbll == null)
+		        {
+			        t_settingbll = new t_settingBLL();
+		        }
+		        return t_settingbll;
+	        }
+	        set{}
+        }
+
+        
         private t_userBLL t_userbll;
         public t_userBLL t_userBLL
         {

@@ -57,6 +57,15 @@
           <Property Name="img" Type="nvarchar" MaxLength="200" />
           <Property Name="add_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_setting">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="set_key" Type="nvarchar" MaxLength="50" />
+          <Property Name="set_value" Type="nvarchar" MaxLength="100" />
+          <Property Name="note" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="t_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -64,13 +73,13 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="user_name" Type="nvarchar" MaxLength="100" />
           <Property Name="user_real_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="user_img" Type="nvarchar" MaxLength="200" />
           <Property Name="user_psw" Type="nvarchar" MaxLength="50" />
           <Property Name="user_age" Type="int" />
           <Property Name="user_phone" Type="nvarchar" MaxLength="20" />
-          <Property Name="user_img" Type="nvarchar" MaxLength="200" />
-          <Property Name="token" Type="nvarchar" MaxLength="50" />
           <Property Name="last_login_time" Type="datetime" />
           <Property Name="create_time" Type="datetime" />
+          <Property Name="token" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="t_user_code">
           <Key>
@@ -111,6 +120,7 @@
           <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods_gallery" EntityType="Self.t_goods_gallery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_setting" EntityType="Self.t_setting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user" EntityType="Self.t_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user_code" EntityType="Self.t_user_code" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_t_goods_gallery_t_goods" Association="Self.FK_t_goods_gallery_t_goods">
@@ -141,6 +151,7 @@
             <End Role="t_category" EntitySet="t_category" />
             <End Role="t_goods" EntitySet="t_goods" />
           </AssociationSet>
+          <EntitySet Name="t_setting" EntityType="SmallBeliefModel.t_setting" />
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -247,6 +258,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="t_setting">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="set_key" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="set_value" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -333,6 +353,16 @@
                 <ScalarProperty Name="cat_name" ColumnName="cat_name" />
                 <ScalarProperty Name="cat_type" ColumnName="cat_type" />
                 <ScalarProperty Name="cat_id" ColumnName="cat_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_setting">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_setting">
+              <MappingFragment StoreEntitySet="t_setting">
+                <ScalarProperty Name="note" ColumnName="note" />
+                <ScalarProperty Name="set_value" ColumnName="set_value" />
+                <ScalarProperty Name="set_key" ColumnName="set_key" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

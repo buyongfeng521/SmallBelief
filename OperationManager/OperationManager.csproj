@@ -203,6 +203,7 @@
     <Content Include="Views\Coupon\CouponList.cshtml" />
     <Content Include="Views\Goods\GoodsAdd.cshtml" />
     <Content Include="Views\Goods\GoodsEdit.cshtml" />
+    <Content Include="Views\Settings\AppSet.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

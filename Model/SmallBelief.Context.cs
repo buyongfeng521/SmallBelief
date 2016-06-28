@@ -31,5 +31,6 @@ namespace Model
         public virtual DbSet<t_user> t_user { get; set; }
         public virtual DbSet<t_user_code> t_user_code { get; set; }
         public virtual DbSet<t_category> t_category { get; set; }
+        public virtual DbSet<t_setting> t_setting { get; set; }
     }
 }
