@@ -154,11 +154,14 @@ namespace OperationManager.Controllers
             t_setting wx_public_id_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "wx_public_id");
             ViewBag.wx_public_id = wx_public_id_model.set_value;
 
+            t_setting service_qq_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "service_qq");
+            ViewBag.service_qq = service_qq_model.set_value;
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult AppSet(string service_tel, string wx_id, string wx_public_id)
+        public ActionResult AppSet(string service_tel, string wx_id, string wx_public_id,string service_qq)
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
@@ -177,6 +180,11 @@ namespace OperationManager.Controllers
                 ajax.Msg = "微信公众号不能为空";
                 return Json(ajax);
             }
+            if (string.IsNullOrWhiteSpace(service_qq))
+            {
+                ajax.Msg = "qq号不能为空";
+                return Json(ajax);
+            }
             //1.0 do
             t_setting service_tel_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "service_tel");
             service_tel_model.set_value = service_tel;
@@ -187,8 +195,11 @@ namespace OperationManager.Controllers
             t_setting wx_public_id_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "wx_public_id");
             wx_public_id_model.set_value = wx_public_id;
 
+            t_setting service_qq_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "service_qq");
+            service_qq_model.set_value = service_qq;
+
             if (OperateContext.EFBLLSession.t_settingBLL.Modify(service_tel_model) && OperateContext.EFBLLSession.t_settingBLL.Modify(wx_id_model)
-                && OperateContext.EFBLLSession.t_settingBLL.Modify(wx_public_id_model))
+                && OperateContext.EFBLLSession.t_settingBLL.Modify(wx_public_id_model) && OperateContext.EFBLLSession.t_settingBLL.Modify(service_qq_model))
             {
                 ajax.Msg = CommonBasicMsg.SaveSuc;
                 ajax.Status = "ok";

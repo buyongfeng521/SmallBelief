@@ -38,6 +38,20 @@ namespace Common
             return ConfigurationHelper.AppSetting("Bucket");
         }
 
+        /// <summary>
+        /// 获取token
+        /// </summary>
+        /// <returns></returns>
+        public static string GetToken()
+        {
+            InitQiniuConfig();
+            //普通上传,只需要设置上传的空间名就可以了,第二个参数可以设定token过期时间
+            var putPolicy = new PutPolicy(GetBucket());
+            //调用Token()方法生成上传的Token
+            var upToken = putPolicy.Token();
+            return upToken;
+        }
+
 
         /// <summary>
         /// 上传单个文件

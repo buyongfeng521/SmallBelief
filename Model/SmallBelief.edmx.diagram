@@ -14,6 +14,7 @@
         <EntityTypeShape EntityType="SmallBeliefModel.t_category" Width="1.5" PointX="0.75" PointY="1.875" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_goods_t_category" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_setting" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_psw_code" Width="1.5" PointX="7.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

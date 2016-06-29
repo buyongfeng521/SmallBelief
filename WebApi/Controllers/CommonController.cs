@@ -1,4 +1,5 @@
-﻿using HelperCommon;
+﻿using Common;
+using HelperCommon;
 using Model;
 using Model.DTOModel;
 using Model.FormatModel;
@@ -36,6 +37,29 @@ namespace WebApi.Controllers
                 dtoModel.wx_public_id = wx_public_id_model.set_value;
 
                 ret.Data = dtoModel;
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
+
+
+        /// <summary>
+        /// 获得七牛ToKen
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<string> QiNiuTokenGet()
+        {
+            RetInfo<string> ret = new RetInfo<string>();
+
+            try
+            {
+                ret.Data = QiNiuHelper.GetToken();
                 ret.status = true;
             }
             catch (Exception ex)

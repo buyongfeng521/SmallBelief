@@ -42,6 +42,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_psw_codeBLL : EFBLLBase<t_psw_code>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_psw_codeDAL();
+        }
+    }
+
 	public partial class t_settingBLL : EFBLLBase<t_setting>
     {
 		protected override void SetDAL()

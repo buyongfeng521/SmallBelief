@@ -25,6 +25,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_psw_codeDAL : EFDALBase<t_psw_code>
+    {
+    }
+
 	public partial class t_settingDAL : EFDALBase<t_setting>
     {
     }

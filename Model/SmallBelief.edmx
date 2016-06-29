@@ -57,6 +57,16 @@
           <Property Name="img" Type="nvarchar" MaxLength="200" />
           <Property Name="add_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_psw_code">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="v_code" Type="nvarchar" MaxLength="10" />
+          <Property Name="is_use" Type="bit" />
+          <Property Name="create_time" Type="datetime" />
+        </EntityType>
         <EntityType Name="t_setting">
           <Key>
             <PropertyRef Name="id" />
@@ -120,6 +130,7 @@
           <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods_gallery" EntityType="Self.t_goods_gallery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_psw_code" EntityType="Self.t_psw_code" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_setting" EntityType="Self.t_setting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user" EntityType="Self.t_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user_code" EntityType="Self.t_user_code" Schema="dbo" store:Type="Tables" />
@@ -152,6 +163,7 @@
             <End Role="t_goods" EntitySet="t_goods" />
           </AssociationSet>
           <EntitySet Name="t_setting" EntityType="SmallBeliefModel.t_setting" />
+          <EntitySet Name="t_psw_code" EntityType="SmallBeliefModel.t_psw_code" />
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -267,6 +279,16 @@
           <Property Name="set_value" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="t_psw_code">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="v_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="is_use" Type="Boolean" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -362,6 +384,17 @@
                 <ScalarProperty Name="note" ColumnName="note" />
                 <ScalarProperty Name="set_value" ColumnName="set_value" />
                 <ScalarProperty Name="set_key" ColumnName="set_key" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_psw_code">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_psw_code">
+              <MappingFragment StoreEntitySet="t_psw_code">
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="is_use" ColumnName="is_use" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="user_phone" ColumnName="user_phone" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

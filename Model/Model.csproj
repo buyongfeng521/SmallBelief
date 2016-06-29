@@ -86,6 +86,9 @@
     <Compile Include="t_goods_gallery.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_psw_code.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_setting.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>

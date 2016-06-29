@@ -56,7 +56,7 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// 发送
+        /// 发送注册验证码
         /// </summary>
         /// <param name="obj">{"user_phone":"手机号"}</param>
         /// <returns></returns>
@@ -65,30 +65,15 @@ namespace WebApi.Controllers
         {
             RetInfo<string> ret = new RetInfo<string>();
 
-            //string strtContent = Request.Content.ReadAsStringAsync().Result;
-
-            //string str = Request.Content.ToString();
-            ////Model.CommonModel.TestModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<TestModel>(strtContent);
-            ////string user_phone = model.user_phone;
-
-            //string user_phone = "";
-
-           
-            
-            //var content = req.Content.ReadAsStringAsync().Result;
-
-
-            string user_phone = obj.user_phone;
-
             try
             {
+                string user_phone = obj.user_phone;
                 if (!string.IsNullOrEmpty(user_phone))
                 {
                     if (Common.RegHelper.IsPhone(user_phone.Trim()))
                     {
                         if (OperateContext.EFBLLSession.t_userBLL.GetCountBy(u => u.user_phone == user_phone.Trim()) <= 0)
                         {
-                            //发送短信
                             //发送短信
                             string strCode = new Random().Next(10000, 99999).ToString();
                            //string strContent = string.Format("{\"code\":\"{0}\"}", strCode);
@@ -164,7 +149,7 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-                    t_user_code userCode = OperateContext.EFBLLSession.t_user_codeBLL.GetModelBy(c => c.is_use == false && c.user_phone == user_phone.Trim());
+                    t_user_code userCode = OperateContext.EFBLLSession.t_user_codeBLL.GetModelBy(c =>c.v_code == v_code && c.is_use == false && c.user_phone == user_phone.Trim());
                     if (userCode != null)
                     {
                         userCode.is_use = true;
@@ -207,6 +192,138 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 发送找回密码验证码 
+        /// </summary>
+        /// <param name="obj">{"user_phone":"手机号"}</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RetInfo<string> VCodeFindPswSend(dynamic obj)
+        {
+            RetInfo<string> ret = new RetInfo<string>();
+
+            try
+            {
+                string user_phone = obj.user_phone;
+                if (!string.IsNullOrEmpty(user_phone))
+                {
+                    if (Common.RegHelper.IsPhone(user_phone.Trim()))
+                    {
+                        if (OperateContext.EFBLLSession.t_userBLL.GetCountBy(u => u.user_phone == user_phone.Trim()) > 0)
+                        {
+                            //发送短信
+                            string strCode = new Random().Next(10000, 99999).ToString();
+                           //string strContent = string.Format("{\"code\":\"{0}\"}", strCode);
+                            string strContent = "{\"code\":\"" + strCode + "\"}";
+                            if (SMSHelper.SendMsgByTaoBao(user_phone, strContent, "SMS_10895108"))
+                            {
+                                t_psw_code userCode = new t_psw_code()
+                                {
+                                    user_phone = user_phone.Trim(),
+                                    v_code = strCode,
+                                    is_use = false,
+                                    create_time = DateTime.Now
+                                };
+                                if (OperateContext.EFBLLSession.t_psw_codeBLL.Add(userCode))
+                                {
+                                    ret.status = true;
+                                    ret.msg = "发送成功";
+                                    //ret.Data = userCode.v_code;
+                                }
+                                else
+                                {
+                                    ret.msg = "发送失败";
+                                }
+                            }
+                            else
+                            {
+                                ret.msg = "短信失败";
+                            }
+                            
+                        }
+                        else
+                        {
+                            ret.msg = "此手机号码未注册";
+                        }
+                    }
+                    else
+                    {
+                        ret.msg = "手机号码无效";
+                    }
+                }
+                else
+                {
+                    ret.msg = "手机号码为空";
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 找回密码
+        /// </summary>
+        /// <param name="obj">{"user_phone":"手机号码","user_psw":"密码","v_code":"验证码"}</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RetInfo<object> FindPsw(dynamic obj)
+        {
+            RetInfo<object> ret = new RetInfo<object>();
+
+            try
+            {
+                string user_phone = obj.user_phone;
+                string user_psw = obj.user_psw;
+                string v_code = obj.v_code;
+                if (string.IsNullOrEmpty(user_phone) || string.IsNullOrEmpty(user_psw) || string.IsNullOrEmpty(v_code))
+                {
+                    ret.msg = "无效的信息";
+                }
+                else
+                {
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.user_phone == user_phone.Trim());
+                    if (user != null)
+                    {
+                        
+                        t_psw_code userCode = OperateContext.EFBLLSession.t_psw_codeBLL.GetModelBy(c =>c.v_code == v_code && c.is_use == false && c.user_phone == user_phone.Trim());
+                        if (userCode != null)
+                        {
+                            userCode.is_use = true;
+                            user.user_psw = SecurityHelper.GetMD5(user_psw.Trim());
+                            if (OperateContext.EFBLLSession.t_userBLL.Modify(user) && OperateContext.EFBLLSession.t_psw_codeBLL.Modify(userCode))
+                            {
+                                ret.status = true;
+                                ret.msg = "成功";
+                            }
+                            else
+                            {
+                                ret.msg = "失败";
+                            }
+
+                        }
+                        else
+                        {
+                            ret.msg = "验证码错误";
+                        }
+                    }
+                    else
+                    {
+                        ret.msg = "此用户不存在";
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
 
 
 

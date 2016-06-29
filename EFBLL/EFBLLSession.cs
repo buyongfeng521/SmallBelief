@@ -71,6 +71,21 @@ namespace EFBLL
         }
 
         
+        private t_psw_codeBLL t_psw_codebll;
+        public t_psw_codeBLL t_psw_codeBLL
+        {
+	        get
+	        {
+		        if(t_psw_codebll == null)
+		        {
+			        t_psw_codebll = new t_psw_codeBLL();
+		        }
+		        return t_psw_codebll;
+	        }
+	        set{}
+        }
+
+        
         private t_settingBLL t_settingbll;
         public t_settingBLL t_settingBLL
         {
