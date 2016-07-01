@@ -44,6 +44,8 @@ namespace WebApi.Controllers
                                 {
                                     ret.msg = CommonBasicMsg.EditSuc;
                                     ret.status = true;
+                                    user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
+                                    ret.Data = user;
                                 }
                                 else
                                 {
@@ -110,6 +112,8 @@ namespace WebApi.Controllers
                                 {
                                     ret.msg = CommonBasicMsg.EditSuc;
                                     ret.status = true;
+                                    user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
+                                    ret.Data = user;
                                 }
                                 else
                                 {
@@ -169,6 +173,8 @@ namespace WebApi.Controllers
                             {
                                 ret.msg = CommonBasicMsg.EditSuc;
                                 ret.status = true;
+                                user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
+                                ret.Data = user;
                             }
                             else
                             {
