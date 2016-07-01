@@ -39,6 +39,7 @@ namespace WebApi.Controllers
                     OperateContext.EFBLLSession.t_userBLL.Modify(user);
 
                     ret.status = true;
+                    user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
                     ret.Data = DTOHelper.Map<UserDTO>(user);
                     ret.msg = CommonBasicMsg.LoginSuc;
                 }
@@ -170,6 +171,7 @@ namespace WebApi.Controllers
                         {
                             ret.status = true;
                             ret.msg = "注册成功";
+                            user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
                             ret.Data = DTOHelper.Map<UserDTO>(user);
                         }
                         else
