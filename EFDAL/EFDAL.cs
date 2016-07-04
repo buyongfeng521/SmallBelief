@@ -13,6 +13,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_bannerDAL : EFDALBase<t_banner>
+    {
+    }
+
 	public partial class t_categoryDAL : EFDALBase<t_category>
     {
     }
@@ -29,11 +33,19 @@ namespace EFDAL
     {
     }
 
+	public partial class t_roomDAL : EFDALBase<t_room>
+    {
+    }
+
 	public partial class t_settingDAL : EFDALBase<t_setting>
     {
     }
 
 	public partial class t_userDAL : EFDALBase<t_user>
+    {
+    }
+
+	public partial class t_user_addressDAL : EFDALBase<t_user_address>
     {
     }
 

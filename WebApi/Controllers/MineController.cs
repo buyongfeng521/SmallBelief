@@ -2,6 +2,7 @@
 using HelperCommon;
 using Model;
 using Model.CommonModel;
+using Model.DTOModel;
 using Model.FormatModel;
 using System;
 using System.Collections.Generic;
@@ -75,6 +76,7 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
             }
 
             return ret;
@@ -143,6 +145,7 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
             }
 
             return ret;
@@ -153,6 +156,7 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="obj">{"token":"用户Token","user_img":"用户头像（七牛）"}</param>
         /// <returns></returns>
+        [HttpPost]
         public RetInfo<object> UserImgModify(dynamic obj)
         {
             RetInfo<object> ret = new RetInfo<object>();
@@ -199,10 +203,227 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
             }
 
             return ret;
         }
+
+
+        /// <summary>
+        /// 获取用户收货地址
+        /// </summary>
+        /// <param name="token">用户token</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<UserAddressDTO>> UserAddressGet(string token)
+        {
+            RetInfo<List<UserAddressDTO>> ret = new RetInfo<List<UserAddressDTO>>();
+
+            try
+            {
+                if (APIHelper.IsLogin(token))
+                {
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                    if (user != null)
+                    {
+                        List<t_user_address> listAddress = OperateContext.EFBLLSession.t_user_addressBLL.GetListByDesc(a => a.user_id == user.ID, a => a.is_default);
+                        if (listAddress.Count > 0)
+                        {
+                            ret.Data = DTOHelper.Map<List<UserAddressDTO>>(listAddress);
+                        }
+                        else
+                        {
+                            ret.msg = Message.NullData;
+                        }
+
+                        ret.status = true;
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.VoidUser;
+                    }
+                }
+                else
+                {
+                    ret.msg = Message.NoLogin;
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 用户地址新增
+        /// </summary>
+        /// <param name="obj">{"token":"用户token","receipt_person":"收货人姓名","receipt_phone":"收货人手机号码","area":"区号","building":"楼号","room_num":"寝室号","is_default":true/false}</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RetInfo<object> UserAddressAdd(dynamic obj)
+        {
+            RetInfo<object> ret = new RetInfo<object>();
+
+            string token = obj.token;
+            string receipt_person = obj.receipt_person;
+            string receipt_phone = obj.receipt_phone;
+            string area = obj.area;
+            string building = obj.building;
+            string room_num = obj.room_num;
+            bool is_default = obj.is_default;
+            if (APIHelper.IsLogin(token))
+            {
+                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                if (user != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(receipt_person) && !string.IsNullOrWhiteSpace(receipt_phone))
+                    {
+                        if (RegHelper.IsPhone(receipt_phone))
+                        {
+                            if (!string.IsNullOrWhiteSpace(area) && !string.IsNullOrWhiteSpace(building) && !string.IsNullOrWhiteSpace(room_num))
+                            {
+                                t_user_address user_address = new t_user_address()
+                                {
+                                    user_id = user.ID,
+                                    receipt_person = receipt_person,
+                                    receipt_phone = receipt_phone,
+                                    university = "浙江理工大学",
+                                    area = area,
+                                    building = building,
+                                    room_num = room_num,
+                                    address = "浙江理工大学" + area + building + room_num,
+                                    is_default = is_default == true ? true : false
+                                };
+                                if (OperateContext.EFBLLSession.t_user_addressBLL.Add(user_address))
+                                {
+                                    if (user_address.is_default == true)
+                                    {
+                                        string upSql = "update t_user_address set is_default = 0 where address_id <> @address_id and user_id = @user_id";
+                                        DapperContext<t_user_address>.DapperBLL.ExecuteSql(upSql, new { address_id = user_address.address_id,user_id = user.ID });
+                                    }
+                                    
+                                    ret.msg = CommonBasicMsg.AddSuc;
+                                    ret.status = true;
+                                }
+                                else
+                                {
+                                    ret.msg = CommonBasicMsg.AddFail;
+                                }
+                            }
+                            else
+                            {
+                                ret.msg = Message.VoidAddress;
+                            }
+                        }
+                        else
+                        {
+                            ret.msg = Message.VoidPhone;
+                        }
+                    }
+                    else
+                    {
+                        ret.msg = "请输入收货人姓名和手机号码";
+                    }
+                }
+                else
+                {
+                    ret.msg = CommonBasicMsg.VoidUser;
+                }
+            }
+            else
+            {
+                ret.msg = Message.NoLogin;
+            }
+
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 获取学校内区号
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<string>> AddressAreaGet()
+        {
+            RetInfo<List<string>> ret = new RetInfo<List<string>>();
+
+            try
+            {
+                string sql = "select distinct area from t_room  order by Area";
+                List<string> listArea = DapperContext<t_room>.DapperBLL.QueryListSql(sql, null).Select(r => r.area).ToList();
+                ret.Data = listArea;
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+            
+            return ret;
+        }
+
+        /// <summary>
+        /// 获取楼号根据区号
+        /// </summary>
+        /// <param name="area">区号</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<string>> AddressBuildingGet(string area)
+        {
+            RetInfo<List<string>> ret = new RetInfo<List<string>>();
+
+            try
+            {
+                string sql = "select distinct building from t_room where area = @area order by building";
+                List<string> listBuilding = DapperContext<t_room>.DapperBLL.QueryListSql(sql, new { area = area }).Select(r => r.building).ToList();
+                ret.Data = listBuilding;
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 获取寝室号根据区号和楼号
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="building"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<string>> AddressRoomGet(string area, string building)
+        {
+            RetInfo<List<string>> ret = new RetInfo<List<string>>();
+
+            try
+            {
+                string sql = "select room_num from t_room where area = @area and building = @building order by room_num";
+                List<string> listRoom = DapperContext<t_room>.DapperBLL.QueryListSql(sql, new { area = area, building = building }).Select(r => r.room_num).ToList();
+                ret.Data = listRoom;
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+            return ret;
+        }
+
+
+
+
 
 
     }

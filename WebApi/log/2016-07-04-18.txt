@@ -1,0 +1,16 @@
+Exception ---- 0000 
+	 Code:0000
+	 Time:2016-07-04 18:13:53
+	 ApplicationName:
+	 ApplicationPath:G:\GithubGit\SmallBelief\WebApi\
+	 MachineName:DESKTOP-0EVL3FV
+	 UserDomain:DESKTOP-0EVL3FV
+	 UserName:step
+	 Information:值不能为 null。
+参数名: source
+	 Message:值不能为 null。
+参数名: source
+	 Source:System.Core
+	 StackTrace:   在 System.Linq.Enumerable.Select[TSource,TResult](IEnumerable`1 source, Func`2 selector)
+   在 WebApi.Controllers.MineController.AddressBuildingGet(String area) 位置 g:\GithubGit\SmallBelief\WebApi\Controllers\MineController.cs:行号 384
+

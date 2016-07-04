@@ -15,6 +15,18 @@
           <Property Name="last_login_time" Type="datetime" />
           <Property Name="create_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_banner">
+          <Key>
+            <PropertyRef Name="banner_id" />
+          </Key>
+          <Property Name="banner_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="banner_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="banner_type" Type="tinyint" />
+          <Property Name="banner_img" Type="nvarchar" MaxLength="200" />
+          <Property Name="click_type" Type="tinyint" />
+          <Property Name="click_value" Type="nvarchar" MaxLength="256" />
+          <Property Name="sort" Type="tinyint" />
+        </EntityType>
         <EntityType Name="t_category">
           <Key>
             <PropertyRef Name="cat_id" />
@@ -67,6 +79,16 @@
           <Property Name="is_use" Type="bit" />
           <Property Name="create_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_room">
+          <Key>
+            <PropertyRef Name="room_id" />
+          </Key>
+          <Property Name="room_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="area" Type="nvarchar" MaxLength="10" />
+          <Property Name="building" Type="nvarchar" MaxLength="20" />
+          <Property Name="room_num" Type="nvarchar" MaxLength="20" />
+          <Property Name="note" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="t_setting">
           <Key>
             <PropertyRef Name="id" />
@@ -90,6 +112,21 @@
           <Property Name="last_login_time" Type="datetime" />
           <Property Name="create_time" Type="datetime" />
           <Property Name="token" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="t_user_address">
+          <Key>
+            <PropertyRef Name="address_id" />
+          </Key>
+          <Property Name="address_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="receipt_person" Type="nvarchar" MaxLength="20" />
+          <Property Name="receipt_phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="university" Type="nvarchar" MaxLength="50" />
+          <Property Name="area" Type="nvarchar" MaxLength="10" />
+          <Property Name="building" Type="nvarchar" MaxLength="20" />
+          <Property Name="room_num" Type="nvarchar" MaxLength="20" />
+          <Property Name="address" Type="nvarchar" MaxLength="200" />
+          <Property Name="is_default" Type="bit" />
         </EntityType>
         <EntityType Name="t_user_code">
           <Key>
@@ -127,12 +164,15 @@
         </Association>
         <EntityContainer Name="SmallBeliefModelStoreContainer">
           <EntitySet Name="t_admin_user" EntityType="Self.t_admin_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_banner" EntityType="Self.t_banner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods_gallery" EntityType="Self.t_goods_gallery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_psw_code" EntityType="Self.t_psw_code" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_room" EntityType="Self.t_room" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_setting" EntityType="Self.t_setting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user" EntityType="Self.t_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_user_address" EntityType="Self.t_user_address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user_code" EntityType="Self.t_user_code" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_t_goods_gallery_t_goods" Association="Self.FK_t_goods_gallery_t_goods">
             <End Role="t_goods" EntitySet="t_goods" />
@@ -164,6 +204,9 @@
           </AssociationSet>
           <EntitySet Name="t_setting" EntityType="SmallBeliefModel.t_setting" />
           <EntitySet Name="t_psw_code" EntityType="SmallBeliefModel.t_psw_code" />
+          <EntitySet Name="t_banner" EntityType="SmallBeliefModel.t_banner" />
+          <EntitySet Name="t_room" EntityType="SmallBeliefModel.t_room" />
+          <EntitySet Name="t_user_address" EntityType="SmallBeliefModel.t_user_address" />
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -289,6 +332,43 @@
           <Property Name="is_use" Type="Boolean" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="t_banner">
+          <Key>
+            <PropertyRef Name="banner_id" />
+          </Key>
+          <Property Name="banner_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="banner_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="banner_type" Type="Byte" />
+          <Property Name="banner_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="click_type" Type="Byte" />
+          <Property Name="click_value" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="sort" Type="Byte" />
+        </EntityType>
+        <EntityType Name="t_room">
+          <Key>
+            <PropertyRef Name="room_id" />
+          </Key>
+          <Property Name="room_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="area" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="building" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="room_num" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="t_user_address">
+          <Key>
+            <PropertyRef Name="address_id" />
+          </Key>
+          <Property Name="address_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="receipt_person" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="receipt_phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="university" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="area" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="building" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="room_num" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="is_default" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -396,6 +476,46 @@
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
                 <ScalarProperty Name="user_phone" ColumnName="user_phone" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_banner">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_banner">
+              <MappingFragment StoreEntitySet="t_banner">
+                <ScalarProperty Name="sort" ColumnName="sort" />
+                <ScalarProperty Name="click_value" ColumnName="click_value" />
+                <ScalarProperty Name="click_type" ColumnName="click_type" />
+                <ScalarProperty Name="banner_img" ColumnName="banner_img" />
+                <ScalarProperty Name="banner_type" ColumnName="banner_type" />
+                <ScalarProperty Name="banner_name" ColumnName="banner_name" />
+                <ScalarProperty Name="banner_id" ColumnName="banner_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_room">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_room">
+              <MappingFragment StoreEntitySet="t_room">
+                <ScalarProperty Name="note" ColumnName="note" />
+                <ScalarProperty Name="room_num" ColumnName="room_num" />
+                <ScalarProperty Name="building" ColumnName="building" />
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="room_id" ColumnName="room_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_user_address">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_user_address">
+              <MappingFragment StoreEntitySet="t_user_address">
+                <ScalarProperty Name="is_default" ColumnName="is_default" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="room_num" ColumnName="room_num" />
+                <ScalarProperty Name="building" ColumnName="building" />
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="university" ColumnName="university" />
+                <ScalarProperty Name="receipt_phone" ColumnName="receipt_phone" />
+                <ScalarProperty Name="receipt_person" ColumnName="receipt_person" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="address_id" ColumnName="address_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

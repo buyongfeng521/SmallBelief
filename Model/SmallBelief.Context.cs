@@ -33,5 +33,8 @@ namespace Model
         public virtual DbSet<t_category> t_category { get; set; }
         public virtual DbSet<t_setting> t_setting { get; set; }
         public virtual DbSet<t_psw_code> t_psw_code { get; set; }
+        public virtual DbSet<t_banner> t_banner { get; set; }
+        public virtual DbSet<t_room> t_room { get; set; }
+        public virtual DbSet<t_user_address> t_user_address { get; set; }
     }
 }

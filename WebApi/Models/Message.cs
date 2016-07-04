@@ -15,5 +15,9 @@ namespace WebApi.Models
         public const string NullData = "数据为空";
         public const string NoLogin = "用户未登录";
 
+        //void
+        public const string VoidPhone = "无效的手机号码";
+        public const string VoidAddress = "无效的地址信息";
+
     }
 }

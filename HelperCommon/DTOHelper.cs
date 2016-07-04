@@ -16,6 +16,7 @@ namespace HelperCommon
             Mapper.CreateMap<t_category, CategoryDTO>();
             Mapper.CreateMap<t_goods, GoodsDTO>();
             Mapper.CreateMap<t_user, UserDTO>();
+            Mapper.CreateMap<t_user_address, UserAddressDTO>();
         }
 
         static void Visa<T1, T2>()

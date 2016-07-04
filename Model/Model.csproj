@@ -54,6 +54,7 @@
     <Compile Include="DTOModel\CategoryDTO.cs" />
     <Compile Include="DTOModel\GoodsDTO.cs" />
     <Compile Include="DTOModel\OnlineDTO.cs" />
+    <Compile Include="DTOModel\UserAddressDTO.cs" />
     <Compile Include="DTOModel\UserDTO.cs" />
     <Compile Include="FormatModel\AjaxMsg.cs" />
     <Compile Include="FormatModel\RetInfo.cs" />
@@ -77,6 +78,9 @@
     <Compile Include="t_admin_user.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_banner.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_category.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
@@ -89,10 +93,16 @@
     <Compile Include="t_psw_code.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_room.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_setting.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_user.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_user_address.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_user_code.cs">

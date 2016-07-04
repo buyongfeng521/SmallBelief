@@ -18,6 +18,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_bannerBLL : EFBLLBase<t_banner>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_bannerDAL();
+        }
+    }
+
 	public partial class t_categoryBLL : EFBLLBase<t_category>
     {
 		protected override void SetDAL()
@@ -50,6 +58,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_roomBLL : EFBLLBase<t_room>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_roomDAL();
+        }
+    }
+
 	public partial class t_settingBLL : EFBLLBase<t_setting>
     {
 		protected override void SetDAL()
@@ -63,6 +79,14 @@ namespace EFBLL
 		protected override void SetDAL()
         {
             dal = new t_userDAL();
+        }
+    }
+
+	public partial class t_user_addressBLL : EFBLLBase<t_user_address>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_user_addressDAL();
         }
     }
 

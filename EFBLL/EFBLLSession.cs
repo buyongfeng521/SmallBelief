@@ -26,6 +26,21 @@ namespace EFBLL
         }
 
         
+        private t_bannerBLL t_bannerbll;
+        public t_bannerBLL t_bannerBLL
+        {
+	        get
+	        {
+		        if(t_bannerbll == null)
+		        {
+			        t_bannerbll = new t_bannerBLL();
+		        }
+		        return t_bannerbll;
+	        }
+	        set{}
+        }
+
+        
         private t_categoryBLL t_categorybll;
         public t_categoryBLL t_categoryBLL
         {
@@ -86,6 +101,21 @@ namespace EFBLL
         }
 
         
+        private t_roomBLL t_roombll;
+        public t_roomBLL t_roomBLL
+        {
+	        get
+	        {
+		        if(t_roombll == null)
+		        {
+			        t_roombll = new t_roomBLL();
+		        }
+		        return t_roombll;
+	        }
+	        set{}
+        }
+
+        
         private t_settingBLL t_settingbll;
         public t_settingBLL t_settingBLL
         {
@@ -111,6 +141,21 @@ namespace EFBLL
 			        t_userbll = new t_userBLL();
 		        }
 		        return t_userbll;
+	        }
+	        set{}
+        }
+
+        
+        private t_user_addressBLL t_user_addressbll;
+        public t_user_addressBLL t_user_addressBLL
+        {
+	        get
+	        {
+		        if(t_user_addressbll == null)
+		        {
+			        t_user_addressbll = new t_user_addressBLL();
+		        }
+		        return t_user_addressbll;
 	        }
 	        set{}
         }
