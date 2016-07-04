@@ -268,77 +268,176 @@ namespace WebApi.Controllers
         {
             RetInfo<object> ret = new RetInfo<object>();
 
-            string token = obj.token;
-            string receipt_person = obj.receipt_person;
-            string receipt_phone = obj.receipt_phone;
-            string area = obj.area;
-            string building = obj.building;
-            string room_num = obj.room_num;
-            bool is_default = obj.is_default;
-            if (APIHelper.IsLogin(token))
+            try
             {
-                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
-                if (user != null)
+                string token = obj.token;
+                string receipt_person = obj.receipt_person;
+                string receipt_phone = obj.receipt_phone;
+                string area = obj.area;
+                string building = obj.building;
+                string room_num = obj.room_num;
+                bool is_default = obj.is_default;
+                if (APIHelper.IsLogin(token))
                 {
-                    if (!string.IsNullOrWhiteSpace(receipt_person) && !string.IsNullOrWhiteSpace(receipt_phone))
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                    if (user != null)
                     {
-                        if (RegHelper.IsPhone(receipt_phone))
+                        if (!string.IsNullOrWhiteSpace(receipt_person) && !string.IsNullOrWhiteSpace(receipt_phone))
                         {
-                            if (!string.IsNullOrWhiteSpace(area) && !string.IsNullOrWhiteSpace(building) && !string.IsNullOrWhiteSpace(room_num))
+                            if (RegHelper.IsPhone(receipt_phone))
                             {
-                                t_user_address user_address = new t_user_address()
+                                if (!string.IsNullOrWhiteSpace(area) && !string.IsNullOrWhiteSpace(building) && !string.IsNullOrWhiteSpace(room_num))
                                 {
-                                    user_id = user.ID,
-                                    receipt_person = receipt_person,
-                                    receipt_phone = receipt_phone,
-                                    university = "浙江理工大学",
-                                    area = area,
-                                    building = building,
-                                    room_num = room_num,
-                                    address = "浙江理工大学" + area + building + room_num,
-                                    is_default = is_default == true ? true : false
-                                };
-                                if (OperateContext.EFBLLSession.t_user_addressBLL.Add(user_address))
-                                {
-                                    if (user_address.is_default == true)
+                                    t_user_address user_address = new t_user_address()
                                     {
-                                        string upSql = "update t_user_address set is_default = 0 where address_id <> @address_id and user_id = @user_id";
-                                        DapperContext<t_user_address>.DapperBLL.ExecuteSql(upSql, new { address_id = user_address.address_id,user_id = user.ID });
+                                        user_id = user.ID,
+                                        receipt_person = receipt_person,
+                                        receipt_phone = receipt_phone,
+                                        university = "浙江理工大学",
+                                        area = area,
+                                        building = building,
+                                        room_num = room_num,
+                                        address = "浙江理工大学" + area + building + room_num,
+                                        is_default = is_default == true ? true : false
+                                    };
+                                    if (OperateContext.EFBLLSession.t_user_addressBLL.Add(user_address))
+                                    {
+                                        if (user_address.is_default == true)
+                                        {
+                                            string upSql = "update t_user_address set is_default = 0 where address_id <> @address_id and user_id = @user_id";
+                                            DapperContext<t_user_address>.DapperBLL.ExecuteSql(upSql, new { address_id = user_address.address_id, user_id = user.ID });
+                                        }
+
+                                        ret.msg = CommonBasicMsg.AddSuc;
+                                        ret.status = true;
                                     }
-                                    
-                                    ret.msg = CommonBasicMsg.AddSuc;
-                                    ret.status = true;
+                                    else
+                                    {
+                                        ret.msg = CommonBasicMsg.AddFail;
+                                    }
                                 }
                                 else
                                 {
-                                    ret.msg = CommonBasicMsg.AddFail;
+                                    ret.msg = Message.VoidAddress;
                                 }
                             }
                             else
                             {
-                                ret.msg = Message.VoidAddress;
+                                ret.msg = Message.VoidPhone;
                             }
                         }
                         else
                         {
-                            ret.msg = Message.VoidPhone;
+                            ret.msg = "请输入收货人姓名和手机号码";
                         }
                     }
                     else
                     {
-                        ret.msg = "请输入收货人姓名和手机号码";
+                        ret.msg = CommonBasicMsg.VoidUser;
                     }
                 }
                 else
                 {
-                    ret.msg = CommonBasicMsg.VoidUser;
+                    ret.msg = Message.NoLogin;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                ret.msg = Message.NoLogin;
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
             }
 
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 用户地址修改
+        /// </summary>
+        /// <param name="obj">{"address_id":"用户地址ID","receipt_person":"收货人姓名","receipt_phone":"收货人手机号码","area":"区号","building":"楼号","room_num":"寝室号","is_default":true/false}</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RetInfo<object> UserAddressEdit(dynamic obj)
+        {
+            RetInfo<object> ret = new RetInfo<object>();
+
+            try
+            {
+                string address_id = obj.address_id;
+                string receipt_person = obj.receipt_person;
+                string receipt_phone = obj.receipt_phone;
+                string area = obj.area;
+                string building = obj.building;
+                string room_num = obj.room_num;
+                bool is_default = obj.is_default;
+
+                if (!string.IsNullOrWhiteSpace(receipt_person) && !string.IsNullOrWhiteSpace(receipt_phone))
+                {
+                    if (RegHelper.IsPhone(receipt_phone))
+                    {
+                        if (!string.IsNullOrWhiteSpace(area) && !string.IsNullOrWhiteSpace(building) && !string.IsNullOrWhiteSpace(room_num))
+                        {
+                            int iAddress_id = 0;
+                            if (int.TryParse(address_id, out iAddress_id))
+                            {
+                                t_user_address editModel = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.address_id == iAddress_id);
+                                if (editModel != null)
+                                {
+                                    editModel.receipt_person = receipt_person;
+                                    editModel.receipt_phone = receipt_phone;
+                                    editModel.university = "浙江理工大学";
+                                    editModel.area = area;
+                                    editModel.building = building;
+                                    editModel.room_num = room_num;
+                                    editModel.address = "浙江理工大学" + area + building + room_num;
+                                    is_default = is_default == true ? true : false;
+                                    if (OperateContext.EFBLLSession.t_user_addressBLL.Modify(editModel))
+                                    {
+                                        if (editModel.is_default == true)
+                                        {
+                                            string upSql = "update t_user_address set is_default = 0 where address_id <> @address_id and user_id = @user_id";
+                                            DapperContext<t_user_address>.DapperBLL.ExecuteSql(upSql, new { address_id = editModel.address_id, user_id = editModel.user_id });
+                                        }
+
+                                        ret.msg = CommonBasicMsg.EditSuc;
+                                        ret.status = true;
+                                    }
+                                    else
+                                    {
+                                        ret.msg = CommonBasicMsg.EditFail;
+                                    }
+                                }
+                                else
+                                {
+                                    ret.msg = CommonBasicMsg.VoidModel;
+                                }
+                            }
+                            else
+                            {
+                                ret.msg = CommonBasicMsg.VoidID;
+                            }
+
+                        }
+                        else
+                        {
+                            ret.msg = Message.VoidAddress;
+                        }
+                    }
+                    else
+                    {
+                        ret.msg = Message.VoidPhone;
+                    }
+                }
+                else
+                {
+                    ret.msg = "请输入收货人姓名和手机号码";
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
 
             return ret;
         }
