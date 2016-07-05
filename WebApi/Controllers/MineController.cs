@@ -443,6 +443,68 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
+        /// 用户地址删除
+        /// </summary>
+        /// <param name="obj">{"token":"用户Token","address_id":"用户地址ID"}</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RetInfo<object> UserAddressDelete(dynamic obj)
+        {
+            RetInfo<object> ret = new RetInfo<object>();
+
+            try
+            {
+                string token = obj.token;
+                string address_id = obj.address_id;
+                int iAddress_id = 0;
+                if (APIHelper.IsLogin(token))
+                {
+                    if (int.TryParse(address_id, out iAddress_id))
+                    {
+                        if (OperateContext.EFBLLSession.t_user_addressBLL.GetCountBy(a => a.address_id == iAddress_id) > 0)
+                        {
+                            if (OperateContext.EFBLLSession.t_user_addressBLL.DeleteBy(a => a.address_id == iAddress_id))
+                            {
+                                ret.msg = CommonBasicMsg.DelSuc;
+                                ret.status = true;
+                            }
+                            else
+                            {
+                                ret.msg = CommonBasicMsg.DelFail;
+                            }
+                        }
+                        else
+                        {
+                            ret.msg = CommonBasicMsg.VoidModel;
+                        }
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.VoidID;
+                    }
+                }
+                else
+                {
+                    ret.msg = Message.NoAccess;
+                }
+            }
+            catch(Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+            return ret;
+        }
+
+
+
+
+
+
+
+
+        /// <summary>
         /// 获取学校内区号
         /// </summary>
         /// <returns></returns>
