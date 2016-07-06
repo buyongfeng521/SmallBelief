@@ -36,7 +36,7 @@ namespace Model
         public Nullable<bool> is_del { get; set; }
         public Nullable<System.DateTime> add_time { get; set; }
     
-        public virtual ICollection<t_goods_gallery> t_goods_gallery { get; set; }
         public virtual t_category t_category { get; set; }
+        public virtual ICollection<t_goods_gallery> t_goods_gallery { get; set; }
     }
 }

@@ -26,7 +26,6 @@ namespace Model
         }
     
         public virtual DbSet<t_admin_user> t_admin_user { get; set; }
-        public virtual DbSet<t_goods> t_goods { get; set; }
         public virtual DbSet<t_goods_gallery> t_goods_gallery { get; set; }
         public virtual DbSet<t_user> t_user { get; set; }
         public virtual DbSet<t_user_code> t_user_code { get; set; }
@@ -36,5 +35,7 @@ namespace Model
         public virtual DbSet<t_banner> t_banner { get; set; }
         public virtual DbSet<t_room> t_room { get; set; }
         public virtual DbSet<t_user_address> t_user_address { get; set; }
+        public virtual DbSet<t_ad> t_ad { get; set; }
+        public virtual DbSet<t_goods> t_goods { get; set; }
     }
 }

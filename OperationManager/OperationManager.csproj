@@ -142,6 +142,9 @@
     <Content Include="content\wangEditor-2.1.12\css\wangEditor.less" />
     <Content Include="content\wangEditor-2.1.12\emotions.data" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Common\GoodsCommon.js" />
+    <Content Include="Scripts\Common\GoodsCommon2.js" />
+    <Content Include="Scripts\Common\GoodsSelector.js" />
     <Content Include="Scripts\Common\ViewCommon.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -165,6 +168,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\SOPartialController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -204,6 +208,11 @@
     <Content Include="Views\Goods\GoodsAdd.cshtml" />
     <Content Include="Views\Goods\GoodsEdit.cshtml" />
     <Content Include="Views\Settings\AppSet.cshtml" />
+    <Content Include="Views\AD\BannerAdd.cshtml" />
+    <Content Include="Views\AD\BannerEdit.cshtml" />
+    <Content Include="Views\AD\ADAdd.cshtml" />
+    <Content Include="Views\SOPartial\PartialClickType.cshtml" />
+    <Content Include="Views\AD\ADEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

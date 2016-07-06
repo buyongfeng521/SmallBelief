@@ -1,4 +1,5 @@
-﻿
+﻿@using Model.CommonModel;
+@model List<Model.t_ad>
 @{
     ViewBag.Title = "广告列表";
     Layout = "~/Views/_Layout.cshtml";
@@ -23,7 +24,7 @@
             </div>
             <button class="btn btn-default">搜索</button>
 
-            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加广告</a>
+            <a href="/AD/ADAdd" class="btn btn-info pull-right" id="btnAdd">增加广告</a>
         }
         <hr />
         <div class="dataTable_wrapper">
@@ -31,22 +32,46 @@
                 <tr>
                     <th>编号</th>
                     <th>广告名称</th>
+                    <th>广告类型</th>
                     <th>点击类型</th>
-                    <th>创建时间</th>
                     <th>操作</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>广告001</td>
-                    <td>URL</td>
-                    <td>2015-15-16</td>
-                    <td>
-                        <a href="#">修改</a>
-                        <a href="#">删除</a>
-                    </td>
-                </tr>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.ad_name</td>
+                            <td>@((Enums.ADType)item.ad_type)</td>
+                            <td>@((Enums.ClickType)item.click_type)</td>
+                            <td>
+                                <a href="/AD/ADEdit?id=@item.ad_id">修改</a>
+                                &nbsp;&nbsp;&nbsp;
+                                <a href="javascript:" onclick="del(@item.ad_id)">删除</a>
+                            </td>
+                        </tr>
+                    }
+                }
 
             </table>
         </div>
     </div>
 </div>
+
+
+<script>
+    function del(id) {
+        if (id) {
+            if (confirm("确定删除?")) {
+                var url = "/AD/ADDel";
+                $.post(url, { "id": id },function(data){
+                    $.procAjaxData(data, function () {
+                        location.href = "/AD/ADList";
+                    });
+                });
+            }
+        }
+    }
+</script>

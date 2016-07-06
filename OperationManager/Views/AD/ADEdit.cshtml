@@ -1,0 +1,103 @@
+﻿@model Model.t_ad
+@{
+    ViewBag.Title = "广告编辑";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">广告编辑</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                广告信息
+            </div>
+            <div class="panel-body">
+                <form id="frmAD">
+                    @Html.HiddenFor(a=>a.ad_id)
+                    @Html.Hidden("hideClickType", Model.click_type)
+                    <div class="form-group">
+                        <label>广告名字：</label>
+                        <input type="text" class="form-control" id="ad_name" name="ad_name" value="@Model.ad_name" placeholder="广告名字">
+                    </div>
+                    <div class="form-group">
+                        <label>广告类型：</label>
+                        @Html.DropDownList("ad_type", ViewBag.ListADType as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>广告图：</label>
+                        <input type="file" id="ad_img" name="ad_img">
+                        @if (!string.IsNullOrEmpty(Model.ad_img))
+                        {
+                            <div>
+                                <img src='@System.Configuration.ConfigurationManager.AppSettings["Domain"]@Model.ad_img' class="img-rounded" height="150" width="150">
+                            </div>
+                        }
+                    </div>
+
+                    @{Html.RenderAction("PartialClickType", "SOPartial", new { clickType = Model.click_type, clickValue = Model.click_value });}
+
+                    <div class="form-group">
+                        <label>排序：</label>
+                        <input type="number" class="form-control" id="sort" name="sort" value="@Model.sort" placeholder="排序">
+                    </div>
+
+                    <button type="button" id="btnSave" class="btn btn-success" onclick="saveInfo()">保存</button>
+                    <a class="btn btn-default" href="/AD/ADList">返回</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/Common/ViewCommon.js"></script>
+<script src="~/Scripts/jquery.form.js"></script>
+<script>
+    $(function () {
+        //主图
+        View_File_Input_Init("ad_img", 1000);
+    })
+</script>
+
+
+<script>
+    function saveInfo() {
+        SetClickTypeValue();
+        $("#frmAD").ajaxSubmit({
+            type: "post",
+            url: "/AD/ADEdit",
+            success: function (data) {
+                $.procAjaxData(data, function (data) {
+                    location.href = "/AD/ADList";
+                });
+            }
+        });
+    }
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#divClickGoods").css("display", "none");
+        $("#URL").css("display", "none");
+        $("#divCat").css("display", "none");
+
+        var type = $("#hideClickType").val();
+        if (type == "1") {//分类
+            $("#divCat").css("display", "");
+        }
+        else if (type == "2") {//产品
+            $("#divClickGoods").css("display", "inline-block");
+        }
+        else if (type == "3") {//Url
+            $("#URL").css("display", "");
+        }
+    });
+</script>
+

@@ -1,4 +1,4 @@
-﻿
+﻿@using Model.CommonModel
 @{
     ViewBag.Title = "Banner列表";
     Layout = "~/Views/_Layout.cshtml";
@@ -11,6 +11,7 @@
     </div>
 </div>
 
+
 <!--content-->
 <div class="row">
     <div class="col-lg-12">
@@ -22,31 +23,57 @@
             </div>
             <button class="btn btn-default">搜索</button>
 
-            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加Banner</a>
+            <a href="/AD/BannerAdd" class="btn btn-info pull-right" id="btnAdd">增加Banner</a>
         }
         <hr />
         <div class="dataTable_wrapper">
             <table class="table table-bordered table-hover">
                 <tr>
                     <th>编号</th>
-                    <th>banner名称</th>
+                    <th>Banner名称</th>
+                    <th>Banner类型</th>
                     <th>点击类型</th>
-                    <th>创建时间</th>
                     <th>操作</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>banner001</td>
-                    <td>URL</td>
-                    <td>2016-12-16</td>
-                    <td>
-                        <a href="#">修改</a>
-                        <a href="#">删除</a>
-                    </td>
-                </tr>
+
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.banner_name</td>
+                            <td>@((Enums.BannerType)item.banner_type)</td>
+                            <td>@((Enums.ClickType)item.click_type)</td>
+                            <td>
+                                <a href="/AD/BannerEdit?id=@item.banner_id">修改</a>
+                                &nbsp;&nbsp;&nbsp;
+                                <a href="javascrip:" onclick="del(@item.banner_id)">删除</a>
+                            </td>
+                        </tr>
+                    }
+
+                }
 
             </table>
         </div>
     </div>
 </div>
+
+
+<script>
+    function del(id) {
+        if(id){
+            if(confirm("确定删除吗?")){
+                $.post("/AD/BannerDel",{"id":id},function(data){
+                    $.procAjaxData(data,function(){
+                        location.href = "/AD/BannerList";
+                    });
+                })
+            }
+        }
+
+    }
+</script>
 

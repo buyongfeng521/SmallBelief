@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common;
 using Model;
 using Model.DTOModel;
 using System;
@@ -17,6 +18,9 @@ namespace HelperCommon
             Mapper.CreateMap<t_goods, GoodsDTO>();
             Mapper.CreateMap<t_user, UserDTO>();
             Mapper.CreateMap<t_user_address, UserAddressDTO>();
+            Mapper.CreateMap<t_banner, BannerDTO>().ForMember(dest => dest.banner_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.banner_img));
+            Mapper.CreateMap<t_ad, ADDTO>().ForMember(dest => dest.ad_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.ad_img));
+
         }
 
         static void Visa<T1, T2>()

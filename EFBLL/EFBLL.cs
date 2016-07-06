@@ -10,6 +10,14 @@ using EFDAL;
 
 namespace EFBLL
 {
+	public partial class t_adBLL : EFBLLBase<t_ad>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_adDAL();
+        }
+    }
+
 	public partial class t_admin_userBLL : EFBLLBase<t_admin_user>
     {
 		protected override void SetDAL()

@@ -1,0 +1,132 @@
+﻿
+
+<div class="form-group">
+    <label>点击：</label>
+    <div class="form-inline">
+        <div class="form-group">
+            @Html.Hidden("hideClickValue")
+            <label class="sr-only">点击类型</label>
+            @Html.DropDownList("click_type", ViewBag.ListClickType as IEnumerable<SelectListItem>, new { @class = "form-control", onchange = "chgClickType(this.value)" })
+        </div>
+        <div class="form-group" id="divCat">
+            <label class="sr-only">clickValue</label>
+            @Html.DropDownList("ddlcat", ViewBag.ListCat as IEnumerable<SelectListItem>, new { @class = "form-control" })
+        </div>
+        <div class="form-group" id="divURL">
+            <label class="sr-only">clickValue</label>
+            @Html.TextBox("URL", (string)@ViewBag.ClickURL, new { placeholder = "URL",style="width:360px" })
+        </div>
+
+        <div id="divClickGoods" style="display:inline-block">
+            @Html.Hidden("clickGoods")
+            <a class="btn btn-success" href="javascript:void(0);" onclick="show('1')">选择</a>
+            <label id="lbClickGoods">
+                @HelperCommon.ContentHelper.GetGoodsName(int.Parse(@ViewBag.ClickGoods))
+            </label>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Modal-->
+<!--GoodsSelect-->
+<div class="modal fade" id="modalGoods" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">商品选择 (双击选定商品)</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-inline">
+                                <div class="row">
+                                    @Html.Hidden("hideGoodsType")
+                                    <div class="col-md-3 col-sm-3">
+                                        @Html.DropDownList("ddlType2", ViewBag.ListAllType as IEnumerable<SelectListItem>, new { @class = "form-control"})
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <input type="text" id="keywords2" name="keywords2" class="form-control" value="" placeholder="关键字">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <button type="button" class="btn btn-default" onclick="SearchGoods2()">搜索</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <select multiple style="height:400px" class="form-control" id="selSource2"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/Common/GoodsCommon2.js"></script>
+<script src="~/Scripts/Common/GoodsSelector.js"></script>
+
+<script>
+    function SetClickTypeValue() {
+        var cli_val = $("#click_type").find("option:selected").val();
+        if (cli_val == "1") {
+            $("#hideClickValue").val($("#ddlcat").find("option:selected").val());
+        }
+        else if (cli_val == "2") {
+            $("#hideClickValue").val($("#clickGoods").val());
+        }
+        else if (cli_val == "3") {
+            $("#hideClickValue").val($("#URL").val());
+        }
+        else {
+            $("#hideClickValue").val("");
+        }
+    }
+
+    $(function () {
+        $("#divClickGoods").css("display", "none");
+        $("#URL").css("display", "none");
+        $("#divCat").css("display", "none");
+    })
+
+    //ClickType变化
+    function chgClickType(val) {
+        //分类
+        if (val == "1") {
+            $("#divCat").css("display", "");
+        }
+        else {
+            $("#divCat").css("display", "none");
+        }
+
+        //产品
+        if (val == "2") {
+            $("#divClickGoods").css("display", "inline-block");
+        }
+        else {
+            $("#divClickGoods").css("display", "none");
+        }
+        //url
+        if (val == 3) {
+            $("#URL").css("display", "");
+            //$("#show_title").val("");
+        }
+        else {
+            $("#URL").css("display", "none");
+        }
+        
+    }
+</script>

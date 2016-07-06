@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIHelper.cs" />
+    <Compile Include="ContentHelper.cs" />
     <Compile Include="DapperContext.cs" />
     <Compile Include="DTOHelper.cs" />
     <Compile Include="OperateContext.cs" />

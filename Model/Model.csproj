@@ -51,6 +51,8 @@
     <Compile Include="CommonModel\CommonBasicMsg.cs" />
     <Compile Include="CommonModel\Enums.cs" />
     <Compile Include="CommonModel\TestModel.cs" />
+    <Compile Include="DTOModel\ADDTO.cs" />
+    <Compile Include="DTOModel\BannerDTO.cs" />
     <Compile Include="DTOModel\CategoryDTO.cs" />
     <Compile Include="DTOModel\GoodsDTO.cs" />
     <Compile Include="DTOModel\OnlineDTO.cs" />
@@ -75,6 +77,9 @@
       <DependentUpon>SmallBelief.edmx</DependentUpon>
     </Compile>
     <Compile Include="StaticModel\OperateMsgModel.cs" />
+    <Compile Include="t_ad.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_admin_user.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>

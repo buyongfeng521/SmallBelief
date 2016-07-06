@@ -9,6 +9,10 @@ using Model;
 
 namespace EFDAL
 {
+	public partial class t_adDAL : EFDALBase<t_ad>
+    {
+    }
+
 	public partial class t_admin_userDAL : EFDALBase<t_admin_user>
     {
     }

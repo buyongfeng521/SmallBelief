@@ -11,6 +11,21 @@ namespace EFBLL
     public class EFBLLSession
     {
         
+        private t_adBLL t_adbll;
+        public t_adBLL t_adBLL
+        {
+	        get
+	        {
+		        if(t_adbll == null)
+		        {
+			        t_adbll = new t_adBLL();
+		        }
+		        return t_adbll;
+	        }
+	        set{}
+        }
+
+        
         private t_admin_userBLL t_admin_userbll;
         public t_admin_userBLL t_admin_userBLL
         {
