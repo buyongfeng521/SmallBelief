@@ -52,8 +52,10 @@
     <Compile Include="CommonModel\Enums.cs" />
     <Compile Include="CommonModel\TestModel.cs" />
     <Compile Include="DTOModel\ADDTO.cs" />
+    <Compile Include="DTOModel\APPHomeDTO.cs" />
     <Compile Include="DTOModel\BannerDTO.cs" />
     <Compile Include="DTOModel\CategoryDTO.cs" />
+    <Compile Include="DTOModel\CategoryGoodsDTO.cs" />
     <Compile Include="DTOModel\GoodsDTO.cs" />
     <Compile Include="DTOModel\OnlineDTO.cs" />
     <Compile Include="DTOModel\UserAddressDTO.cs" />
