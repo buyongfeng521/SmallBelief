@@ -156,11 +156,13 @@ namespace WebApi.Controllers
                 APPHomeDTO dto = new APPHomeDTO();
                 //1.0 basic
                 List<t_banner> listBanner = OperateContext.EFBLLSession.t_bannerBLL.GetListBy(b => b.banner_type == (int)Enums.BannerType.首页Banner, b => b.sort);
+                List<t_category_type> listCatType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id > 0, c => c.cat_type_id);
                 List<t_ad> listAD = OperateContext.EFBLLSession.t_adBLL.GetListBy(a => a.ad_id > 0, a => a.sort);
                 List<t_goods> listGoodsHot = OperateContext.EFBLLSession.t_goodsBLL.GetPageList(1, 4, g => g.is_del == false && g.is_hot == true, g => g.sort);
                 List<t_goods> listGoodsBest = OperateContext.EFBLLSession.t_goodsBLL.GetPageList(1, 4, g => g.is_del == false && g.is_best == true, g => g.sort);
                 //2.0 to dto
                 dto.Banner = DTOHelper.Map<List<BannerDTO>>(listBanner);
+                dto.Category = DTOHelper.Map<List<CatTypeDTO>>(listCatType);
                 dto.AD = DTOHelper.Map<List<ADDTO>>(listAD);
                 dto.GoodsHot = DTOHelper.MapList<GoodsDTO>(listGoodsHot);
                 dto.GoodsBest = DTOHelper.MapList<GoodsDTO>(listGoodsBest);

@@ -8,6 +8,7 @@ namespace Model.DTOModel
 {
     public class CategoryGoodsDTO
     {
+        public List<CatTypeDTO> CatType { get; set; }
         public List<CategoryDTO> Category { get; set; }
         public List<GoodsDTO> Goods { get; set; }
     }

@@ -20,6 +20,7 @@ namespace HelperCommon
             Mapper.CreateMap<t_user_address, UserAddressDTO>();
             Mapper.CreateMap<t_banner, BannerDTO>().ForMember(dest => dest.banner_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.banner_img));
             Mapper.CreateMap<t_ad, ADDTO>().ForMember(dest => dest.ad_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.ad_img));
+            Mapper.CreateMap<t_category_type, CatTypeDTO>();
 
         }
 

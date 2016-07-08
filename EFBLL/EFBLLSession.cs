@@ -71,6 +71,21 @@ namespace EFBLL
         }
 
         
+        private t_category_typeBLL t_category_typebll;
+        public t_category_typeBLL t_category_typeBLL
+        {
+	        get
+	        {
+		        if(t_category_typebll == null)
+		        {
+			        t_category_typebll = new t_category_typeBLL();
+		        }
+		        return t_category_typebll;
+	        }
+	        set{}
+        }
+
+        
         private t_goodsBLL t_goodsbll;
         public t_goodsBLL t_goodsBLL
         {

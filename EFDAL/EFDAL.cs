@@ -25,6 +25,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_category_typeDAL : EFDALBase<t_category_type>
+    {
+    }
+
 	public partial class t_goodsDAL : EFDALBase<t_goods>
     {
     }

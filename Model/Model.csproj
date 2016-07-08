@@ -56,6 +56,7 @@
     <Compile Include="DTOModel\BannerDTO.cs" />
     <Compile Include="DTOModel\CategoryDTO.cs" />
     <Compile Include="DTOModel\CategoryGoodsDTO.cs" />
+    <Compile Include="DTOModel\CatTypeDTO.cs" />
     <Compile Include="DTOModel\GoodsDTO.cs" />
     <Compile Include="DTOModel\OnlineDTO.cs" />
     <Compile Include="DTOModel\UserAddressDTO.cs" />
@@ -89,6 +90,9 @@
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_category.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_category_type.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_goods.cs">

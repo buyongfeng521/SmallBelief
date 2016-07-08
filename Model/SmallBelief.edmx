@@ -51,6 +51,14 @@
           <Property Name="sort" Type="int" />
           <Property Name="add_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_category_type">
+          <Key>
+            <PropertyRef Name="cat_type_id" />
+          </Key>
+          <Property Name="cat_type_id" Type="int" Nullable="false" />
+          <Property Name="type_name" Type="nvarchar" MaxLength="20" />
+          <Property Name="type_img" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="t_goods">
           <Key>
             <PropertyRef Name="goods_id" />
@@ -179,6 +187,7 @@
           <EntitySet Name="t_admin_user" EntityType="Self.t_admin_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_banner" EntityType="Self.t_banner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_category_type" EntityType="Self.t_category_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods_gallery" EntityType="Self.t_goods_gallery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_psw_code" EntityType="Self.t_psw_code" Schema="dbo" store:Type="Tables" />
@@ -221,6 +230,7 @@
             <End Role="t_goods" EntitySet="t_goods" />
             <End Role="t_goods_gallery" EntitySet="t_goods_gallery" />
           </AssociationSet>
+          <EntitySet Name="t_category_type" EntityType="SmallBeliefModel.t_category_type" />
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -395,6 +405,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="t_category_type">
+          <Key>
+            <PropertyRef Name="cat_type_id" />
+          </Key>
+          <Property Name="cat_type_id" Type="Int32" Nullable="false" />
+          <Property Name="type_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="type_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -555,6 +573,15 @@
                 <ScalarProperty Name="goods_name" ColumnName="goods_name" />
                 <ScalarProperty Name="cat_id" ColumnName="cat_id" />
                 <ScalarProperty Name="goods_id" ColumnName="goods_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_category_type">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_category_type">
+              <MappingFragment StoreEntitySet="t_category_type">
+                <ScalarProperty Name="type_img" ColumnName="type_img" />
+                <ScalarProperty Name="type_name" ColumnName="type_name" />
+                <ScalarProperty Name="cat_type_id" ColumnName="cat_type_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
