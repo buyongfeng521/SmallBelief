@@ -21,6 +21,7 @@ namespace HelperCommon
             Mapper.CreateMap<t_banner, BannerDTO>().ForMember(dest => dest.banner_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.banner_img));
             Mapper.CreateMap<t_ad, ADDTO>().ForMember(dest => dest.ad_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.ad_img));
             Mapper.CreateMap<t_category_type, CatTypeDTO>().ForMember(desc => desc.type_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.type_img));
+            Mapper.CreateMap<t_goods_gallery, GoodsGalleryDTO>().ForMember(desc => desc.img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.img));
 
         }
 

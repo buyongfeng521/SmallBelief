@@ -1,0 +1,40 @@
+Exception ---- 0000 
+	 Code:0000
+	 Time:2016-07-12 13:18:06
+	 ApplicationName:
+	 ApplicationPath:G:\GithubGit\SmallBelief\WebApi\
+	 MachineName:DESKTOP-0EVL3FV
+	 UserDomain:DESKTOP-0EVL3FV
+	 UserName:step
+	 Information:Missing type map configuration or unsupported mapping.
+
+Mapping types:
+t_goods_FD728FB822F99A30586B90367FE9220EA77313401EBD2991FF7A31B2F6F242F2 -> GoodsDetailDTO
+System.Data.Entity.DynamicProxies.t_goods_FD728FB822F99A30586B90367FE9220EA77313401EBD2991FF7A31B2F6F242F2 -> Model.DTOModel.GoodsDetailDTO
+
+Destination path:
+GoodsDetailDTO
+
+Source value:
+System.Data.Entity.DynamicProxies.t_goods_FD728FB822F99A30586B90367FE9220EA77313401EBD2991FF7A31B2F6F242F2
+	 Message:Missing type map configuration or unsupported mapping.
+
+Mapping types:
+t_goods_FD728FB822F99A30586B90367FE9220EA77313401EBD2991FF7A31B2F6F242F2 -> GoodsDetailDTO
+System.Data.Entity.DynamicProxies.t_goods_FD728FB822F99A30586B90367FE9220EA77313401EBD2991FF7A31B2F6F242F2 -> Model.DTOModel.GoodsDetailDTO
+
+Destination path:
+GoodsDetailDTO
+
+Source value:
+System.Data.Entity.DynamicProxies.t_goods_FD728FB822F99A30586B90367FE9220EA77313401EBD2991FF7A31B2F6F242F2
+	 Source:AutoMapper
+	 StackTrace:   在 AutoMapper.MappingEngine.Map(ResolutionContext context)
+   在 AutoMapper.Mapper.MapCore(Object source, Type sourceType, Type destinationType, MappingOperationOptions options)
+   在 AutoMapper.Mapper.AutoMapper.IMapper.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   在 AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source, Action`1 opts)
+   在 AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source)
+   在 AutoMapper.Mapper.Map[TDestination](Object source)
+   在 HelperCommon.DTOHelper.Map[ToT](Object org) 位置 g:\GithubGit\SmallBelief\HelperCommon\DTOHelper.cs:行号 42
+   在 WebApi.Controllers.GoodsController.GoodsDetailGet(Int32 goods_id) 位置 g:\GithubGit\SmallBelief\WebApi\Controllers\GoodsController.cs:行号 143
+

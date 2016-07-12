@@ -57,7 +57,9 @@
     <Compile Include="DTOModel\CategoryDTO.cs" />
     <Compile Include="DTOModel\CategoryGoodsDTO.cs" />
     <Compile Include="DTOModel\CatTypeDTO.cs" />
+    <Compile Include="DTOModel\GoodsDetailDTO.cs" />
     <Compile Include="DTOModel\GoodsDTO.cs" />
+    <Compile Include="DTOModel\GoodsGalleryDTO.cs" />
     <Compile Include="DTOModel\OnlineDTO.cs" />
     <Compile Include="DTOModel\UserAddressDTO.cs" />
     <Compile Include="DTOModel\UserDTO.cs" />
