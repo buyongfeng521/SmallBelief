@@ -34,6 +34,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_cartBLL : EFBLLBase<t_cart>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_cartDAL();
+        }
+    }
+
 	public partial class t_categoryBLL : EFBLLBase<t_category>
     {
 		protected override void SetDAL()
@@ -63,6 +71,22 @@ namespace EFBLL
 		protected override void SetDAL()
         {
             dal = new t_goods_galleryDAL();
+        }
+    }
+
+	public partial class t_order_goodsBLL : EFBLLBase<t_order_goods>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_order_goodsDAL();
+        }
+    }
+
+	public partial class t_order_infoBLL : EFBLLBase<t_order_info>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_order_infoDAL();
         }
     }
 

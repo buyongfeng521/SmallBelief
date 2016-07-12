@@ -38,5 +38,8 @@ namespace Model
         public virtual DbSet<t_ad> t_ad { get; set; }
         public virtual DbSet<t_goods> t_goods { get; set; }
         public virtual DbSet<t_category_type> t_category_type { get; set; }
+        public virtual DbSet<t_cart> t_cart { get; set; }
+        public virtual DbSet<t_order_goods> t_order_goods { get; set; }
+        public virtual DbSet<t_order_info> t_order_info { get; set; }
     }
 }

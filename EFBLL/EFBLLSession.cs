@@ -56,6 +56,21 @@ namespace EFBLL
         }
 
         
+        private t_cartBLL t_cartbll;
+        public t_cartBLL t_cartBLL
+        {
+	        get
+	        {
+		        if(t_cartbll == null)
+		        {
+			        t_cartbll = new t_cartBLL();
+		        }
+		        return t_cartbll;
+	        }
+	        set{}
+        }
+
+        
         private t_categoryBLL t_categorybll;
         public t_categoryBLL t_categoryBLL
         {
@@ -111,6 +126,36 @@ namespace EFBLL
 			        t_goods_gallerybll = new t_goods_galleryBLL();
 		        }
 		        return t_goods_gallerybll;
+	        }
+	        set{}
+        }
+
+        
+        private t_order_goodsBLL t_order_goodsbll;
+        public t_order_goodsBLL t_order_goodsBLL
+        {
+	        get
+	        {
+		        if(t_order_goodsbll == null)
+		        {
+			        t_order_goodsbll = new t_order_goodsBLL();
+		        }
+		        return t_order_goodsbll;
+	        }
+	        set{}
+        }
+
+        
+        private t_order_infoBLL t_order_infobll;
+        public t_order_infoBLL t_order_infoBLL
+        {
+	        get
+	        {
+		        if(t_order_infobll == null)
+		        {
+			        t_order_infobll = new t_order_infoBLL();
+		        }
+		        return t_order_infobll;
 	        }
 	        set{}
         }

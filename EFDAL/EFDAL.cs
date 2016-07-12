@@ -21,6 +21,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_cartDAL : EFDALBase<t_cart>
+    {
+    }
+
 	public partial class t_categoryDAL : EFDALBase<t_category>
     {
     }
@@ -34,6 +38,14 @@ namespace EFDAL
     }
 
 	public partial class t_goods_galleryDAL : EFDALBase<t_goods_gallery>
+    {
+    }
+
+	public partial class t_order_goodsDAL : EFDALBase<t_order_goods>
+    {
+    }
+
+	public partial class t_order_infoDAL : EFDALBase<t_order_info>
     {
     }
 

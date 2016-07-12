@@ -39,6 +39,19 @@
           <Property Name="click_value" Type="nvarchar" MaxLength="256" />
           <Property Name="sort" Type="tinyint" />
         </EntityType>
+        <EntityType Name="t_cart">
+          <Key>
+            <PropertyRef Name="cart_id" />
+          </Key>
+          <Property Name="cart_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cart_type" Type="tinyint" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="goods_id" Type="int" />
+          <Property Name="goods_name" Type="nvarchar" MaxLength="30" />
+          <Property Name="market_price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="goods_price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="goods_number" Type="int" />
+        </EntityType>
         <EntityType Name="t_category">
           <Key>
             <PropertyRef Name="cat_id" />
@@ -88,6 +101,44 @@
           <Property Name="goods_id" Type="int" />
           <Property Name="img" Type="nvarchar" MaxLength="200" />
           <Property Name="add_time" Type="datetime" />
+        </EntityType>
+        <EntityType Name="t_order_goods">
+          <Key>
+            <PropertyRef Name="rec_id" />
+          </Key>
+          <Property Name="rec_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_id" Type="int" />
+          <Property Name="goods_id" Type="int" />
+          <Property Name="goods_name" Type="nvarchar" MaxLength="30" />
+          <Property Name="goods_number" Type="int" />
+          <Property Name="market_price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="goods_price" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="t_order_info">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_type" Type="tinyint" />
+          <Property Name="order_sn" Type="nvarchar" MaxLength="30" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="order_status" Type="tinyint" />
+          <Property Name="shipping_status" Type="tinyint" />
+          <Property Name="pay_status" Type="tinyint" />
+          <Property Name="consignee" Type="nvarchar" MaxLength="30" />
+          <Property Name="mobile" Type="nvarchar" MaxLength="20" />
+          <Property Name="area" Type="nvarchar" MaxLength="10" />
+          <Property Name="building" Type="nvarchar" MaxLength="20" />
+          <Property Name="room_num" Type="nvarchar" MaxLength="20" />
+          <Property Name="address" Type="nvarchar" MaxLength="200" />
+          <Property Name="postscript" Type="nvarchar" MaxLength="100" />
+          <Property Name="goods_amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="order_amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="money_paid" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="add_time" Type="datetime" />
+          <Property Name="confirm_time" Type="datetime" />
+          <Property Name="pay_time" Type="datetime" />
+          <Property Name="shipping_time" Type="datetime" />
         </EntityType>
         <EntityType Name="t_psw_code">
           <Key>
@@ -182,14 +233,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_t_order_goods_t_order_info">
+          <End Role="t_order_info" Type="Self.t_order_info" Multiplicity="0..1" />
+          <End Role="t_order_goods" Type="Self.t_order_goods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_order_info">
+              <PropertyRef Name="order_id" />
+            </Principal>
+            <Dependent Role="t_order_goods">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="SmallBeliefModelStoreContainer">
           <EntitySet Name="t_ad" EntityType="Self.t_ad" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_admin_user" EntityType="Self.t_admin_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_banner" EntityType="Self.t_banner" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_cart" EntityType="Self.t_cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category_type" EntityType="Self.t_category_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods_gallery" EntityType="Self.t_goods_gallery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_order_goods" EntityType="Self.t_order_goods" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_order_info" EntityType="Self.t_order_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_psw_code" EntityType="Self.t_psw_code" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_room" EntityType="Self.t_room" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_setting" EntityType="Self.t_setting" Schema="dbo" store:Type="Tables" />
@@ -203,6 +269,10 @@
           <AssociationSet Name="FK_t_goods_t_category" Association="Self.FK_t_goods_t_category">
             <End Role="t_category" EntitySet="t_category" />
             <End Role="t_goods" EntitySet="t_goods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_order_goods_t_order_info" Association="Self.FK_t_order_goods_t_order_info">
+            <End Role="t_order_info" EntitySet="t_order_info" />
+            <End Role="t_order_goods" EntitySet="t_order_goods" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -231,6 +301,13 @@
             <End Role="t_goods_gallery" EntitySet="t_goods_gallery" />
           </AssociationSet>
           <EntitySet Name="t_category_type" EntityType="SmallBeliefModel.t_category_type" />
+          <EntitySet Name="t_cart" EntityType="SmallBeliefModel.t_cart" />
+          <EntitySet Name="t_order_goods" EntityType="SmallBeliefModel.t_order_goods" />
+          <EntitySet Name="t_order_info" EntityType="SmallBeliefModel.t_order_info" />
+          <AssociationSet Name="FK_t_order_goods_t_order_info" Association="SmallBeliefModel.FK_t_order_goods_t_order_info">
+            <End Role="t_order_info" EntitySet="t_order_info" />
+            <End Role="t_order_goods" EntitySet="t_order_goods" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -413,6 +490,71 @@
           <Property Name="type_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="type_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="t_cart">
+          <Key>
+            <PropertyRef Name="cart_id" />
+          </Key>
+          <Property Name="cart_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cart_type" Type="Byte" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="goods_id" Type="Int32" />
+          <Property Name="goods_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="market_price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="goods_price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="goods_number" Type="Int32" />
+        </EntityType>
+        <EntityType Name="t_order_goods">
+          <Key>
+            <PropertyRef Name="rec_id" />
+          </Key>
+          <Property Name="rec_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_id" Type="Int32" />
+          <Property Name="goods_id" Type="Int32" />
+          <Property Name="goods_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="goods_number" Type="Int32" />
+          <Property Name="market_price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="goods_price" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="t_order_info" Relationship="SmallBeliefModel.FK_t_order_goods_t_order_info" FromRole="t_order_goods" ToRole="t_order_info" />
+        </EntityType>
+        <EntityType Name="t_order_info">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_type" Type="Byte" />
+          <Property Name="order_sn" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="order_status" Type="Byte" />
+          <Property Name="shipping_status" Type="Byte" />
+          <Property Name="pay_status" Type="Byte" />
+          <Property Name="consignee" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="area" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="building" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="room_num" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="postscript" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="goods_amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="order_amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="money_paid" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="add_time" Type="DateTime" Precision="3" />
+          <Property Name="confirm_time" Type="DateTime" Precision="3" />
+          <Property Name="pay_time" Type="DateTime" Precision="3" />
+          <Property Name="shipping_time" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="t_order_goods" Relationship="SmallBeliefModel.FK_t_order_goods_t_order_info" FromRole="t_order_info" ToRole="t_order_goods" />
+        </EntityType>
+        <Association Name="FK_t_order_goods_t_order_info">
+          <End Type="SmallBeliefModel.t_order_info" Role="t_order_info" Multiplicity="0..1" />
+          <End Type="SmallBeliefModel.t_order_goods" Role="t_order_goods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_order_info">
+              <PropertyRef Name="order_id" />
+            </Principal>
+            <Dependent Role="t_order_goods">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -582,6 +724,60 @@
                 <ScalarProperty Name="type_img" ColumnName="type_img" />
                 <ScalarProperty Name="type_name" ColumnName="type_name" />
                 <ScalarProperty Name="cat_type_id" ColumnName="cat_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_cart">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_cart">
+              <MappingFragment StoreEntitySet="t_cart">
+                <ScalarProperty Name="goods_number" ColumnName="goods_number" />
+                <ScalarProperty Name="goods_price" ColumnName="goods_price" />
+                <ScalarProperty Name="market_price" ColumnName="market_price" />
+                <ScalarProperty Name="goods_name" ColumnName="goods_name" />
+                <ScalarProperty Name="goods_id" ColumnName="goods_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="cart_type" ColumnName="cart_type" />
+                <ScalarProperty Name="cart_id" ColumnName="cart_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_order_goods">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_order_goods">
+              <MappingFragment StoreEntitySet="t_order_goods">
+                <ScalarProperty Name="goods_price" ColumnName="goods_price" />
+                <ScalarProperty Name="market_price" ColumnName="market_price" />
+                <ScalarProperty Name="goods_number" ColumnName="goods_number" />
+                <ScalarProperty Name="goods_name" ColumnName="goods_name" />
+                <ScalarProperty Name="goods_id" ColumnName="goods_id" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="rec_id" ColumnName="rec_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_order_info">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_order_info">
+              <MappingFragment StoreEntitySet="t_order_info">
+                <ScalarProperty Name="shipping_time" ColumnName="shipping_time" />
+                <ScalarProperty Name="pay_time" ColumnName="pay_time" />
+                <ScalarProperty Name="confirm_time" ColumnName="confirm_time" />
+                <ScalarProperty Name="add_time" ColumnName="add_time" />
+                <ScalarProperty Name="money_paid" ColumnName="money_paid" />
+                <ScalarProperty Name="order_amount" ColumnName="order_amount" />
+                <ScalarProperty Name="goods_amount" ColumnName="goods_amount" />
+                <ScalarProperty Name="postscript" ColumnName="postscript" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="room_num" ColumnName="room_num" />
+                <ScalarProperty Name="building" ColumnName="building" />
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="consignee" ColumnName="consignee" />
+                <ScalarProperty Name="pay_status" ColumnName="pay_status" />
+                <ScalarProperty Name="shipping_status" ColumnName="shipping_status" />
+                <ScalarProperty Name="order_status" ColumnName="order_status" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="order_sn" ColumnName="order_sn" />
+                <ScalarProperty Name="order_type" ColumnName="order_type" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
