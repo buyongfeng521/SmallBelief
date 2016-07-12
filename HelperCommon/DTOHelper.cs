@@ -15,12 +15,12 @@ namespace HelperCommon
         static DTOHelper()
         {
             Mapper.CreateMap<t_category, CategoryDTO>();
-            Mapper.CreateMap<t_goods, GoodsDTO>();
+            Mapper.CreateMap<t_goods, GoodsDTO>().ForMember(dest => dest.goods_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.goods_img)); ;
             Mapper.CreateMap<t_user, UserDTO>();
             Mapper.CreateMap<t_user_address, UserAddressDTO>();
             Mapper.CreateMap<t_banner, BannerDTO>().ForMember(dest => dest.banner_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.banner_img));
             Mapper.CreateMap<t_ad, ADDTO>().ForMember(dest => dest.ad_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.ad_img));
-            Mapper.CreateMap<t_category_type, CatTypeDTO>();
+            Mapper.CreateMap<t_category_type, CatTypeDTO>().ForMember(desc => desc.type_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.type_img));
 
         }
 

@@ -141,6 +141,7 @@
     <Content Include="content\wangEditor-2.1.12\css\fonts\icomoon.woff" />
     <Content Include="content\wangEditor-2.1.12\css\wangEditor.less" />
     <Content Include="content\wangEditor-2.1.12\emotions.data" />
+    <None Include="Properties\PublishProfiles\ZLZPManager.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Common\GoodsCommon.js" />
     <Content Include="Scripts\Common\GoodsCommon2.js" />
