@@ -61,6 +61,9 @@
     <Compile Include="DTOModel\GoodsDTO.cs" />
     <Compile Include="DTOModel\GoodsGalleryDTO.cs" />
     <Compile Include="DTOModel\OnlineDTO.cs" />
+    <Compile Include="DTOModel\OrderDetailDTO.cs" />
+    <Compile Include="DTOModel\OrderGoodsDTO.cs" />
+    <Compile Include="DTOModel\OrderInfoDTO.cs" />
     <Compile Include="DTOModel\UserAddressDTO.cs" />
     <Compile Include="DTOModel\UserDTO.cs" />
     <Compile Include="FormatModel\AjaxMsg.cs" />

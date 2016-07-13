@@ -23,6 +23,11 @@ namespace HelperCommon
             Mapper.CreateMap<t_category_type, CatTypeDTO>().ForMember(desc => desc.type_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.type_img));
             Mapper.CreateMap<t_goods_gallery, GoodsGalleryDTO>().ForMember(desc => desc.img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.img));
 
+            //Order
+            Mapper.CreateMap<t_order_info, OrderInfoDTO>();
+            Mapper.CreateMap<t_order_goods, OrderGoodsDTO>();
+
+
         }
 
         static void Visa<T1, T2>()

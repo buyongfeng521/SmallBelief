@@ -17,6 +17,7 @@ namespace Model
         public t_goods()
         {
             this.t_goods_gallery = new HashSet<t_goods_gallery>();
+            this.t_cart = new HashSet<t_cart>();
         }
     
         public int goods_id { get; set; }
@@ -38,5 +39,6 @@ namespace Model
     
         public virtual t_category t_category { get; set; }
         public virtual ICollection<t_goods_gallery> t_goods_gallery { get; set; }
+        public virtual ICollection<t_cart> t_cart { get; set; }
     }
 }

@@ -142,7 +142,8 @@ namespace WebApi.Controllers
                 {
                     dto.goods = DTOHelper.Map<GoodsDTO>(model);
                     List<t_goods_gallery> listGallery = OperateContext.EFBLLSession.t_goods_galleryBLL.GetListBy(g => g.goods_id == model.goods_id);
-                    dto.gallery = DTOHelper.Map<List<GoodsGalleryDTO>>(listGallery);
+                    List<GoodsGalleryDTO> listGalleryDTO = DTOHelper.Map<List<GoodsGalleryDTO>>(listGallery);
+                    dto.gallery = listGalleryDTO.Select(g => g.img).ToArray();
 
                     ret.Data = dto;
                     ret.status = true;

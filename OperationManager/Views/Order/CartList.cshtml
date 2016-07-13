@@ -1,4 +1,5 @@
-﻿
+﻿@model List<Model.t_cart>
+@using Model.CommonModel;
 @{
     ViewBag.Title = "购物车列表";
     Layout = "~/Views/_Layout.cshtml";
@@ -31,18 +32,23 @@
                     <th>购物类型</th>
                     <th>商品名称</th>
                     <th>商品数量</th>
-                    <th>操作</th>
+                    <th>商品数量</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>用户001</td>
-                    <td>预购订单</td>
-                    <td>商品001</td>
-                    <td>10</td>
-                    <td>
-                        <a href="#">查看</a>
-                    </td>
-                </tr>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    { 
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.t_user.user_name</td>
+                            <td>@((Enums.CartType)item.cart_type)</td>
+                            <td>@item.goods_name</td>
+                            <td>@item.goods_price</td>
+                            <td>@item.goods_number</td>
+                        </tr>
+                    }
+                }
 
             </table>
         </div>

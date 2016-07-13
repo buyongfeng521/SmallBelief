@@ -14,6 +14,11 @@ namespace Model
     
     public partial class t_user
     {
+        public t_user()
+        {
+            this.t_cart = new HashSet<t_cart>();
+        }
+    
         public int ID { get; set; }
         public string user_name { get; set; }
         public string user_real_name { get; set; }
@@ -24,5 +29,7 @@ namespace Model
         public Nullable<System.DateTime> last_login_time { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public string token { get; set; }
+    
+        public virtual ICollection<t_cart> t_cart { get; set; }
     }
 }

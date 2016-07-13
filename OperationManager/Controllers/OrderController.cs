@@ -14,10 +14,12 @@ namespace OperationManager.Controllers
     {
 
         #region 购物车
-        public ActionResult CartList()
+        public ActionResult CartList(string keywords = "")
         {
+            List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListBy(c=>c.t_user.user_name.Contains(keywords),c=>c.user_id);
 
-            return View();
+            ViewBag.Keywords = keywords;
+            return View(listCart);
         } 
         #endregion
 

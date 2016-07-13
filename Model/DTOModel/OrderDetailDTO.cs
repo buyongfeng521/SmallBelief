@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Model.DTOModel
 {
-    public class GoodsDetailDTO
+    public class OrderDetailDTO
     {
-        public GoodsDTO goods { get; set; }
-        public string[] gallery { get; set; }
-        
+        public OrderInfoDTO order_info { get; set; }
+        public List<OrderGoodsDTO> order_goods { get; set; }
     }
 }

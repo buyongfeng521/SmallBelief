@@ -31,6 +31,8 @@ namespace Model.CommonModel
         public const string VoidModel = "无效实体";
         public const string VoidGallerys = "无效的图片集合";
         public const string VoidUser = "无效用户";
+        public const string VoidAddress = "无效地址";
+        public const string VoidOrder = "无效订单";
 
         //Login
         public const string LoginSuc = "登陆成功";
@@ -41,6 +43,8 @@ namespace Model.CommonModel
 
         //Goods
         public const string VoidGoods = "不存在此商品";
+
+        
 
         //Img
 

@@ -27,7 +27,6 @@ namespace Model
     
         public virtual DbSet<t_admin_user> t_admin_user { get; set; }
         public virtual DbSet<t_goods_gallery> t_goods_gallery { get; set; }
-        public virtual DbSet<t_user> t_user { get; set; }
         public virtual DbSet<t_user_code> t_user_code { get; set; }
         public virtual DbSet<t_category> t_category { get; set; }
         public virtual DbSet<t_setting> t_setting { get; set; }
@@ -38,8 +37,9 @@ namespace Model
         public virtual DbSet<t_ad> t_ad { get; set; }
         public virtual DbSet<t_goods> t_goods { get; set; }
         public virtual DbSet<t_category_type> t_category_type { get; set; }
-        public virtual DbSet<t_cart> t_cart { get; set; }
         public virtual DbSet<t_order_goods> t_order_goods { get; set; }
         public virtual DbSet<t_order_info> t_order_info { get; set; }
+        public virtual DbSet<t_cart> t_cart { get; set; }
+        public virtual DbSet<t_user> t_user { get; set; }
     }
 }

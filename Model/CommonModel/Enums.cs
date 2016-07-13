@@ -55,6 +55,25 @@ namespace Model.CommonModel
         }
 
 
+        //购物车类型
+        public enum CartType
+        { 
+            [Description("普通")]
+            普通 = 0,
+            [Description("预购")]
+            预购 = 1
+        }
+
+        //订单类型
+        public enum OrderType
+        {
+            [Description("普通")]
+            普通 = 0,
+            [Description("预购")]
+            预购 = 1
+        }
+
+
 
 
 
