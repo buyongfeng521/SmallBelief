@@ -293,7 +293,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// 直接购买订单确认
         /// </summary>
-        /// <param name="obj">{"token":"用户Token","order_type":购物车类型0(普通)1(预购),"number":购买数量,"address_id":用户地址ID}</param>
+        /// <param name="obj">{"token":"用户Token","goods_id":商品ID,"order_type":购物车类型0(普通)1(预购),"number":购买数量,"address_id":用户地址ID}</param>
         /// <returns></returns>
         [HttpPost]
         public RetInfo<OrderDetailDTO> OrderConfirm(dynamic obj)

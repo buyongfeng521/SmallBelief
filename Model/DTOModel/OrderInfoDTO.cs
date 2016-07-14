@@ -25,10 +25,10 @@ namespace Model.DTOModel
         public decimal goods_amount { get; set; }
         public decimal order_amount { get; set; }
         public decimal money_paid { get; set; }
-        public DateTime add_time { get; set; }
-        public DateTime confirm_time { get; set; }
-        public DateTime pay_time { get; set; }
-        public DateTime shipping_time { get; set; }
+        public string add_time { get; set; }
+        public string confirm_time { get; set; }
+        public string pay_time { get; set; }
+        public string shipping_time { get; set; }
     }
 
 }

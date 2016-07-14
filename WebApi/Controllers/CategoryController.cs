@@ -15,30 +15,92 @@ namespace WebApi.Controllers
     public class CategoryController : ApiController
     {
 
+        ///// <summary>
+        ///// 获得分类（初始）
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpGet]
+        //public RetInfo<CategoryGoodsDTO> CategoryGet()
+        //{
+        //    RetInfo<CategoryGoodsDTO> ret = new RetInfo<CategoryGoodsDTO>();
+
+        //    try
+        //    {
+        //        CategoryGoodsDTO dto = new CategoryGoodsDTO();
+
+        //        List<t_category_type> listCatType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
+        //        List<t_category> listCat = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_type == 0, c => c.sort);
+        //        List<int> listID = listCat.Select(c => (int)c.cat_id).ToList();
+        //        List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => listID.Contains((int)g.cat_id), g => g.goods_id);
+
+        //        dto.CatType = DTOHelper.Map<List<CatTypeDTO>>(listCatType);
+        //        dto.Category = DTOHelper.Map<List<CategoryDTO>>(listCat);
+        //        dto.Goods = DTOHelper.Map<List<GoodsDTO>>(listGoods);
+
+        //        ret.Data = dto;
+        //        ret.status = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ret.msg = ex.ToString();
+        //        Logger.WriteExceptionLog(ex);
+        //    }
+
+        //    return ret;
+        //}
+
+        ///// <summary>
+        ///// 获得分类By类型（0:水果,1:零用品,2:日用品,3:微商,4:其他）
+        ///// </summary>
+        ///// <param name="cat_type_id"></param>
+        ///// <returns></returns>
+        //[HttpGet]
+        //public RetInfo<CategoryGoodsDTO> CategoryGetBy(int cat_type_id)
+        //{
+        //    RetInfo<CategoryGoodsDTO> ret = new RetInfo<CategoryGoodsDTO>();
+
+        //    try
+        //    {
+        //        CategoryGoodsDTO dto = new CategoryGoodsDTO();
+
+        //        List<t_category_type> listCatType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
+        //        List<t_category> listCat = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_type == cat_type_id, c => c.sort);
+        //        List<int> listID = listCat.Select(c => (int)c.cat_id).ToList();
+        //        List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => listID.Contains((int)g.cat_id), g => g.goods_id);
+
+        //        dto.CatType = DTOHelper.Map<List<CatTypeDTO>>(listCatType);
+        //        dto.Category = DTOHelper.Map<List<CategoryDTO>>(listCat);
+        //        dto.Goods = DTOHelper.Map<List<GoodsDTO>>(listGoods);
+
+        //        ret.Data = dto;
+        //        ret.status = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ret.msg = ex.ToString();
+        //        Logger.WriteExceptionLog(ex);
+        //    }
+
+        //    return ret;
+        //}
+
+
         /// <summary>
-        /// 获得分类（初始）
+        /// 获得一级分类
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<CategoryGoodsDTO> CategoryGet()
+        public RetInfo<List<CatTypeDTO>> CategoryGet()
         {
-            RetInfo<CategoryGoodsDTO> ret = new RetInfo<CategoryGoodsDTO>();
+            RetInfo<List<CatTypeDTO>> ret = new RetInfo<List<CatTypeDTO>>();
 
             try
             {
-                CategoryGoodsDTO dto = new CategoryGoodsDTO();
+                List<t_category_type> listCatType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
 
-                List<t_category_type> listCatType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id > 0, c => c.cat_type_id);
-                List<t_category> listCat = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_type == 0, c => c.sort);
-                List<int> listID = listCat.Select(c => (int)c.cat_id).ToList();
-                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => listID.Contains((int)g.cat_id), g => g.goods_id);
-
-                dto.CatType = DTOHelper.Map<List<CatTypeDTO>>(listCatType);
-                dto.Category = DTOHelper.Map<List<CategoryDTO>>(listCat);
-                dto.Goods = DTOHelper.Map<List<GoodsDTO>>(listGoods);
-
-                ret.Data = dto;
+                ret.Data = DTOHelper.Map<List<CatTypeDTO>>(listCatType);
                 ret.status = true;
+
             }
             catch (Exception ex)
             {
@@ -50,29 +112,20 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// 获得分类By类型（0:水果,1:零用品,2:日用品,3:微商,4:其他）
+        /// 获得二级分类（0:水果,1:零用品,2:日用品,3:微商,4:其他）
         /// </summary>
         /// <param name="cat_type_id"></param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<CategoryGoodsDTO> CategoryGetBy(int cat_type_id)
+        public RetInfo<List<CategoryDTO>> CategoryGetBy(int cat_type_id)
         {
-            RetInfo<CategoryGoodsDTO> ret = new RetInfo<CategoryGoodsDTO>();
+            RetInfo<List<CategoryDTO>> ret = new RetInfo<List<CategoryDTO>>();
 
             try
             {
-                CategoryGoodsDTO dto = new CategoryGoodsDTO();
-
-                List<t_category_type> listCatType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id > 0, c => c.cat_type_id);
                 List<t_category> listCat = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_type == cat_type_id, c => c.sort);
-                List<int> listID = listCat.Select(c => (int)c.cat_id).ToList();
-                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => listID.Contains((int)g.cat_id), g => g.goods_id);
 
-                dto.CatType = DTOHelper.Map<List<CatTypeDTO>>(listCatType);
-                dto.Category = DTOHelper.Map<List<CategoryDTO>>(listCat);
-                dto.Goods = DTOHelper.Map<List<GoodsDTO>>(listGoods);
-
-                ret.Data = dto;
+                ret.Data = DTOHelper.Map<List<CategoryDTO>>(listCat);
                 ret.status = true;
             }
             catch (Exception ex)

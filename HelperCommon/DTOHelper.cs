@@ -15,7 +15,8 @@ namespace HelperCommon
         static DTOHelper()
         {
             Mapper.CreateMap<t_category, CategoryDTO>();
-            Mapper.CreateMap<t_goods, GoodsDTO>().ForMember(dest => dest.goods_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.goods_img)); ;
+            Mapper.CreateMap<t_goods, GoodsDTO>().ForMember(dest => dest.goods_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.goods_img))
+                .ForMember(desc=>desc.goods_number,opt=>opt.MapFrom(src=>src.goods_number - src.goods_lock_number));
             Mapper.CreateMap<t_user, UserDTO>();
             Mapper.CreateMap<t_user_address, UserAddressDTO>();
             Mapper.CreateMap<t_banner, BannerDTO>().ForMember(dest => dest.banner_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.banner_img));
@@ -24,7 +25,11 @@ namespace HelperCommon
             Mapper.CreateMap<t_goods_gallery, GoodsGalleryDTO>().ForMember(desc => desc.img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.img));
 
             //Order
-            Mapper.CreateMap<t_order_info, OrderInfoDTO>();
+            Mapper.CreateMap<t_order_info, OrderInfoDTO>()
+                .ForMember(desc => desc.add_time, opt =>opt.MapFrom(src => src.add_time == null ? "":((DateTime)src.add_time).ToString("yyyy-MM-dd HH:mm:ss")))
+                .ForMember(desc => desc.confirm_time, opt => opt.MapFrom(src =>src.confirm_time == null? "": ((DateTime)src.confirm_time).ToString("yyyy-MM-dd HH:mm:ss")))
+                .ForMember(desc => desc.pay_time, opt => opt.MapFrom(src => src.pay_time == null ? "" : ((DateTime)src.pay_time).ToString("yyyy-MM-dd HH:mm:ss")))
+                .ForMember(desc => desc.shipping_time, opt => opt.MapFrom(src => src.shipping_time == null? "": ((DateTime)src.shipping_time).ToString("yyyy-MM-dd HH:mm:ss")));
             Mapper.CreateMap<t_order_goods, OrderGoodsDTO>();
 
 
