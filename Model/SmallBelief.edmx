@@ -89,6 +89,8 @@
           <Property Name="sort" Type="int" />
           <Property Name="is_hot" Type="bit" />
           <Property Name="is_best" Type="bit" />
+          <Property Name="is_new" Type="bit" />
+          <Property Name="is_activity" Type="bit" />
           <Property Name="is_on_sale" Type="bit" />
           <Property Name="is_del" Type="bit" />
           <Property Name="add_time" Type="datetime" />
@@ -483,6 +485,8 @@
           <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
           <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
           <NavigationProperty Name="t_cart" Relationship="SmallBeliefModel.FK_t_cart_t_goods" FromRole="t_goods" ToRole="t_cart" />
+          <Property Name="is_new" Type="Boolean" />
+          <Property Name="is_activity" Type="Boolean" />
         </EntityType>
         <Association Name="FK_t_goods_t_category">
           <End Type="SmallBeliefModel.t_category" Role="t_category" Multiplicity="0..1" />
@@ -751,6 +755,8 @@
           <EntitySetMapping Name="t_goods">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_goods">
               <MappingFragment StoreEntitySet="t_goods">
+                <ScalarProperty Name="is_activity" ColumnName="is_activity" />
+                <ScalarProperty Name="is_new" ColumnName="is_new" />
                 <ScalarProperty Name="add_time" ColumnName="add_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
                 <ScalarProperty Name="is_on_sale" ColumnName="is_on_sale" />

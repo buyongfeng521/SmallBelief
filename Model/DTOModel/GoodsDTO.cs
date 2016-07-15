@@ -21,6 +21,8 @@ namespace Model.DTOModel
         public int sort { get; set; }
         public bool is_hot { get; set; }
         public bool is_best { get; set; }
+        public bool is_new { get; set; }
+        public bool is_activity { get; set; }
         public bool is_on_sale { get; set; }
         public bool is_del { get; set; }
         public DateTime add_time { get; set; }

@@ -88,6 +88,28 @@
                                 @Html.CheckBox("is_best", Model.is_best == true ? true : false)<span>明星</span>
                             }
                         </label>
+                        <label class="checkbox-inline">
+
+                            @if (string.IsNullOrEmpty(Model.goods_name))
+                            {
+                                <input type="checkbox" id="is_new" name="is_new"><span>新品</span>
+                            }
+                            else
+                            {
+                                @Html.CheckBox("is_new", Model.is_new == true ? true : false)<span>新品</span>
+                            }
+                        </label>
+                        <label class="checkbox-inline">
+
+                            @if (string.IsNullOrEmpty(Model.goods_name))
+                            {
+                                <input type="checkbox" id="is_activity" name="is_activity"><span>促销</span>
+                            }
+                            else
+                            {
+                                @Html.CheckBox("is_activity", Model.is_activity == true ? true : false)<span>促销</span>
+                            }
+                        </label>
                     </div>
                     <div class="form-group">
                         <label>商品简介：</label>

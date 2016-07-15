@@ -33,6 +33,8 @@
                     <th>商品名称</th>
                     <th>是否热销</th>
                     <th>是否明星</th>
+                    <th>是否新品</th>
+                    <th>是否促销</th>
                     <th>库存</th>
                     <th>锁定库存</th>
                     <th>是否上架</th>
@@ -58,6 +60,26 @@
                             </td>
                             <td>
                                 @if (item.is_best == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (item.is_new == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (item.is_activity == true)
                                 {
                                     <i class="glyphicon glyphicon-ok text-success"></i>
                                 }

@@ -62,7 +62,7 @@ namespace OperationManager.Controllers
 
         [HttpPost]
         public ActionResult GoodsAdd(int goods_id = 0,string goods_name = "", int cat_id = 0, string shop_price = "", string goods_number = "",string goods_unit = "",
-            HttpPostedFileBase goods_img = null,string is_on_sale = "",string is_hot="",string is_best="",string goods_brief="")
+            HttpPostedFileBase goods_img = null,string is_on_sale = "",string is_hot="",string is_best="",string is_new = "",string is_activity = "", string goods_brief="")
         {
             AjaxMsg ajax = new AjaxMsg();
             
@@ -136,6 +136,8 @@ namespace OperationManager.Controllers
                     editModel.is_on_sale = is_on_sale == "true" ? true : false;
                     editModel.is_hot = is_hot == "true" ? true : false;
                     editModel.is_best = is_best == "true" ? true : false;
+                    editModel.is_new = is_new == "true" ? true : false;
+                    editModel.is_activity = is_activity == "true" ? true : false;
                     editModel.goods_brief = goods_brief.Trim();
                     if (OperateContext.EFBLLSession.t_goodsBLL.Modify(editModel))
                     {
@@ -186,6 +188,8 @@ namespace OperationManager.Controllers
                     is_on_sale = is_on_sale == "on" ? true : false,
                     is_hot = is_hot == "on" ? true : false,
                     is_best = is_best == "on" ? true : false,
+                    is_new = is_new == "on" ? true : false,
+                    is_activity = is_activity == "on" ? true : false,
                     goods_brief = goods_brief.Trim(),
                     goods_desc = "",
                     sort = 0,

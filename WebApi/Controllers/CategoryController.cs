@@ -149,7 +149,7 @@ namespace WebApi.Controllers
 
             try
             {
-                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => g.cat_id == cat_id, g => g.goods_id);
+                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => g.cat_id == cat_id && g.is_on_sale == true, g => g.goods_id);
 
                 ret.Data = DTOHelper.Map<List<GoodsDTO>>(listGoods);
                 ret.status = true;
