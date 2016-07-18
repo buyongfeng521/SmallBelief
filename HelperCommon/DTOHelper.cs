@@ -31,6 +31,7 @@ namespace HelperCommon
                 .ForMember(desc => desc.pay_time, opt => opt.MapFrom(src => src.pay_time == null ? "" : ((DateTime)src.pay_time).ToString("yyyy-MM-dd HH:mm:ss")))
                 .ForMember(desc => desc.shipping_time, opt => opt.MapFrom(src => src.shipping_time == null? "": ((DateTime)src.shipping_time).ToString("yyyy-MM-dd HH:mm:ss")));
             Mapper.CreateMap<t_order_goods, OrderGoodsDTO>();
+            Mapper.CreateMap<t_cart, CartDTO>().ForMember(desc => desc.goods_img, opt => opt.MapFrom(src => src.t_goods.goods_img));
 
 
         }
