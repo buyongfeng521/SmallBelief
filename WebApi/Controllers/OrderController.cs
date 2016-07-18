@@ -18,6 +18,48 @@ namespace WebApi.Controllers
     {
 
         /// <summary>
+        /// 购物车列表By
+        /// </summary>
+        /// <param name="token">用户ID</param>
+        /// <param name="cart_type">购物车类型(0:普通,1:预购)</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<CartDTO>> CartListBy(string token, int cart_type)
+        {
+            RetInfo<List<CartDTO>> ret = new RetInfo<List<CartDTO>>();
+
+            try
+            {
+                if (APIHelper.IsLogin(token))
+                {
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u=>u.token == token.Trim());
+                    if (user != null)
+                    {
+                        List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListByDesc(c => c.user_id == user.ID && c.cart_type == cart_type, c => c.cart_id);
+                        ret.Data = DTOHelper.Map<List<CartDTO>>(listCart);
+                        ret.status = true;
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.VoidUser;
+                    }
+                }
+                else
+                {
+                    ret.msg = Message.NoLogin;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
         /// 加入购物车
         /// </summary>
         /// <param name="obj">{"token":"用户Token","goods_id":商品ID,"cart_type":购物车类型0(普通)1(预购)}</param>
