@@ -24,9 +24,9 @@ namespace WebApi.Controllers
         /// <param name="cart_type">购物车类型(0:普通,1:预购)</param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<List<CartDTO>> CartListBy(string token, int cart_type)
+        public RetInfo<CartListDTO> CartListBy(string token, int cart_type)
         {
-            RetInfo<List<CartDTO>> ret = new RetInfo<List<CartDTO>>();
+            RetInfo<CartListDTO> ret = new RetInfo<CartListDTO>();
 
             try
             {
@@ -35,8 +35,14 @@ namespace WebApi.Controllers
                     t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u=>u.token == token.Trim());
                     if (user != null)
                     {
+                        CartListDTO dto = new CartListDTO();
+
                         List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListByDesc(c => c.user_id == user.ID && c.cart_type == cart_type, c => c.cart_id);
-                        ret.Data = DTOHelper.Map<List<CartDTO>>(listCart);
+                        List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetPageList(1, 6, g => g.is_del == false && g.is_on_sale == true, g => g.sort);
+
+                        dto.cart = DTOHelper.Map<List<CartDTO>>(listCart);
+                        dto.goods = DTOHelper.Map<List<GoodsDTO>>(listGoods);
+                        ret.Data = dto;
                         ret.status = true;
                     }
                     else
@@ -48,7 +54,6 @@ namespace WebApi.Controllers
                 {
                     ret.msg = Message.NoLogin;
                 }
-                
             }
             catch (Exception ex)
             {
