@@ -32,13 +32,14 @@ namespace Model.CommonModel
         public const string VoidGallerys = "无效的图片集合";
         public const string VoidUser = "无效用户";
         public const string VoidAddress = "无效地址";
-        public const string VoidOrder = "无效订单";
+        
 
         //Login
         public const string LoginSuc = "登陆成功";
         public const string LoginFail = "用户名或密码错误";
         public const string RegisterSuc = "注册成功";
         public const string RegisterFail = "注册失败";
+        public const string NoLogin = "用户未登录";
 
 
         //Goods
@@ -47,6 +48,16 @@ namespace Model.CommonModel
         
 
         //Img
+
+
+        
+        //Order
+        public const string CreateOrderFail = "生成订单失败";
+        public const string VoidOrder = "无效订单";
+        public const string PaySuc = "支付成功";
+        public const string PayFail = "支付失败";
+        public const string PayStatusErr = "订单不存在或支付状态异常";
+        public const string OrderAmountErr = "订单金额为0";
 
 
     }

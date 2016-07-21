@@ -130,6 +130,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MineController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -175,6 +176,10 @@
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{14dc32e1-26ea-4a13-8870-90e0c72ec777}</Project>
       <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmallPay\SmallPay.csproj">
+      <Project>{e95179f8-64d9-465e-bcae-19e001d92acb}</Project>
+      <Name>SmallPay</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

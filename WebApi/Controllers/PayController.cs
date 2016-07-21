@@ -1,0 +1,108 @@
+﻿using Common;
+using HelperCommon;
+using Model;
+using Model.CommonModel;
+using Model.FormatModel;
+using SmallPay;
+using SmallPay.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web;
+using System.Web.Http;
+
+namespace WebApi.Controllers
+{
+    public class PayController : ApiController
+    {
+        /// <summary>
+        /// 创建支付宝支付
+        /// </summary>
+        /// <param name="obj">{"token":"用户Token","order_id":订单ID}</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RetInfo<string> BuildAliPay(dynamic obj)
+        {
+            RetInfo<string> ret = new RetInfo<string>();
+
+            try
+            {
+                string token = obj.token;
+                int order_id = obj.order_id;
+
+                t_user user = APIHelper.LoginUser(token);
+                if (user != null)
+                {
+                    t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o => o.user_id == user.ID && o.order_id == order_id && o.order_status == 1 && o.pay_status == 0);
+                    if (order != null)
+                    {
+                        string order_sn = order.order_sn;
+                        string subject = order.t_order_goods.FirstOrDefault().goods_name + "等";
+                        decimal amount = (decimal)order.order_amount;
+
+                        if (amount > 0)
+                        {
+                            AliPay pay = new AliPay();
+                            string strHtmlText = pay.BuildAliPay(order.order_sn, subject, amount, EnumAliPayTradeType.APP);
+
+                            ret.status = true;
+                            ret.Data = strHtmlText;
+                        }
+                        else
+                        {
+                            ret.msg = CommonBasicMsg.OrderAmountErr;
+                        }
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.PayStatusErr;
+                    }
+                }
+                else
+                {
+                    ret.msg = CommonBasicMsg.NoLogin;
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 同步通知
+        /// </summary>
+        /// <param name="request"></param>
+        [HttpGet]
+        public void VerifyReturnURL(HttpRequestBase request)
+        {
+            AliPay pay = new AliPay();
+            AliPayReturnModel returnModel = new AliPayReturnModel();
+            if (pay.VerifyReturnURL(request, out returnModel))
+            {
+                APIHelper.AliPaySucProcess(returnModel);
+            }
+        }
+
+        /// <summary>
+        /// 异步通知
+        /// </summary>
+        /// <param name="request"></param>
+        [HttpPost]
+        public void VerifyNotify(HttpRequestBase request)
+        {
+            AliPay pay = new AliPay();
+            AliPayReturnModel returnModel = new AliPayReturnModel();
+            if (pay.VerfyNotify(request, out returnModel))
+            {
+                APIHelper.AliPaySucProcess(returnModel);
+            }
+        }
+    }
+}
