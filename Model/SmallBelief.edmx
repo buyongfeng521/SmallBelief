@@ -87,6 +87,7 @@
           <Property Name="goods_brief" Type="nvarchar" MaxLength="100" />
           <Property Name="goods_desc" Type="nvarchar(max)" />
           <Property Name="sort" Type="int" />
+          <Property Name="is_pre_sale" Type="bit" />
           <Property Name="is_hot" Type="bit" />
           <Property Name="is_best" Type="bit" />
           <Property Name="is_new" Type="bit" />
@@ -324,15 +325,6 @@
           <EntitySet Name="t_room" EntityType="SmallBeliefModel.t_room" />
           <EntitySet Name="t_user_address" EntityType="SmallBeliefModel.t_user_address" />
           <EntitySet Name="t_ad" EntityType="SmallBeliefModel.t_ad" />
-          <EntitySet Name="t_goods" EntityType="SmallBeliefModel.t_goods" />
-          <AssociationSet Name="FK_t_goods_t_category" Association="SmallBeliefModel.FK_t_goods_t_category">
-            <End Role="t_category" EntitySet="t_category" />
-            <End Role="t_goods" EntitySet="t_goods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_t_goods_gallery_t_goods" Association="SmallBeliefModel.FK_t_goods_gallery_t_goods">
-            <End Role="t_goods" EntitySet="t_goods" />
-            <End Role="t_goods_gallery" EntitySet="t_goods_gallery" />
-          </AssociationSet>
           <EntitySet Name="t_category_type" EntityType="SmallBeliefModel.t_category_type" />
           <EntitySet Name="t_order_goods" EntityType="SmallBeliefModel.t_order_goods" />
           <EntitySet Name="t_order_info" EntityType="SmallBeliefModel.t_order_info" />
@@ -346,9 +338,18 @@
             <End Role="t_user" EntitySet="t_user" />
             <End Role="t_cart" EntitySet="t_cart" />
           </AssociationSet>
+          <EntitySet Name="t_goods" EntityType="SmallBeliefModel.t_goods" />
           <AssociationSet Name="FK_t_cart_t_goods" Association="SmallBeliefModel.FK_t_cart_t_goods">
             <End Role="t_goods" EntitySet="t_goods" />
             <End Role="t_cart" EntitySet="t_cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_goods_t_category" Association="SmallBeliefModel.FK_t_goods_t_category">
+            <End Role="t_category" EntitySet="t_category" />
+            <End Role="t_goods" EntitySet="t_goods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_goods_gallery_t_goods" Association="SmallBeliefModel.FK_t_goods_gallery_t_goods">
+            <End Role="t_goods" EntitySet="t_goods" />
+            <End Role="t_goods_gallery" EntitySet="t_goods_gallery" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="t_admin_user">
@@ -462,56 +463,6 @@
           <Property Name="click_value" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="sort" Type="Byte" />
         </EntityType>
-        <EntityType Name="t_goods">
-          <Key>
-            <PropertyRef Name="goods_id" />
-          </Key>
-          <Property Name="goods_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="cat_id" Type="Int32" />
-          <Property Name="goods_name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="shop_price" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="goods_number" Type="Int32" />
-          <Property Name="goods_lock_number" Type="Int32" />
-          <Property Name="goods_unit" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="goods_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="goods_brief" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="goods_desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="sort" Type="Int32" />
-          <Property Name="is_hot" Type="Boolean" />
-          <Property Name="is_best" Type="Boolean" />
-          <Property Name="is_on_sale" Type="Boolean" />
-          <Property Name="is_del" Type="Boolean" />
-          <Property Name="add_time" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
-          <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
-          <NavigationProperty Name="t_cart" Relationship="SmallBeliefModel.FK_t_cart_t_goods" FromRole="t_goods" ToRole="t_cart" />
-          <Property Name="is_new" Type="Boolean" />
-          <Property Name="is_activity" Type="Boolean" />
-        </EntityType>
-        <Association Name="FK_t_goods_t_category">
-          <End Type="SmallBeliefModel.t_category" Role="t_category" Multiplicity="0..1" />
-          <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_category">
-              <PropertyRef Name="cat_id" />
-            </Principal>
-            <Dependent Role="t_goods">
-              <PropertyRef Name="cat_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_t_goods_gallery_t_goods">
-          <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="0..1" />
-          <End Type="SmallBeliefModel.t_goods_gallery" Role="t_goods_gallery" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_goods">
-              <PropertyRef Name="goods_id" />
-            </Principal>
-            <Dependent Role="t_goods_gallery">
-              <PropertyRef Name="goods_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="t_category_type">
           <Key>
             <PropertyRef Name="cat_type_id" />
@@ -615,6 +566,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="t_goods">
+          <Key>
+            <PropertyRef Name="goods_id" />
+          </Key>
+          <Property Name="goods_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cat_id" Type="Int32" />
+          <Property Name="goods_name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="shop_price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="goods_number" Type="Int32" />
+          <Property Name="goods_lock_number" Type="Int32" />
+          <Property Name="goods_unit" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="goods_img" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="goods_brief" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="goods_desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="sort" Type="Int32" />
+          <Property Name="is_pre_sale" Type="Boolean" />
+          <Property Name="is_hot" Type="Boolean" />
+          <Property Name="is_best" Type="Boolean" />
+          <Property Name="is_new" Type="Boolean" />
+          <Property Name="is_activity" Type="Boolean" />
+          <Property Name="is_on_sale" Type="Boolean" />
+          <Property Name="is_del" Type="Boolean" />
+          <Property Name="add_time" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="t_cart" Relationship="SmallBeliefModel.FK_t_cart_t_goods" FromRole="t_goods" ToRole="t_cart" />
+          <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
+          <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
+        </EntityType>
         <Association Name="FK_t_cart_t_goods">
           <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="0..1" />
           <End Type="SmallBeliefModel.t_cart" Role="t_cart" Multiplicity="*" />
@@ -623,6 +601,30 @@
               <PropertyRef Name="goods_id" />
             </Principal>
             <Dependent Role="t_cart">
+              <PropertyRef Name="goods_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_goods_t_category">
+          <End Type="SmallBeliefModel.t_category" Role="t_category" Multiplicity="0..1" />
+          <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_category">
+              <PropertyRef Name="cat_id" />
+            </Principal>
+            <Dependent Role="t_goods">
+              <PropertyRef Name="cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_goods_gallery_t_goods">
+          <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="0..1" />
+          <End Type="SmallBeliefModel.t_goods_gallery" Role="t_goods_gallery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_goods">
+              <PropertyRef Name="goods_id" />
+            </Principal>
+            <Dependent Role="t_goods_gallery">
               <PropertyRef Name="goods_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -752,30 +754,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="t_goods">
-            <EntityTypeMapping TypeName="SmallBeliefModel.t_goods">
-              <MappingFragment StoreEntitySet="t_goods">
-                <ScalarProperty Name="is_activity" ColumnName="is_activity" />
-                <ScalarProperty Name="is_new" ColumnName="is_new" />
-                <ScalarProperty Name="add_time" ColumnName="add_time" />
-                <ScalarProperty Name="is_del" ColumnName="is_del" />
-                <ScalarProperty Name="is_on_sale" ColumnName="is_on_sale" />
-                <ScalarProperty Name="is_best" ColumnName="is_best" />
-                <ScalarProperty Name="is_hot" ColumnName="is_hot" />
-                <ScalarProperty Name="sort" ColumnName="sort" />
-                <ScalarProperty Name="goods_desc" ColumnName="goods_desc" />
-                <ScalarProperty Name="goods_brief" ColumnName="goods_brief" />
-                <ScalarProperty Name="goods_img" ColumnName="goods_img" />
-                <ScalarProperty Name="goods_unit" ColumnName="goods_unit" />
-                <ScalarProperty Name="goods_lock_number" ColumnName="goods_lock_number" />
-                <ScalarProperty Name="goods_number" ColumnName="goods_number" />
-                <ScalarProperty Name="shop_price" ColumnName="shop_price" />
-                <ScalarProperty Name="goods_name" ColumnName="goods_name" />
-                <ScalarProperty Name="cat_id" ColumnName="cat_id" />
-                <ScalarProperty Name="goods_id" ColumnName="goods_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="t_category_type">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_category_type">
               <MappingFragment StoreEntitySet="t_category_type">
@@ -852,6 +830,31 @@
                 <ScalarProperty Name="user_real_name" ColumnName="user_real_name" />
                 <ScalarProperty Name="user_name" ColumnName="user_name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_goods">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_goods">
+              <MappingFragment StoreEntitySet="t_goods">
+                <ScalarProperty Name="add_time" ColumnName="add_time" />
+                <ScalarProperty Name="is_del" ColumnName="is_del" />
+                <ScalarProperty Name="is_on_sale" ColumnName="is_on_sale" />
+                <ScalarProperty Name="is_activity" ColumnName="is_activity" />
+                <ScalarProperty Name="is_new" ColumnName="is_new" />
+                <ScalarProperty Name="is_best" ColumnName="is_best" />
+                <ScalarProperty Name="is_hot" ColumnName="is_hot" />
+                <ScalarProperty Name="is_pre_sale" ColumnName="is_pre_sale" />
+                <ScalarProperty Name="sort" ColumnName="sort" />
+                <ScalarProperty Name="goods_desc" ColumnName="goods_desc" />
+                <ScalarProperty Name="goods_brief" ColumnName="goods_brief" />
+                <ScalarProperty Name="goods_img" ColumnName="goods_img" />
+                <ScalarProperty Name="goods_unit" ColumnName="goods_unit" />
+                <ScalarProperty Name="goods_lock_number" ColumnName="goods_lock_number" />
+                <ScalarProperty Name="goods_number" ColumnName="goods_number" />
+                <ScalarProperty Name="shop_price" ColumnName="shop_price" />
+                <ScalarProperty Name="goods_name" ColumnName="goods_name" />
+                <ScalarProperty Name="cat_id" ColumnName="cat_id" />
+                <ScalarProperty Name="goods_id" ColumnName="goods_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

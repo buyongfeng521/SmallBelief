@@ -62,7 +62,7 @@ namespace OperationManager.Controllers
 
         [HttpPost]
         public ActionResult GoodsAdd(int goods_id = 0,string goods_name = "", int cat_id = 0, string shop_price = "", string goods_number = "",string goods_unit = "",
-            HttpPostedFileBase goods_img = null,string is_on_sale = "",string is_hot="",string is_best="",string is_new = "",string is_activity = "", string goods_brief="")
+            HttpPostedFileBase goods_img = null, string is_on_sale = "", string is_hot = "", string is_best = "", string is_new = "", string is_activity = "", string goods_brief = "", string is_pre_sale = "")
         {
             AjaxMsg ajax = new AjaxMsg();
             
@@ -133,6 +133,7 @@ namespace OperationManager.Controllers
                         editModel.goods_img = strImg;
                     }
 
+                    editModel.is_pre_sale = is_pre_sale == "1" ? true : false;
                     editModel.is_on_sale = is_on_sale == "true" ? true : false;
                     editModel.is_hot = is_hot == "true" ? true : false;
                     editModel.is_best = is_best == "true" ? true : false;
@@ -185,6 +186,7 @@ namespace OperationManager.Controllers
                     goods_lock_number = 0,
                     goods_unit = goods_unit.Trim(),
                     goods_img = strImg,
+                    is_pre_sale = is_pre_sale == "1" ? true :false,
                     is_on_sale = is_on_sale == "on" ? true : false,
                     is_hot = is_hot == "on" ? true : false,
                     is_best = is_best == "on" ? true : false,

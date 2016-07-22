@@ -15,9 +15,6 @@
         <EntityTypeShape EntityType="SmallBeliefModel.t_room" Width="1.5" PointX="9.75" PointY="0.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_user_address" Width="1.5" PointX="0.75" PointY="9.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_ad" Width="1.5" PointX="10.375" PointY="3.75" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_goods" Width="1.5" PointX="3" PointY="1" />
-        <AssociationConnector Association="SmallBeliefModel.FK_t_goods_t_category" />
-        <AssociationConnector Association="SmallBeliefModel.FK_t_goods_gallery_t_goods" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_category_type" Width="1.5" PointX="6.375" PointY="10.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_order_goods" Width="1.5" PointX="12.625" PointY="9.375" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_order_info" Width="1.5" PointX="10.375" PointY="8.125" />
@@ -25,7 +22,10 @@
         <EntityTypeShape EntityType="SmallBeliefModel.t_cart" Width="1.5" PointX="14.625" PointY="1.125" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_user" Width="1.5" PointX="12.375" PointY="1" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_cart_t_user" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_goods" Width="1.5" PointX="3" PointY="11.875" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_cart_t_goods" />
+        <AssociationConnector Association="SmallBeliefModel.FK_t_goods_t_category" />
+        <AssociationConnector Association="SmallBeliefModel.FK_t_goods_gallery_t_goods" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

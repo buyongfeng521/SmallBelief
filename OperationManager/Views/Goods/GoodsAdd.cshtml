@@ -56,6 +56,23 @@
                         }
                     </div>
                     <div class="form-group">
+                        <label>是否为预购：</label>
+                        <label class="radio-inline">
+                            @Html.RadioButton("is_pre_sale","1",Model.is_pre_sale == true) 是
+                        </label>
+                        <label class="radio-inline">
+                            @if (!string.IsNullOrEmpty(Model.goods_name))
+                            {
+                                @Html.RadioButton("is_pre_sale", "0", Model.is_pre_sale == false) <span>否</span>
+                            }
+                            else
+                            {
+                                <input type="radio" name="is_pre_sale" value="0" checked> <span>否</span>
+                            }
+                            
+                        </label>
+                    </div>
+                    <div class="form-group">
                         <label>商品属性：</label>
                         <label class="checkbox-inline">
                             @if (string.IsNullOrEmpty(Model.goods_name))

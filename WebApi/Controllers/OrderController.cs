@@ -67,7 +67,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// 加入购物车
         /// </summary>
-        /// <param name="obj">{"token":"用户Token","goods_id":商品ID,"cart_type":购物车类型0(普通)1(预购)}</param>
+        /// <param name="obj">{"token":"用户Token","goods_id":商品ID,"number":加入购物车数量}</param>
         /// <returns></returns>
         [HttpPost]
         public RetInfo<object> CartAdd(dynamic obj)
@@ -78,7 +78,7 @@ namespace WebApi.Controllers
             {
                 string token = obj.token;
                 int goods_id = obj.goods_id;
-                int cart_type = obj.cart_type;
+                int number = obj.number;
                 //int iGoods_id = 0;
                 //if (int.TryParse(goods_id, out iGoods_id))
                 //{
@@ -87,44 +87,59 @@ namespace WebApi.Controllers
                     t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
                     if (user != null)
                     {
-                        t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(u => u.goods_id == goods_id);
+                        t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(u => u.goods_id == goods_id && u.is_del == false && u.is_on_sale == true);
                         if (goods != null)
                         {
-                            t_cart editCart = OperateContext.EFBLLSession.t_cartBLL.GetModelBy(c => c.user_id == user.ID && c.goods_id == goods.goods_id);
-                            if (editCart != null)
+                            if ((goods.goods_number - goods.goods_lock_number) >= number)
                             {
-                                editCart.goods_number = editCart.goods_number + 1;
-                                if (OperateContext.EFBLLSession.t_cartBLL.Modify(editCart))
+                                t_cart editCart = OperateContext.EFBLLSession.t_cartBLL.GetModelBy(c => c.user_id == user.ID && c.goods_id == goods.goods_id);
+                                //锁定库存
+                                goods.goods_lock_number = goods.goods_lock_number + number;
+
+                                if (editCart != null)
                                 {
-                                    ret.status = true;
-                                    ret.msg = CommonBasicMsg.EditSuc;
+                                    editCart.goods_number = editCart.goods_number + number;
+                                    
+                                    if (OperateContext.EFBLLSession.t_cartBLL.Modify(editCart) && OperateContext.EFBLLSession.t_goodsBLL.Modify(goods))
+                                    {
+                                        ret.status = true;
+                                        ret.msg = CommonBasicMsg.EditSuc;
+                                        //购物车数量
+                                        ret.recordCount = editCart.goods_number;
+                                    }
+                                    else
+                                    {
+                                        ret.msg = CommonBasicMsg.EditFail;
+                                    }
                                 }
                                 else
                                 {
-                                    ret.msg = CommonBasicMsg.EditFail;
+                                    t_cart addCart = new t_cart()
+                                    {
+                                        cart_type = goods.is_pre_sale == true ? (byte)1 : (byte)0,
+                                        user_id = user.ID,
+                                        goods_id = goods.goods_id,
+                                        goods_name = goods.goods_name,
+                                        market_price = goods.shop_price,
+                                        goods_price = goods.shop_price,
+                                        goods_number = number
+                                    };
+                                    if (OperateContext.EFBLLSession.t_cartBLL.Add(addCart) && OperateContext.EFBLLSession.t_goodsBLL.Modify(goods))
+                                    {
+                                        ret.status = true;
+                                        ret.msg = CommonBasicMsg.AddSuc;
+                                        //购物车数量
+                                        ret.recordCount = addCart.goods_number;
+                                    }
+                                    else
+                                    {
+                                        ret.msg = CommonBasicMsg.AddFail;
+                                    }
                                 }
                             }
                             else
                             {
-                                t_cart addCart = new t_cart()
-                                {
-                                    cart_type = (byte)cart_type,
-                                    user_id = user.ID,
-                                    goods_id = goods.goods_id,
-                                    goods_name = goods.goods_name,
-                                    market_price = goods.shop_price,
-                                    goods_price = goods.shop_price,
-                                    goods_number = 1
-                                };
-                                if (OperateContext.EFBLLSession.t_cartBLL.Add(addCart))
-                                {
-                                    ret.status = true;
-                                    ret.msg = CommonBasicMsg.AddSuc;
-                                }
-                                else
-                                {
-                                    ret.msg = CommonBasicMsg.AddFail;
-                                }
+                                ret.msg = "库存不足";
                             }
                         }
                         else

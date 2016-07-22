@@ -16,8 +16,8 @@ namespace Model
     {
         public t_goods()
         {
-            this.t_goods_gallery = new HashSet<t_goods_gallery>();
             this.t_cart = new HashSet<t_cart>();
+            this.t_goods_gallery = new HashSet<t_goods_gallery>();
         }
     
         public int goods_id { get; set; }
@@ -31,16 +31,17 @@ namespace Model
         public string goods_brief { get; set; }
         public string goods_desc { get; set; }
         public Nullable<int> sort { get; set; }
+        public Nullable<bool> is_pre_sale { get; set; }
         public Nullable<bool> is_hot { get; set; }
         public Nullable<bool> is_best { get; set; }
+        public Nullable<bool> is_new { get; set; }
+        public Nullable<bool> is_activity { get; set; }
         public Nullable<bool> is_on_sale { get; set; }
         public Nullable<bool> is_del { get; set; }
         public Nullable<System.DateTime> add_time { get; set; }
-        public Nullable<bool> is_new { get; set; }
-        public Nullable<bool> is_activity { get; set; }
     
+        public virtual ICollection<t_cart> t_cart { get; set; }
         public virtual t_category t_category { get; set; }
         public virtual ICollection<t_goods_gallery> t_goods_gallery { get; set; }
-        public virtual ICollection<t_cart> t_cart { get; set; }
     }
 }

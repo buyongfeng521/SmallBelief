@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelperCommon;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,6 +14,8 @@ namespace OperationManager
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            //EF预热
+            OperateContext.EFBLLSession.t_admin_userBLL.GetModelBy(u => u.ID > 0);
         }
     }
 }

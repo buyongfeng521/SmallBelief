@@ -142,10 +142,7 @@
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\BuyfAPI.pubxml" />
-    <None Include="Properties\PublishProfiles\FTPAPI.pubxml" />
-    <None Include="Properties\PublishProfiles\Local.pubxml" />
-    <None Include="Properties\PublishProfiles\StepAPI.pubxml" />
+    <None Include="Properties\PublishProfiles\ZLZHAPI.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
