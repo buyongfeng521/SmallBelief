@@ -32,6 +32,7 @@ namespace Model.CommonModel
         public const string VoidGallerys = "无效的图片集合";
         public const string VoidUser = "无效用户";
         public const string VoidAddress = "无效地址";
+        public const string NoAccess = "无权限操作";
         
 
         //Login
@@ -60,6 +61,9 @@ namespace Model.CommonModel
         public const string OrderAmountErr = "订单金额为0";
         public const string OrderCancelErr = "订单不存在或此状态不允许取消";
         public const string OrderCancelSuc = "订单取消成功";
+        public const string OrderCommentErr = "订单不存在或此状态不允许评论";
+        public const string OrderCommentVoid = "评论不能为空";
+        public const string OrderCommentSuc = "评论成功";
 
 
     }

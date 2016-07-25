@@ -33,6 +33,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_commentDAL : EFDALBase<t_comment>
+    {
+    }
+
 	public partial class t_couponDAL : EFDALBase<t_coupon>
     {
     }

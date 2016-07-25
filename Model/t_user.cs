@@ -17,6 +17,7 @@ namespace Model
         public t_user()
         {
             this.t_cart = new HashSet<t_cart>();
+            this.t_comment = new HashSet<t_comment>();
         }
     
         public int ID { get; set; }
@@ -31,5 +32,6 @@ namespace Model
         public string token { get; set; }
     
         public virtual ICollection<t_cart> t_cart { get; set; }
+        public virtual ICollection<t_comment> t_comment { get; set; }
     }
 }

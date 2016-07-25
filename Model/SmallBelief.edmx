@@ -72,6 +72,18 @@
           <Property Name="type_name" Type="nvarchar" MaxLength="20" />
           <Property Name="type_img" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <EntityType Name="t_comment">
+          <Key>
+            <PropertyRef Name="comment_id" />
+          </Key>
+          <Property Name="comment_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="order_id" Type="int" />
+          <Property Name="goods_id" Type="int" />
+          <Property Name="comment" Type="nvarchar" MaxLength="200" />
+          <Property Name="is_del" Type="bit" />
+          <Property Name="create_time" Type="datetime" />
+        </EntityType>
         <EntityType Name="t_coupon">
           <Key>
             <PropertyRef Name="coupon_id" />
@@ -264,6 +276,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_t_comment_t_user">
+          <End Role="t_user" Type="Self.t_user" Multiplicity="0..1" />
+          <End Role="t_comment" Type="Self.t_comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="t_comment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_t_goods_gallery_t_goods">
           <End Role="t_goods" Type="Self.t_goods" Multiplicity="0..1" />
           <End Role="t_goods_gallery" Type="Self.t_goods_gallery" Multiplicity="*" />
@@ -307,6 +331,7 @@
           <EntitySet Name="t_cart" EntityType="Self.t_cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category_type" EntityType="Self.t_category_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_comment" EntityType="Self.t_comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_coupon" EntityType="Self.t_coupon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods_gallery" EntityType="Self.t_goods_gallery" Schema="dbo" store:Type="Tables" />
@@ -326,6 +351,10 @@
           <AssociationSet Name="FK_t_cart_t_user" Association="Self.FK_t_cart_t_user">
             <End Role="t_user" EntitySet="t_user" />
             <End Role="t_cart" EntitySet="t_cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_comment_t_user" Association="Self.FK_t_comment_t_user">
+            <End Role="t_user" EntitySet="t_user" />
+            <End Role="t_comment" EntitySet="t_comment" />
           </AssociationSet>
           <AssociationSet Name="FK_t_goods_gallery_t_goods" Association="Self.FK_t_goods_gallery_t_goods">
             <End Role="t_goods" EntitySet="t_goods" />
@@ -383,6 +412,11 @@
           </AssociationSet>
           <EntitySet Name="t_coupon" EntityType="SmallBeliefModel.t_coupon" />
           <EntitySet Name="t_user_coupon" EntityType="SmallBeliefModel.t_user_coupon" />
+          <EntitySet Name="t_comment" EntityType="SmallBeliefModel.t_comment" />
+          <AssociationSet Name="FK_t_comment_t_user" Association="SmallBeliefModel.FK_t_comment_t_user">
+            <End Role="t_user" EntitySet="t_user" />
+            <End Role="t_comment" EntitySet="t_comment" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -589,6 +623,7 @@
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="token" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="t_cart" Relationship="SmallBeliefModel.FK_t_cart_t_user" FromRole="t_user" ToRole="t_cart" />
+          <NavigationProperty Name="t_comment" Relationship="SmallBeliefModel.FK_t_comment_t_user" FromRole="t_user" ToRole="t_comment" />
         </EntityType>
         <Association Name="FK_t_cart_t_user">
           <End Type="SmallBeliefModel.t_user" Role="t_user" Multiplicity="0..1" />
@@ -689,6 +724,31 @@
           <Property Name="is_use" Type="Boolean" />
           <Property Name="use_time" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="t_comment">
+          <Key>
+            <PropertyRef Name="comment_id" />
+          </Key>
+          <Property Name="comment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="order_id" Type="Int32" />
+          <Property Name="goods_id" Type="Int32" />
+          <Property Name="comment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="is_del" Type="Boolean" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="t_user" Relationship="SmallBeliefModel.FK_t_comment_t_user" FromRole="t_comment" ToRole="t_user" />
+        </EntityType>
+        <Association Name="FK_t_comment_t_user">
+          <End Type="SmallBeliefModel.t_user" Role="t_user" Multiplicity="0..1" />
+          <End Type="SmallBeliefModel.t_comment" Role="t_comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="t_comment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -945,6 +1005,19 @@
                 <ScalarProperty Name="coupon_id" ColumnName="coupon_id" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="uc_id" ColumnName="uc_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_comment">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_comment">
+              <MappingFragment StoreEntitySet="t_comment">
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="is_del" ColumnName="is_del" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
+                <ScalarProperty Name="goods_id" ColumnName="goods_id" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="comment_id" ColumnName="comment_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

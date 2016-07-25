@@ -58,6 +58,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_commentBLL : EFBLLBase<t_comment>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_commentDAL();
+        }
+    }
+
 	public partial class t_couponBLL : EFBLLBase<t_coupon>
     {
 		protected override void SetDAL()

@@ -163,6 +163,29 @@ namespace WebApi.Controllers
         }
 
 
+        /// <summary>
+        /// 获得商品评价
+        /// </summary>
+        /// <param name="goods_id">商品ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<CommentDTO>> GoodsCommentGet(int goods_id)
+        {
+            RetInfo<List<CommentDTO>> ret = new RetInfo<List<CommentDTO>>();
+            try
+            {
+                List<t_comment> listComment = OperateContext.EFBLLSession.t_commentBLL.GetListByDesc(c => c.goods_id == goods_id && c.is_del == false, c => c.create_time);
+                ret.Data = DTOHelper.Map<List<CommentDTO>>(listComment);
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+            return ret;
+        }
 
 
     }

@@ -101,6 +101,21 @@ namespace EFBLL
         }
 
         
+        private t_commentBLL t_commentbll;
+        public t_commentBLL t_commentBLL
+        {
+	        get
+	        {
+		        if(t_commentbll == null)
+		        {
+			        t_commentbll = new t_commentBLL();
+		        }
+		        return t_commentbll;
+	        }
+	        set{}
+        }
+
+        
         private t_couponBLL t_couponbll;
         public t_couponBLL t_couponBLL
         {

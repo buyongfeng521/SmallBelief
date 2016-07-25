@@ -563,60 +563,67 @@ namespace WebApi.Controllers
         {
             RetInfo<object> ret = new RetInfo<object>();
 
-            string token = obj.token;
-            int order_id = obj.order_id;
-
-            if (APIHelper.IsLogin(token))
+            try
             {
-                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
-                t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o => o.order_id == order_id && o.order_status == 1 && o.pay_status == 0);
-                if (order != null)
-                {
-                    if (order.user_id == user.ID)
-                    {
-                        //1.0 锁定库存
-                        List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == order.order_id);
-                        listOrderGoods.ForEach(item =>
-                        {
-                            t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == item.goods_id);
-                            if (goods != null)
-                            {
-                                goods.goods_lock_number = (goods.goods_lock_number - item.goods_number) >= 0 ? (goods.goods_lock_number - item.goods_number) : 0;
-                                OperateContext.EFBLLSession.t_goodsBLL.Modify(goods);
-                            }
-                        });
-                        //2.0 订单状态
-                        order.order_status = 2;
-                        order.cancel_time = DateTime.Now;
-                        OperateContext.EFBLLSession.t_order_infoBLL.Modify(order);
-                        //3.0 优惠券
-                        if (order.uc_id > 0)
-                        {
-                            t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == order.uc_id);
-                            userCoupon.is_use = false;
-                            userCoupon.use_time = null;
-                            OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
-                        }
+                string token = obj.token;
+                int order_id = obj.order_id;
 
-                        ret.msg = CommonBasicMsg.OrderCancelSuc;
-                        ret.status = true;
+                if (APIHelper.IsLogin(token))
+                {
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                    t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o => o.order_id == order_id && o.order_status == 1 && o.pay_status == 0);
+                    if (order != null)
+                    {
+                        if (order.user_id == user.ID)
+                        {
+                            //1.0 锁定库存
+                            List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == order.order_id);
+                            listOrderGoods.ForEach(item =>
+                            {
+                                t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == item.goods_id);
+                                if (goods != null)
+                                {
+                                    goods.goods_lock_number = (goods.goods_lock_number - item.goods_number) >= 0 ? (goods.goods_lock_number - item.goods_number) : 0;
+                                    OperateContext.EFBLLSession.t_goodsBLL.Modify(goods);
+                                }
+                            });
+                            //2.0 订单状态
+                            order.order_status = 2;
+                            order.cancel_time = DateTime.Now;
+                            OperateContext.EFBLLSession.t_order_infoBLL.Modify(order);
+                            //3.0 优惠券
+                            if (order.uc_id > 0)
+                            {
+                                t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == order.uc_id);
+                                userCoupon.is_use = false;
+                                userCoupon.use_time = null;
+                                OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
+                            }
+
+                            ret.msg = CommonBasicMsg.OrderCancelSuc;
+                            ret.status = true;
+                        }
+                        else
+                        {
+                            ret.msg = CommonBasicMsg.NoAccess;// "无权限取消";
+                        }
                     }
                     else
                     {
-                        ret.msg = "无权限取消";
+                        ret.msg = CommonBasicMsg.OrderCancelErr;
                     }
+
                 }
                 else
                 {
-                    ret.msg = CommonBasicMsg.OrderCancelErr;
+                    ret.msg = CommonBasicMsg.NoLogin;
                 }
-
             }
-            else
+            catch (Exception ex)
             {
-                ret.msg = CommonBasicMsg.NoLogin;
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
             }
-            
             
 
             return ret;
@@ -635,36 +642,127 @@ namespace WebApi.Controllers
         {
             RetInfo<OrderDetailDTO> ret = new RetInfo<OrderDetailDTO>();
 
-            if (APIHelper.IsLogin(token))
+            try
             {
-                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u=>u.token == token);
-                if (user != null)
+                if (APIHelper.IsLogin(token))
                 {
-                    t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o=>o.order_id == order_id);
-                    if (order != null)
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+                    if (user != null)
                     {
-                        List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o=>o.order_id == order.order_id);
+                        t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o => o.order_id == order_id);
+                        if (order != null)
+                        {
+                            List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == order.order_id);
 
-                        OrderDetailDTO dto = new OrderDetailDTO();
-                        dto.order_info = DTOHelper.Map<OrderInfoDTO>(order);
-                        dto.order_goods = DTOHelper.Map<List<OrderGoodsDTO>>(listOrderGoods);
+                            OrderDetailDTO dto = new OrderDetailDTO();
+                            dto.order_info = DTOHelper.Map<OrderInfoDTO>(order);
+                            dto.order_goods = DTOHelper.Map<List<OrderGoodsDTO>>(listOrderGoods);
 
-                        ret.status = true;
-                        ret.Data = dto;
+                            ret.status = true;
+                            ret.Data = dto;
+                        }
+                        else
+                        {
+                            ret.msg = CommonBasicMsg.VoidOrder;
+                        }
                     }
                     else
                     {
-                        ret.msg = CommonBasicMsg.VoidOrder;
+                        ret.msg = CommonBasicMsg.VoidUser;
                     }
                 }
                 else
                 {
-                    ret.msg = CommonBasicMsg.VoidUser;
+                    ret.msg = Message.NoLogin;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                ret.msg = Message.NoLogin;
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+            return ret;
+        }
+
+
+        /// <summary>
+        /// 订单评论发表
+        /// </summary>
+        /// <param name="obj">{"token":"用户token","order_id":订单ID,"comment":"评价"}</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RetInfo<object> OrderCommentSumit(dynamic obj)
+        {
+            RetInfo<object> ret = new RetInfo<object>();
+
+            try
+            {
+                string token = obj.token;
+                int order_id = obj.order_id;
+                string comment = obj.comment;
+
+                if (!string.IsNullOrWhiteSpace(comment))
+                {
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+                    if (user != null)
+                    {
+                        t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o => o.order_id == order_id && o.order_status == 3 && o.pay_status == 1);
+                        if (order != null)
+                        {
+                            if (order.user_id == user.ID)
+                            {
+                                List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == order.order_id);
+                                listOrderGoods.ForEach(item =>
+                                {
+                                    t_comment addComment = new t_comment()
+                                    {
+                                        user_id = user.ID,
+                                        order_id = order.order_id,
+                                        goods_id = item.goods_id,
+                                        comment = comment,
+                                        is_del = false,
+                                        create_time = DateTime.Now
+                                    };
+                                    OperateContext.EFBLLSession.t_commentBLL.Add(addComment);
+                                });
+                                //Finished
+                                order.order_status = 4;
+                                order.pay_status = 1;
+                                if (OperateContext.EFBLLSession.t_order_infoBLL.Modify(order))
+                                {
+                                    ret.status = true;
+                                    ret.msg = CommonBasicMsg.OrderCommentSuc;
+                                }
+                                else
+                                {
+                                    ret.msg = "评论失败";
+                                }
+                            }
+                            else
+                            {
+                                ret.msg = CommonBasicMsg.NoAccess;
+                            }
+                        }
+                        else
+                        {
+                            ret.msg = CommonBasicMsg.OrderCommentErr;
+                        }
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.NoLogin;
+                    }
+                }
+                else
+                {
+                    ret.msg = CommonBasicMsg.OrderCommentVoid;
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
             }
 
             return ret;
