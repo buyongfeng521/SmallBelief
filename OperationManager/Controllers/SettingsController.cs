@@ -157,6 +157,10 @@ namespace OperationManager.Controllers
             t_setting service_qq_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "service_qq");
             ViewBag.service_qq = service_qq_model.set_value;
 
+            //其他设置
+            t_setting reg_coupon = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "reg_coupon");
+            ViewBag.Reg_coupon = SelectHelper.GetCouponSelList(reg_coupon.set_value);
+
             return View();
         }
 
@@ -209,6 +213,23 @@ namespace OperationManager.Controllers
                 ajax.Msg = CommonBasicMsg.SaveFail;
             }
 
+            return Json(ajax);
+        }
+
+        [HttpPost]
+        public ActionResult AppOtherSet(string reg_coupon_value = "")
+        {
+            AjaxMsg ajax = new AjaxMsg();
+            if (!string.IsNullOrEmpty(reg_coupon_value))
+            {
+                t_setting reg_coupon_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "reg_coupon");
+                reg_coupon_model.set_value = reg_coupon_value;
+                if (OperateContext.EFBLLSession.t_settingBLL.Modify(reg_coupon_model))
+                {
+                    ajax.Msg = CommonBasicMsg.EditSuc;
+                    ajax.Status = "ok";
+                }
+            }
             return Json(ajax);
         }
 

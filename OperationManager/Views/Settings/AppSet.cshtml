@@ -49,7 +49,14 @@
                 其他设置
             </div>
             <div class="panel-body">
+                <form id="frmOtherSetting">
+                    <div class="form-group">
+                        <label>注册优惠券：</label>
+                        @Html.DropDownList("reg_coupon_value", ViewBag.Reg_coupon as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
 
+                    <button type="button" class="btn btn-success" onclick="saveOtherInfo()">保存</button>
+                </form>
             </div>
         </div>
     </div>
@@ -60,6 +67,13 @@
     function saveInfo() {
         var url = "/Settings/AppSet";
         $.post(url, $("#frmSetting").serialize(), function (data) {
+            $.procAjaxData(data);
+        });
+    }
+
+    function saveOtherInfo() {
+        var url = "/Settings/AppOtherSet";
+        $.post(url, $("#frmOtherSetting").serialize(), function (data) {
             $.procAjaxData(data);
         });
     }

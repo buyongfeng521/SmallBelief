@@ -58,6 +58,8 @@ namespace Model.CommonModel
         public const string PayFail = "支付失败";
         public const string PayStatusErr = "订单不存在或支付状态异常";
         public const string OrderAmountErr = "订单金额为0";
+        public const string OrderCancelErr = "订单不存在或此状态不允许取消";
+        public const string OrderCancelSuc = "订单取消成功";
 
 
     }

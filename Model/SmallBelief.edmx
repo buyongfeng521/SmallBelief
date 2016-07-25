@@ -72,6 +72,17 @@
           <Property Name="type_name" Type="nvarchar" MaxLength="20" />
           <Property Name="type_img" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <EntityType Name="t_coupon">
+          <Key>
+            <PropertyRef Name="coupon_id" />
+          </Key>
+          <Property Name="coupon_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="coupon_name" Type="nvarchar" MaxLength="20" />
+          <Property Name="coupon_amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="valid_days" Type="int" />
+          <Property Name="is_del" Type="bit" />
+          <Property Name="create_time" Type="datetime" />
+        </EntityType>
         <EntityType Name="t_goods">
           <Key>
             <PropertyRef Name="goods_id" />
@@ -136,12 +147,16 @@
           <Property Name="address" Type="nvarchar" MaxLength="200" />
           <Property Name="postscript" Type="nvarchar" MaxLength="100" />
           <Property Name="goods_amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="uc_id" Type="int" />
+          <Property Name="uc_amount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="order_amount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="money_paid" Type="decimal" Precision="18" Scale="2" />
           <Property Name="add_time" Type="datetime" />
           <Property Name="confirm_time" Type="datetime" />
           <Property Name="pay_time" Type="datetime" />
           <Property Name="shipping_time" Type="datetime" />
+          <Property Name="cancel_time" Type="datetime" />
+          <Property Name="expect_shipping_time" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <EntityType Name="t_psw_code">
           <Key>
@@ -212,6 +227,19 @@
           <Property Name="is_use" Type="bit" />
           <Property Name="create_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_user_coupon">
+          <Key>
+            <PropertyRef Name="uc_id" />
+          </Key>
+          <Property Name="uc_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="coupon_id" Type="int" />
+          <Property Name="coupon_amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="begin_time" Type="datetime" />
+          <Property Name="end_time" Type="datetime" />
+          <Property Name="is_use" Type="bit" />
+          <Property Name="use_time" Type="datetime" />
+        </EntityType>
         <Association Name="FK_t_cart_t_goods">
           <End Role="t_goods" Type="Self.t_goods" Multiplicity="0..1" />
           <End Role="t_cart" Type="Self.t_cart" Multiplicity="*" />
@@ -279,6 +307,7 @@
           <EntitySet Name="t_cart" EntityType="Self.t_cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category" EntityType="Self.t_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_category_type" EntityType="Self.t_category_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_coupon" EntityType="Self.t_coupon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods" EntityType="Self.t_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_goods_gallery" EntityType="Self.t_goods_gallery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_order_goods" EntityType="Self.t_order_goods" Schema="dbo" store:Type="Tables" />
@@ -289,6 +318,7 @@
           <EntitySet Name="t_user" EntityType="Self.t_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user_address" EntityType="Self.t_user_address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user_code" EntityType="Self.t_user_code" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_user_coupon" EntityType="Self.t_user_coupon" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_t_cart_t_goods" Association="Self.FK_t_cart_t_goods">
             <End Role="t_goods" EntitySet="t_goods" />
             <End Role="t_cart" EntitySet="t_cart" />
@@ -351,6 +381,8 @@
             <End Role="t_goods" EntitySet="t_goods" />
             <End Role="t_goods_gallery" EntitySet="t_goods_gallery" />
           </AssociationSet>
+          <EntitySet Name="t_coupon" EntityType="SmallBeliefModel.t_coupon" />
+          <EntitySet Name="t_user_coupon" EntityType="SmallBeliefModel.t_user_coupon" />
         </EntityContainer>
         <EntityType Name="t_admin_user">
           <Key>
@@ -510,6 +542,10 @@
           <Property Name="pay_time" Type="DateTime" Precision="3" />
           <Property Name="shipping_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_order_goods" Relationship="SmallBeliefModel.FK_t_order_goods_t_order_info" FromRole="t_order_info" ToRole="t_order_goods" />
+          <Property Name="uc_id" Type="Int32" />
+          <Property Name="uc_amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="expect_shipping_time" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="cancel_time" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_t_order_goods_t_order_info">
           <End Type="SmallBeliefModel.t_order_info" Role="t_order_info" Multiplicity="0..1" />
@@ -629,6 +665,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="t_coupon">
+          <Key>
+            <PropertyRef Name="coupon_id" />
+          </Key>
+          <Property Name="coupon_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="coupon_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="coupon_amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="valid_days" Type="Int32" />
+          <Property Name="is_del" Type="Boolean" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="t_user_coupon">
+          <Key>
+            <PropertyRef Name="uc_id" />
+          </Key>
+          <Property Name="uc_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="coupon_id" Type="Int32" />
+          <Property Name="coupon_amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="begin_time" Type="DateTime" Precision="3" />
+          <Property Name="end_time" Type="DateTime" Precision="3" />
+          <Property Name="is_use" Type="Boolean" />
+          <Property Name="use_time" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -779,6 +839,10 @@
           <EntitySetMapping Name="t_order_info">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_order_info">
               <MappingFragment StoreEntitySet="t_order_info">
+                <ScalarProperty Name="cancel_time" ColumnName="cancel_time" />
+                <ScalarProperty Name="expect_shipping_time" ColumnName="expect_shipping_time" />
+                <ScalarProperty Name="uc_amount" ColumnName="uc_amount" />
+                <ScalarProperty Name="uc_id" ColumnName="uc_id" />
                 <ScalarProperty Name="shipping_time" ColumnName="shipping_time" />
                 <ScalarProperty Name="pay_time" ColumnName="pay_time" />
                 <ScalarProperty Name="confirm_time" ColumnName="confirm_time" />
@@ -855,6 +919,32 @@
                 <ScalarProperty Name="goods_name" ColumnName="goods_name" />
                 <ScalarProperty Name="cat_id" ColumnName="cat_id" />
                 <ScalarProperty Name="goods_id" ColumnName="goods_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_coupon">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_coupon">
+              <MappingFragment StoreEntitySet="t_coupon">
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="is_del" ColumnName="is_del" />
+                <ScalarProperty Name="valid_days" ColumnName="valid_days" />
+                <ScalarProperty Name="coupon_amount" ColumnName="coupon_amount" />
+                <ScalarProperty Name="coupon_name" ColumnName="coupon_name" />
+                <ScalarProperty Name="coupon_id" ColumnName="coupon_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_user_coupon">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_user_coupon">
+              <MappingFragment StoreEntitySet="t_user_coupon">
+                <ScalarProperty Name="use_time" ColumnName="use_time" />
+                <ScalarProperty Name="is_use" ColumnName="is_use" />
+                <ScalarProperty Name="end_time" ColumnName="end_time" />
+                <ScalarProperty Name="begin_time" ColumnName="begin_time" />
+                <ScalarProperty Name="coupon_amount" ColumnName="coupon_amount" />
+                <ScalarProperty Name="coupon_id" ColumnName="coupon_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="uc_id" ColumnName="uc_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

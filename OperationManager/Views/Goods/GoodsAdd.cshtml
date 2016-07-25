@@ -272,7 +272,7 @@
         if (goods_id) {
             var url = "/Goods/GoodsDetail";
             $.post(url, { "goods_id": goods_id, "goods_detail": goods_detail }, function (data) {
-                $.procAjaxData(data)
+                $.procAjaxData(data);
             })
         }
         else {

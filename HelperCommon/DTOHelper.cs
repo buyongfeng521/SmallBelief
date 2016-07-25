@@ -33,6 +33,12 @@ namespace HelperCommon
             Mapper.CreateMap<t_order_goods, OrderGoodsDTO>();
             Mapper.CreateMap<t_cart, CartDTO>().ForMember(desc => desc.goods_img, opt => opt.MapFrom(src => src.t_goods.goods_img));
 
+            //Coupon
+            Mapper.CreateMap<t_user_coupon, UserCouponDTO>()
+                .ForMember(desc => desc.begin_time, opt => opt.MapFrom(src => src.begin_time == null ? "" : ((DateTime)src.begin_time).ToString("yyyy-MM-dd")))
+                .ForMember(desc => desc.end_time, opt => opt.MapFrom(src => src.end_time == null ? "" : ((DateTime)src.end_time).ToString("yyyy-MM-dd")))
+                .ForMember(desc => desc.use_time, opt => opt.MapFrom(src => src.use_time == null ? "" : ((DateTime)src.use_time).ToString("yyyy-MM-dd HH:mm:ss")));
+
 
         }
 

@@ -33,6 +33,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_couponDAL : EFDALBase<t_coupon>
+    {
+    }
+
 	public partial class t_goodsDAL : EFDALBase<t_goods>
     {
     }
@@ -70,6 +74,10 @@ namespace EFDAL
     }
 
 	public partial class t_user_codeDAL : EFDALBase<t_user_code>
+    {
+    }
+
+	public partial class t_user_couponDAL : EFDALBase<t_user_coupon>
     {
     }
 

@@ -1,4 +1,4 @@
-﻿
+﻿@model List<Model.t_coupon>
 @{
     ViewBag.Title = "优惠券列表";
     Layout = "~/Views/_Layout.cshtml";
@@ -22,7 +22,7 @@
             </div>
             <button class="btn btn-default">搜索</button>
 
-            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd">增加优惠券</a>
+            <a href="javascript:" class="btn btn-info pull-right" id="btnAdd" onclick="add()">增加优惠券</a>
         }
         <hr />
         <div class="dataTable_wrapper">
@@ -30,22 +30,118 @@
                 <tr>
                     <th>编号</th>
                     <th>优惠券名称</th>
-                    <th>优惠券类型</th>
+                    <th>优惠券金额</th>
+                    <th>有效天数</th>
                     <th>创建时间</th>
                     <th>操作</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>优惠券001</td>
-                    <td>即时使用</td>
-                    <td>2015-15-16</td>
-                    <td>
-                        <a href="#">修改</a>
-                        <a href="#">删除</a>
-                    </td>
-                </tr>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.coupon_name</td>
+                            <td>@item.coupon_amount</td>
+                            <td>@item.valid_days</td>
+                            <td>@item.create_time</td>
+                            <td>
+                                <a href="javascript:" onclick="edit(this,@item.coupon_id)">修改</a>
+                            </td>
+                        </tr>    
+                    }
+                }
             </table>
         </div>
     </div>
 </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalCoupon" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">优惠券详情</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmCoupon">
+                    @Html.Hidden("coupon_id")
+                    <div class="form-group">
+                        <label>优惠券名称</label>
+                        <input type="text" class="form-control" id="coupon_name" name="coupon_name" placeholder="优惠券名称">
+                    </div>
+                    <div class="form-group">
+                        <label>优惠券金额</label>
+                        <input type="number" class="form-control" id="coupon_amount" name="coupon_amount" placeholder="优惠券金额">
+                    </div>
+                    <div class="form-group">
+                        <label>有效天数</label>
+                        <input type="number" class="form-control" id="valid_days" name="valid_days" placeholder="有效天数">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="save()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- JS -->
+<script>
+    function add() {
+        $("#coupon_id").val("");
+        $("#coupon_name").val("");
+        $("#coupon_amount").val("1");
+        $("#valid_days").val("30");
+        $("#modalCoupon").modal("show");
+    }
+
+    function edit(obj,id) {
+        //alert($(obj).text());
+        //alert($(obj).parent().prev().prev().text());
+        if(id){
+            var valid_days = $(obj).parent().prev().prev().text();
+            var coupon_amount = $(obj).parent().prev().prev().prev().text();
+            var coupon_name = $(obj).parent().prev().prev().prev().prev().text();
+
+            $("#coupon_id").val(id);
+            $("#coupon_name").val(coupon_name);
+            $("#coupon_amount").val(coupon_amount);
+            $("#valid_days").val(valid_days);
+
+            $("#modalCoupon").modal("show");
+        }
+
+    }
+
+    function save(){
+        var coupon_id = $("#coupon_id").val();
+        //edit
+        if(coupon_id){
+            var url = "/Coupon/CouponEdit";
+            $.post(url,$("#frmCoupon").serialize(),function(data){
+                $.procAjaxData(data,function(){
+                    window.location.href = "/Coupon/CouponList";
+                });
+            });
+        }
+        //add
+        else{
+            var url = "/Coupon/CouponAdd";
+            $.post(url,$("#frmCoupon").serialize(),function(data){
+                $.procAjaxData(data,function(){
+                    window.location.href = "/Coupon/CouponList";
+                });
+            });
+        }
+    }
+</script>
+
 

@@ -40,6 +40,10 @@ namespace Model
         public Nullable<System.DateTime> confirm_time { get; set; }
         public Nullable<System.DateTime> pay_time { get; set; }
         public Nullable<System.DateTime> shipping_time { get; set; }
+        public Nullable<int> uc_id { get; set; }
+        public Nullable<decimal> uc_amount { get; set; }
+        public string expect_shipping_time { get; set; }
+        public Nullable<System.DateTime> cancel_time { get; set; }
     
         public virtual ICollection<t_order_goods> t_order_goods { get; set; }
     }

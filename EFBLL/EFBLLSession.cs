@@ -101,6 +101,21 @@ namespace EFBLL
         }
 
         
+        private t_couponBLL t_couponbll;
+        public t_couponBLL t_couponBLL
+        {
+	        get
+	        {
+		        if(t_couponbll == null)
+		        {
+			        t_couponbll = new t_couponBLL();
+		        }
+		        return t_couponbll;
+	        }
+	        set{}
+        }
+
+        
         private t_goodsBLL t_goodsbll;
         public t_goodsBLL t_goodsBLL
         {
@@ -246,6 +261,21 @@ namespace EFBLL
 			        t_user_codebll = new t_user_codeBLL();
 		        }
 		        return t_user_codebll;
+	        }
+	        set{}
+        }
+
+        
+        private t_user_couponBLL t_user_couponbll;
+        public t_user_couponBLL t_user_couponBLL
+        {
+	        get
+	        {
+		        if(t_user_couponbll == null)
+		        {
+			        t_user_couponbll = new t_user_couponBLL();
+		        }
+		        return t_user_couponbll;
 	        }
 	        set{}
         }

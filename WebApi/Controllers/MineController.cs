@@ -209,6 +209,53 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 获取用户默认收货地址
+        /// </summary>
+        /// <param name="token">用户Token</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<UserAddressDTO> UserAddressDefaultGet(string token)
+        {
+            RetInfo<UserAddressDTO> ret = new RetInfo<UserAddressDTO>();
+
+            try
+            {
+                if (APIHelper.IsLogin(token))
+                {
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                    if (user != null)
+                    {
+                        t_user_address addressModel = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.user_id == user.ID && a.is_default == true);
+                        if (addressModel != null)
+                        {
+                            ret.Data = DTOHelper.Map<UserAddressDTO>(addressModel);
+                        }
+                        else
+                        {
+                            ret.msg = Message.NullData;
+                        }
+
+                        ret.status = true;
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.VoidUser;
+                    }
+                }
+                else
+                {
+                    ret.msg = Message.NoLogin;
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+            return ret;
+        }
 
         /// <summary>
         /// 获取用户收货地址
@@ -497,11 +544,53 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 用户优惠券
+        /// </summary>
+        /// <param name="token">用户Token</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<UserCouponDTO>> UserCouponsGet(string token)
+        {
+            RetInfo<List<UserCouponDTO>> ret = new RetInfo<List<UserCouponDTO>>();
 
+            try
+            {
+                if (APIHelper.IsLogin(token))
+                {
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                    if (user != null)
+                    {
+                        List<t_user_coupon> listCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetListByDesc(a => a.user_id == user.ID, a => a.end_time);
+                        if (listCoupon.Count > 0)
+                        {
+                            ret.Data = DTOHelper.Map<List<UserCouponDTO>>(listCoupon);
+                        }
+                        else
+                        {
+                            ret.msg = Message.NullData;
+                        }
 
+                        ret.status = true;
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.VoidUser;
+                    }
+                }
+                else
+                {
+                    ret.msg = Message.NoLogin;
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
 
-
-
+            return ret;
+        }
 
 
         /// <summary>

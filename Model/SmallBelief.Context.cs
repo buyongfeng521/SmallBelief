@@ -41,5 +41,7 @@ namespace Model
         public virtual DbSet<t_cart> t_cart { get; set; }
         public virtual DbSet<t_user> t_user { get; set; }
         public virtual DbSet<t_goods> t_goods { get; set; }
+        public virtual DbSet<t_coupon> t_coupon { get; set; }
+        public virtual DbSet<t_user_coupon> t_user_coupon { get; set; }
     }
 }

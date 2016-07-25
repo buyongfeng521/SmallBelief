@@ -26,6 +26,8 @@
         <AssociationConnector Association="SmallBeliefModel.FK_t_cart_t_goods" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_goods_t_category" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_goods_gallery_t_goods" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_coupon" Width="1.5" PointX="12.375" PointY="5.75" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_user_coupon" Width="1.5" PointX="12.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -93,14 +93,12 @@ namespace WebApi.Controllers
                             if ((goods.goods_number - goods.goods_lock_number) >= number)
                             {
                                 t_cart editCart = OperateContext.EFBLLSession.t_cartBLL.GetModelBy(c => c.user_id == user.ID && c.goods_id == goods.goods_id);
-                                //锁定库存
-                                goods.goods_lock_number = goods.goods_lock_number + number;
 
                                 if (editCart != null)
                                 {
-                                    editCart.goods_number = editCart.goods_number + number;
+                                    //editCart.goods_number = editCart.goods_number + number;
                                     
-                                    if (OperateContext.EFBLLSession.t_cartBLL.Modify(editCart) && OperateContext.EFBLLSession.t_goodsBLL.Modify(goods))
+                                    if (OperateContext.EFBLLSession.t_cartBLL.Modify(editCart))
                                     {
                                         ret.status = true;
                                         ret.msg = CommonBasicMsg.EditSuc;
@@ -124,7 +122,7 @@ namespace WebApi.Controllers
                                         goods_price = goods.shop_price,
                                         goods_number = number
                                     };
-                                    if (OperateContext.EFBLLSession.t_cartBLL.Add(addCart) && OperateContext.EFBLLSession.t_goodsBLL.Modify(goods))
+                                    if (OperateContext.EFBLLSession.t_cartBLL.Add(addCart))
                                     {
                                         ret.status = true;
                                         ret.msg = CommonBasicMsg.AddSuc;
@@ -217,7 +215,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// 购物车订单确认
         /// </summary>
-        /// <param name="obj">{"token":"用户Token","cart_type":购物车类型0(普通)1(预购),"address_id":用户地址ID}</param>
+        /// <param name="obj">{"token":"用户Token","cart_type":购物车类型0(普通)1(预购),"address_id":用户地址ID,"uc_id":用户优惠券ID,无则0,"expect_shipping_time":"期望配送时间"}</param>
         /// <returns></returns>
         [HttpPost]
         public RetInfo<OrderDetailDTO> OrderCartConfirm(dynamic obj)
@@ -229,6 +227,8 @@ namespace WebApi.Controllers
                 string token = obj.token;
                 int cart_type = obj.cart_type;
                 int address_id = obj.address_id;
+                int uc_id = obj.uc_id;
+                string expect_shipping_time = obj.expect_shipping_time;
 
                 if (APIHelper.IsLogin(token))
                 {
@@ -242,6 +242,16 @@ namespace WebApi.Controllers
                             List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListBy(c => c.user_id == user.ID && c.cart_type == cart_type && (c.t_goods.goods_number - c.t_goods.goods_lock_number) > 0);
                             if (listCart.Count > 0)
                             {
+                                //pre User_Coupon
+                                t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u=>u.uc_id == uc_id);
+                                if (userCoupon != null)
+                                {
+                                    //已使用
+                                    userCoupon.is_use = true;
+                                    userCoupon.use_time = DateTime.Now;
+                                    OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
+                                }
+
                                 //a Order_Base_Info
                                 t_order_info order = new t_order_info()
                                 {
@@ -257,6 +267,11 @@ namespace WebApi.Controllers
                                     building = address.building,
                                     room_num = address.room_num,
                                     address = address.address,
+
+                                    uc_id = userCoupon == null?0:userCoupon.uc_id,
+                                    uc_amount = userCoupon == null?0:userCoupon.coupon_amount,
+                                    expect_shipping_time = DateTime.Now.ToString("yyyy-MM-dd") + " " + expect_shipping_time,
+
                                     postscript = "",
                                     goods_amount = 0,
                                     order_amount = 0,
@@ -285,7 +300,7 @@ namespace WebApi.Controllers
                                 });
 
                                 order.goods_amount = listOrderGoods.Sum(g => g.goods_number * g.goods_price);
-                                order.order_amount = order.goods_amount;//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
+                                order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
                                 
 
                                 //c to SQL
@@ -355,7 +370,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// 直接购买订单确认
         /// </summary>
-        /// <param name="obj">{"token":"用户Token","goods_id":商品ID,"order_type":购物车类型0(普通)1(预购),"number":购买数量,"address_id":用户地址ID}</param>
+        /// <param name="obj">{"token":"用户Token","goods_id":商品ID,"order_type":购物车类型0(普通)1(预购),"number":购买数量,"address_id":用户地址ID,"uc_id":用户优惠券ID,无则0,"expect_shipping_time":"期望配送时间"}</param>
         /// <returns></returns>
         [HttpPost]
         public RetInfo<OrderDetailDTO> OrderConfirm(dynamic obj)
@@ -367,6 +382,10 @@ namespace WebApi.Controllers
             int goods_id = obj.goods_id;
             int order_type = obj.order_type;
             int address_id = obj.address_id;
+            int uc_id = obj.uc_id;
+            string expect_shipping_time = obj.expect_shipping_time;
+
+
             if (APIHelper.IsLogin(token))
             {
                 t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u=>u.token == token);
@@ -380,6 +399,16 @@ namespace WebApi.Controllers
                             t_user_address address = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.address_id == address_id);
                             if (address != null)
                             {
+                                //pre User_Coupon
+                                t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == uc_id);
+                                if (userCoupon != null)
+                                { 
+                                    //已使用
+                                    userCoupon.is_use = true;
+                                    userCoupon.use_time = DateTime.Now;
+                                    OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
+                                }
+
                                 //a order_info
                                 t_order_info order = new t_order_info() 
                                 {
@@ -395,6 +424,11 @@ namespace WebApi.Controllers
                                     building = address.building,
                                     room_num = address.room_num,
                                     address = address.address,
+
+                                    uc_id = userCoupon == null ? 0 : userCoupon.uc_id,
+                                    uc_amount = userCoupon == null ? 0 : userCoupon.coupon_amount,
+                                    expect_shipping_time = DateTime.Now.ToString("yyyy-MM-dd") + " " + expect_shipping_time,
+
                                     postscript = "",
                                     goods_amount = 0,
                                     order_amount = 0,
@@ -412,7 +446,8 @@ namespace WebApi.Controllers
                                     goods_price = goods.shop_price
                                 };
                                 order.goods_amount = order_goods.goods_number * order_goods.goods_price;
-                                order.order_amount = order.goods_amount;
+                                //order.order_amount = order.goods_amount - order.uc_amount;
+                                order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
                                 //c goods lock_number
                                 goods.goods_lock_number += order_goods.goods_number;
                                 goods.goods_number = goods.goods_number - order_goods.goods_number;
@@ -469,6 +504,125 @@ namespace WebApi.Controllers
             return ret;
         }
 
+
+        /// <summary>
+        /// 用户有效优惠券
+        /// </summary>
+        /// <param name="token">用户Token</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<UserCouponDTO>> UserCouponsGet(string token)
+        {
+            RetInfo<List<UserCouponDTO>> ret = new RetInfo<List<UserCouponDTO>>();
+
+            try
+            {
+                if (APIHelper.IsLogin(token))
+                {
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                    if (user != null)
+                    {
+                        List<t_user_coupon> listCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetListByDesc(a => a.user_id == user.ID && a.is_use == false, a => a.end_time);
+                        if (listCoupon.Count > 0)
+                        {
+                            ret.Data = DTOHelper.Map<List<UserCouponDTO>>(listCoupon);
+                        }
+                        else
+                        {
+                            ret.msg = Message.NullData;
+                        }
+
+                        ret.status = true;
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.VoidUser;
+                    }
+                }
+                else
+                {
+                    ret.msg = Message.NoLogin;
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 取消订单
+        /// </summary>
+        /// <param name="obj">{"token":"用户Token","order_id":订单ID}</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RetInfo<object> OrderCancel(dynamic obj)
+        {
+            RetInfo<object> ret = new RetInfo<object>();
+
+            string token = obj.token;
+            int order_id = obj.order_id;
+
+            if (APIHelper.IsLogin(token))
+            {
+                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
+                t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o => o.order_id == order_id && o.order_status == 1 && o.pay_status == 0);
+                if (order != null)
+                {
+                    if (order.user_id == user.ID)
+                    {
+                        //1.0 锁定库存
+                        List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == order.order_id);
+                        listOrderGoods.ForEach(item =>
+                        {
+                            t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == item.goods_id);
+                            if (goods != null)
+                            {
+                                goods.goods_lock_number = (goods.goods_lock_number - item.goods_number) >= 0 ? (goods.goods_lock_number - item.goods_number) : 0;
+                                OperateContext.EFBLLSession.t_goodsBLL.Modify(goods);
+                            }
+                        });
+                        //2.0 订单状态
+                        order.order_status = 2;
+                        order.cancel_time = DateTime.Now;
+                        OperateContext.EFBLLSession.t_order_infoBLL.Modify(order);
+                        //3.0 优惠券
+                        if (order.uc_id > 0)
+                        {
+                            t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == order.uc_id);
+                            userCoupon.is_use = false;
+                            userCoupon.use_time = null;
+                            OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
+                        }
+
+                        ret.msg = CommonBasicMsg.OrderCancelSuc;
+                        ret.status = true;
+                    }
+                    else
+                    {
+                        ret.msg = "无权限取消";
+                    }
+                }
+                else
+                {
+                    ret.msg = CommonBasicMsg.OrderCancelErr;
+                }
+
+            }
+            else
+            {
+                ret.msg = CommonBasicMsg.NoLogin;
+            }
+            
+            
+
+            return ret;
+        }
+        
+        
 
         /// <summary>
         /// 获得订单详情根据订单ID

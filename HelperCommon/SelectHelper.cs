@@ -24,6 +24,8 @@ namespace HelperCommon
             return result;
         }
 
+        
+
         public static SelectList GetCategorySelListBy(string selectValue)
         {
             SelectList result = null;
@@ -48,6 +50,29 @@ namespace HelperCommon
             return result;
         }
         #endregion
+
+
+        /// <summary>
+        /// 优惠券列表
+        /// </summary>
+        /// <param name="selectValue"></param>
+        /// <returns></returns>
+        public static SelectList GetCouponSelList(string selectValue)
+        {
+            //SelectList result = null;
+
+            //List<t_coupon> listCoupon = OperateContext.EFBLLSession.t_couponBLL.GetListBy(c => c.is_del == false, c => c.coupon_id);
+
+            //result = new SelectList(listCoupon, "coupon_id", "coupon_name", selectValue);
+
+            //return result;
+
+            List<t_coupon> listCoupon = OperateContext.EFBLLSession.t_couponBLL.GetListBy(c => c.is_del == false, c => c.coupon_id);
+
+            SelectList result = new SelectList(listCoupon, "coupon_id", "coupon_name", 2);
+
+            return result;
+        }
 
 
         #region 枚举

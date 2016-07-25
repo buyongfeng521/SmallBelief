@@ -155,6 +155,7 @@ namespace WebApi.Controllers
                     {
                         userCode.is_use = true;
 
+                        //用户
                         t_user user = new t_user()
                         {
                             user_name = "",
@@ -167,18 +168,41 @@ namespace WebApi.Controllers
                             create_time = DateTime.Now
                         };
 
+                        
+
                         if (OperateContext.EFBLLSession.t_userBLL.Add(user) && OperateContext.EFBLLSession.t_user_codeBLL.Modify(userCode))
                         {
                             ret.status = true;
                             ret.msg = "注册成功";
                             user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
                             ret.Data = DTOHelper.Map<UserDTO>(user);
+
+                            //优惠券
+                            t_setting reg_coupon_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "reg_coupon");
+                            if (reg_coupon_model != null)
+                            {
+                                t_coupon coupon_model = OperateContext.EFBLLSession.t_couponBLL.GetModelBy(c => c.is_del == false && c.coupon_id == int.Parse(reg_coupon_model.set_value));
+                                if (coupon_model != null)
+                                {
+                                    t_user_coupon addCoupon = new t_user_coupon() 
+                                    {
+                                        user_id = user.ID,
+                                        coupon_id = coupon_model.coupon_id,
+                                        coupon_amount = coupon_model.coupon_amount,
+                                        begin_time = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00")),
+                                        end_time = DateTime.Parse(DateTime.Now.AddDays((int)coupon_model.valid_days).ToString("yyyy-MM-dd 00:00:00")),
+                                        is_use = false,
+                                        use_time = null
+                                    };
+                                    OperateContext.EFBLLSession.t_user_couponBLL.Add(addCoupon);
+                                }
+                            }
+
                         }
                         else
                         {
                             ret.msg = "注册失败";
                         }
-
                     }
                     else
                     {

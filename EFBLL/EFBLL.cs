@@ -58,6 +58,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_couponBLL : EFBLLBase<t_coupon>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_couponDAL();
+        }
+    }
+
 	public partial class t_goodsBLL : EFBLLBase<t_goods>
     {
 		protected override void SetDAL()
@@ -135,6 +143,14 @@ namespace EFBLL
 		protected override void SetDAL()
         {
             dal = new t_user_codeDAL();
+        }
+    }
+
+	public partial class t_user_couponBLL : EFBLLBase<t_user_coupon>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_user_couponDAL();
         }
     }
 
