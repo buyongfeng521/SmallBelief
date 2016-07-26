@@ -2,6 +2,7 @@
 using Common;
 using Model;
 using Model.DTOModel;
+using Model.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,10 @@ namespace HelperCommon
                 .ForMember(desc => desc.begin_time, opt => opt.MapFrom(src => src.begin_time == null ? "" : ((DateTime)src.begin_time).ToString("yyyy-MM-dd")))
                 .ForMember(desc => desc.end_time, opt => opt.MapFrom(src => src.end_time == null ? "" : ((DateTime)src.end_time).ToString("yyyy-MM-dd")))
                 .ForMember(desc => desc.use_time, opt => opt.MapFrom(src => src.use_time == null ? "" : ((DateTime)src.use_time).ToString("yyyy-MM-dd HH:mm:ss")));
+
+
+            //VM
+            Mapper.CreateMap<t_order_goods, OrderGoodsViewModel>();
 
 
         }

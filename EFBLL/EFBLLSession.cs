@@ -41,6 +41,21 @@ namespace EFBLL
         }
 
         
+        private t_areaBLL t_areabll;
+        public t_areaBLL t_areaBLL
+        {
+	        get
+	        {
+		        if(t_areabll == null)
+		        {
+			        t_areabll = new t_areaBLL();
+		        }
+		        return t_areabll;
+	        }
+	        set{}
+        }
+
+        
         private t_bannerBLL t_bannerbll;
         public t_bannerBLL t_bannerBLL
         {
@@ -96,6 +111,21 @@ namespace EFBLL
 			        t_category_typebll = new t_category_typeBLL();
 		        }
 		        return t_category_typebll;
+	        }
+	        set{}
+        }
+
+        
+        private t_cityBLL t_citybll;
+        public t_cityBLL t_cityBLL
+        {
+	        get
+	        {
+		        if(t_citybll == null)
+		        {
+			        t_citybll = new t_cityBLL();
+		        }
+		        return t_citybll;
 	        }
 	        set{}
         }
@@ -186,6 +216,21 @@ namespace EFBLL
 			        t_order_infobll = new t_order_infoBLL();
 		        }
 		        return t_order_infobll;
+	        }
+	        set{}
+        }
+
+        
+        private t_provinceBLL t_provincebll;
+        public t_provinceBLL t_provinceBLL
+        {
+	        get
+	        {
+		        if(t_provincebll == null)
+		        {
+			        t_provincebll = new t_provinceBLL();
+		        }
+		        return t_provincebll;
 	        }
 	        set{}
         }

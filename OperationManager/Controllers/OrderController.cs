@@ -1,5 +1,6 @@
 ﻿using HelperCommon;
 using Model;
+using Model.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,37 @@ namespace OperationManager.Controllers
             ViewBag.Keywords = keywords;
 
             return View(mPage);
-        } 
+        }
+
+        /// <summary>
+        /// 获得订单详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult OrderDetail(int id = 0)
+        {
+            OrderDetailViewModel vm = new OrderDetailViewModel();
+            if (id > 0)
+            {
+                t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o=>o.order_id == id);
+                if (order != null)
+                {
+                    vm.order_sn = order.order_sn;
+                    vm.order_status_content = "";
+                    vm.order_amount = (decimal)order.order_amount;
+                    vm.add_time = ((DateTime)order.add_time).ToString("yyyy-MM-dd HH:mm:ss");
+                    vm.consignee = order.consignee;
+                    vm.mobile = order.mobile;
+                    vm.address = order.address;
+                    List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(g=>g.order_id == order.order_id);
+                    vm.order_goods = DTOHelper.Map<List<OrderGoodsViewModel>>(listOrderGoods);
+                }
+            }
+
+            return Json(vm, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
 	}

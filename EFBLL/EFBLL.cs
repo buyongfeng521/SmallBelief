@@ -26,6 +26,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_areaBLL : EFBLLBase<t_area>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_areaDAL();
+        }
+    }
+
 	public partial class t_bannerBLL : EFBLLBase<t_banner>
     {
 		protected override void SetDAL()
@@ -55,6 +63,14 @@ namespace EFBLL
 		protected override void SetDAL()
         {
             dal = new t_category_typeDAL();
+        }
+    }
+
+	public partial class t_cityBLL : EFBLLBase<t_city>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_cityDAL();
         }
     }
 
@@ -103,6 +119,14 @@ namespace EFBLL
 		protected override void SetDAL()
         {
             dal = new t_order_infoDAL();
+        }
+    }
+
+	public partial class t_provinceBLL : EFBLLBase<t_province>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_provinceDAL();
         }
     }
 

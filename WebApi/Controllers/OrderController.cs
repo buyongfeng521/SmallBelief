@@ -118,8 +118,8 @@ namespace WebApi.Controllers
                                         user_id = user.ID,
                                         goods_id = goods.goods_id,
                                         goods_name = goods.goods_name,
-                                        market_price = goods.shop_price,
-                                        goods_price = goods.shop_price,
+                                        market_price = goods.goods_price,
+                                        goods_price = goods.goods_price,
                                         goods_number = number
                                     };
                                     if (OperateContext.EFBLLSession.t_cartBLL.Add(addCart))
@@ -442,8 +442,8 @@ namespace WebApi.Controllers
                                     goods_id = goods.goods_id,
                                     goods_name = goods.goods_name,
                                     goods_number = (goods.goods_number - goods.goods_lock_number) > number ? number : (goods.goods_number - goods.goods_lock_number),
-                                    market_price = goods.shop_price,
-                                    goods_price = goods.shop_price
+                                    market_price = goods.goods_price,
+                                    goods_price = goods.goods_price
                                 };
                                 order.goods_amount = order_goods.goods_number * order_goods.goods_price;
                                 //order.order_amount = order.goods_amount - order.uc_amount;

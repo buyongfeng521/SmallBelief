@@ -124,7 +124,7 @@ namespace OperationManager.Controllers
                 {
                     editModel.goods_name = goods_name.Trim();
                     editModel.cat_id = cat_id;
-                    editModel.shop_price = dShop_price;
+                    editModel.goods_price = dShop_price;
                     editModel.goods_number = iGoods_number;
 
                     editModel.goods_unit = goods_unit.Trim();
@@ -181,7 +181,7 @@ namespace OperationManager.Controllers
                 {
                     goods_name = goods_name.Trim(),
                     cat_id = cat_id,
-                    shop_price = dShop_price,
+                    goods_price = dShop_price,
                     goods_number = iGoods_number,
                     goods_lock_number = 0,
                     goods_unit = goods_unit.Trim(),

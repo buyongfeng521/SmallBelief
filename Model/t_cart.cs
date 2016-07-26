@@ -23,7 +23,7 @@ namespace Model
         public Nullable<decimal> goods_price { get; set; }
         public Nullable<int> goods_number { get; set; }
     
-        public virtual t_user t_user { get; set; }
         public virtual t_goods t_goods { get; set; }
+        public virtual t_user t_user { get; set; }
     }
 }

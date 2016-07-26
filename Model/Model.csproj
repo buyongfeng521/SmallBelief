@@ -95,6 +95,9 @@
     <Compile Include="t_admin_user.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_area.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_banner.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
@@ -105,6 +108,9 @@
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_category_type.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_city.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_comment.cs">
@@ -123,6 +129,9 @@
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_order_info.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_province.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
     <Compile Include="t_psw_code.cs">
@@ -146,6 +155,8 @@
     <Compile Include="t_user_coupon.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\OrderDetailViewModel.cs" />
+    <Compile Include="ViewModel\OrderGoodsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="SmallBelief.edmx">

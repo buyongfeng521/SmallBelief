@@ -23,7 +23,7 @@ namespace Model
         public int goods_id { get; set; }
         public Nullable<int> cat_id { get; set; }
         public string goods_name { get; set; }
-        public Nullable<decimal> shop_price { get; set; }
+        public Nullable<decimal> goods_price { get; set; }
         public Nullable<int> goods_number { get; set; }
         public Nullable<int> goods_lock_number { get; set; }
         public string goods_unit { get; set; }

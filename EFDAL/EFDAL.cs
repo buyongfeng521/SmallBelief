@@ -17,6 +17,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_areaDAL : EFDALBase<t_area>
+    {
+    }
+
 	public partial class t_bannerDAL : EFDALBase<t_banner>
     {
     }
@@ -30,6 +34,10 @@ namespace EFDAL
     }
 
 	public partial class t_category_typeDAL : EFDALBase<t_category_type>
+    {
+    }
+
+	public partial class t_cityDAL : EFDALBase<t_city>
     {
     }
 
@@ -54,6 +62,10 @@ namespace EFDAL
     }
 
 	public partial class t_order_infoDAL : EFDALBase<t_order_info>
+    {
+    }
+
+	public partial class t_provinceDAL : EFDALBase<t_province>
     {
     }
 

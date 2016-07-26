@@ -442,7 +442,7 @@ namespace WebApi.Controllers
                                     {
                                         if (editModel.is_default == true)
                                         {
-                                            string upSql = "update t_user_address set is_default = 0 where address_id <> @address_id and user_id = @user_id";
+                                            string upSql = "update t_user_address set is_default = 1 where address_id <> @address_id and user_id = @user_id";
                                             DapperContext<t_user_address>.DapperBLL.ExecuteSql(upSql, new { address_id = editModel.address_id, user_id = editModel.user_id });
                                         }
 
