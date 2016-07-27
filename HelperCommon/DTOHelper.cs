@@ -35,7 +35,9 @@ namespace HelperCommon
             Mapper.CreateMap<t_cart, CartDTO>().ForMember(desc => desc.goods_img, opt => opt.MapFrom(src =>ConfigurationHelper.AppSetting("Domain") + src.t_goods.goods_img));
             Mapper.CreateMap<t_comment, CommentDTO>()
                 .ForMember(desc=>desc.create_time,opt=>opt.MapFrom(src=>((DateTime)src.create_time).ToString("yyyy-MM-dd HH:mm:ss")))
-                .ForMember(desc=>desc.user_name,opt=>opt.MapFrom(src=>src.t_user.user_name));
+                .ForMember(desc=>desc.user_name,opt=>opt.MapFrom(src=>src.t_user.user_name))
+                .ForMember(desc=>desc.user_img,opt=>opt.MapFrom(src=>src.t_user.user_img == null?"":ConfigurationHelper.AppSetting("Domain") + src.t_user.user_img))
+                .ForMember(desc=>desc.comment_imgs,opt=>opt.MapFrom(src=>ContentHelper.GetCommentImgs(src.comment_imgs)));
 
             //Coupon
             Mapper.CreateMap<t_user_coupon, UserCouponDTO>()

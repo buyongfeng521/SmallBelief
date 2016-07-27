@@ -99,6 +99,7 @@
           <Property Name="order_id" Type="int" />
           <Property Name="goods_id" Type="int" />
           <Property Name="comment" Type="nvarchar" MaxLength="200" />
+          <Property Name="comment_imgs" Type="nvarchar" MaxLength="2000" />
           <Property Name="is_del" Type="bit" />
           <Property Name="create_time" Type="datetime" />
         </EntityType>
@@ -552,6 +553,7 @@
           <Property Name="is_del" Type="Boolean" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_user" Relationship="SmallBeliefModel.FK_t_comment_t_user" FromRole="t_comment" ToRole="t_user" />
+          <Property Name="comment_imgs" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="t_coupon">
           <Key>
@@ -913,6 +915,7 @@
           <EntitySetMapping Name="t_comment">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_comment">
               <MappingFragment StoreEntitySet="t_comment">
+                <ScalarProperty Name="comment_imgs" ColumnName="comment_imgs" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
                 <ScalarProperty Name="comment" ColumnName="comment" />

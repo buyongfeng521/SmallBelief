@@ -21,6 +21,7 @@ namespace Model
         public string comment { get; set; }
         public Nullable<bool> is_del { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
+        public string comment_imgs { get; set; }
     
         public virtual t_user t_user { get; set; }
     }

@@ -171,6 +171,63 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 删除购物车商品
+        /// </summary>
+        /// <param name="obj">{"token":"用户Token","goods_id":商品ID}</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RetInfo<object> CartDelete(dynamic obj)
+        {
+            RetInfo<object> ret = new RetInfo<object>();
+
+            string token = obj.token;
+            int goods_id = obj.goods_id;
+
+            t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+            if (user != null)
+            {
+                if (OperateContext.EFBLLSession.t_cartBLL.GetCountBy(c => c.user_id == user.ID && c.goods_id == goods_id) > 0)
+                {
+                    t_cart cartModel = OperateContext.EFBLLSession.t_cartBLL.GetModelBy(c => c.user_id == user.ID && c.goods_id == goods_id);
+                    if (cartModel != null)
+                    {
+                        t_goods goodsModel = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(c => c.goods_id == goods_id);
+                        if (goodsModel != null)
+                        {
+                            if (OperateContext.EFBLLSession.t_cartBLL.DeleteBy(c => c.user_id == user.ID && c.goods_id == goods_id))
+                            {
+                                ret.msg = CommonBasicMsg.DelSuc;
+                                ret.status = true;
+                            }
+                            else
+                            {
+                                ret.msg = CommonBasicMsg.DelFail;
+                            }
+                        }
+                        else
+                        {
+                            ret.msg = CommonBasicMsg.VoidGoods;
+                        }
+                    }
+                    else
+                    {
+                        ret.msg = CommonBasicMsg.VoidGoods;
+                    }
+                }
+                else
+                {
+                    ret.msg = "购物车不存在此商品或无权限删除";
+                }
+            }
+            else
+            {
+                ret.msg = CommonBasicMsg.NoLogin;
+            }
+
+
+            return ret;
+        }
 
         /// <summary>
         /// 订单用户地址选择
@@ -715,6 +772,7 @@ namespace WebApi.Controllers
                 string token = obj.token;
                 int order_id = obj.order_id;
                 string comment = obj.comment;
+                string comment_imgs = obj.comment_imgs;
 
                 if (!string.IsNullOrWhiteSpace(comment))
                 {
@@ -735,6 +793,7 @@ namespace WebApi.Controllers
                                         order_id = order.order_id,
                                         goods_id = item.goods_id,
                                         comment = comment,
+                                        comment_imgs = comment_imgs,
                                         is_del = false,
                                         create_time = DateTime.Now
                                     };

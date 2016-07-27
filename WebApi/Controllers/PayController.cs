@@ -82,11 +82,18 @@ namespace WebApi.Controllers
         [HttpGet]
         public void VerifyReturnURL(HttpRequestBase request)
         {
-            AliPay pay = new AliPay();
-            AliPayReturnModel returnModel = new AliPayReturnModel();
-            if (pay.VerifyReturnURL(request, out returnModel))
+            try
             {
-                APIHelper.AliPaySucProcess(returnModel);
+                AliPay pay = new AliPay();
+                AliPayReturnModel returnModel = new AliPayReturnModel();
+                if (pay.VerifyReturnURL(request, out returnModel))
+                {
+                    APIHelper.AliPaySucProcess(returnModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteExceptionLog(ex);
             }
         }
 
@@ -97,11 +104,18 @@ namespace WebApi.Controllers
         [HttpPost]
         public void VerifyNotify(HttpRequestBase request)
         {
-            AliPay pay = new AliPay();
-            AliPayReturnModel returnModel = new AliPayReturnModel();
-            if (pay.VerfyNotify(request, out returnModel))
+            try
             {
-                APIHelper.AliPaySucProcess(returnModel);
+                AliPay pay = new AliPay();
+                AliPayReturnModel returnModel = new AliPayReturnModel();
+                if (pay.VerfyNotify(request, out returnModel))
+                {
+                    APIHelper.AliPaySucProcess(returnModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteExceptionLog(ex);
             }
         }
     }
