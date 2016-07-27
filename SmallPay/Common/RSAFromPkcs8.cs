@@ -17,17 +17,31 @@ namespace SmallPay
         /// <param name="privateKey">私钥</param>
         /// <param name="input_charset">编码格式</param>
         /// <returns></returns>
-        public static string sign(string content, string privateKey, string input_charset)
+        public static string sign(string data, string privateKey, string charset)
         {
-            Encoding code = Encoding.GetEncoding(input_charset);
-            byte[] Data = code.GetBytes(content);
-            RSACryptoServiceProvider rsa = DecodePemPrivateKey(privateKey);
-            SHA1 sh = new SHA1CryptoServiceProvider();
+            //Encoding code = Encoding.GetEncoding(input_charset);
+            //byte[] Data = code.GetBytes(content);
+            //RSACryptoServiceProvider rsa = DecodePemPrivateKey(privateKey);
+            //SHA1 sh = new SHA1CryptoServiceProvider();
 
 
-            byte[] signData = rsa.SignData(Data, sh);
-            return Convert.ToBase64String(signData);
+            //byte[] signData = rsa.SignData(Data, sh);
+            //return Convert.ToBase64String(signData);
 
+            RSACryptoServiceProvider rsaCsp = DecodePemPrivateKey(privateKey);
+            byte[] dataBytes = null;
+            if (string.IsNullOrEmpty(charset))
+            {
+                dataBytes = Encoding.UTF8.GetBytes(data);
+            }
+            else
+            {
+                dataBytes = Encoding.GetEncoding(charset).GetBytes(data);
+            }
+
+            byte[] signatureBytes = rsaCsp.SignData(dataBytes, "SHA1");
+
+            return Convert.ToBase64String(signatureBytes);
 
         }
         /// <summary>

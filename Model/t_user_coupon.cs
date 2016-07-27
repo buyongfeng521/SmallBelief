@@ -22,5 +22,6 @@ namespace Model
         public Nullable<System.DateTime> end_time { get; set; }
         public Nullable<bool> is_use { get; set; }
         public Nullable<System.DateTime> use_time { get; set; }
+        public Nullable<decimal> condition_amount { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using HelperCommon;
 using Model;
+using Model.FormatModel;
 using Model.ViewModel;
+using OperationManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ using Webdiyer.WebControls.Mvc;
 
 namespace OperationManager.Controllers
 {
+    [LoginCheck]
     public class OrderController : Controller
     {
 
@@ -61,7 +64,7 @@ namespace OperationManager.Controllers
                 if (order != null)
                 {
                     vm.order_sn = order.order_sn;
-                    vm.order_status_content = "";
+                    vm.order_status_content = ContentHelper.GetOrderStatusMsg(order.order_status,order.pay_status);
                     vm.order_amount = (decimal)order.order_amount;
                     vm.add_time = ((DateTime)order.add_time).ToString("yyyy-MM-dd HH:mm:ss");
                     vm.consignee = order.consignee;
@@ -73,6 +76,16 @@ namespace OperationManager.Controllers
             }
 
             return Json(vm, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult OrderCancel(int id = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            //t_order_info t_order = 
+
+            return Json(ajax);
         }
 
         #endregion

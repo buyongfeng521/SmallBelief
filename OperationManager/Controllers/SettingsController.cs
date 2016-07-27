@@ -14,7 +14,7 @@ using System.Web.Mvc;
 
 namespace OperationManager.Controllers
 {
-    //[LoginCheck]
+    [LoginCheck]
     public class SettingsController : Controller
     {
         

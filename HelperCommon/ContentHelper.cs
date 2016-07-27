@@ -25,6 +25,38 @@ namespace HelperCommon
             return result;
         }
 
+        /// <summary>
+        /// 获得订单状态
+        /// </summary>
+        /// <param name="order_status"></param>
+        /// <param name="pay_status"></param>
+        /// <returns></returns>
+        public static string GetOrderStatusMsg(byte? order_status = 0, byte? pay_status = 0)
+        {
+            string result = "";
+            if (order_status == 1 && pay_status == 0)
+            {
+                result = "待付款";
+            }
+            else if (order_status == 2 && pay_status == 0)
+            {
+                result = "已取消";
+            }
+            else if (order_status == 1 && pay_status == 1)
+            {
+                result = "配送中";
+            }
+            else if (order_status == 3 && pay_status == 1)
+            {
+                result = "待评价";
+            }
+            else if (order_status == 4 && pay_status == 1)
+            {
+                result = "完成";
+            }
+            return result;
+        }
+
 
     }
 }

@@ -2,6 +2,7 @@
 using Model;
 using Model.CommonModel;
 using Model.FormatModel;
+using OperationManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Web.Mvc;
 
 namespace OperationManager.Controllers
 {
+    [LoginCheck]
     public class CouponController : Controller
     {
         //
@@ -23,7 +25,7 @@ namespace OperationManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult CouponAdd(string coupon_name = "", decimal coupon_amount = 0, int valid_days = 0)
+        public ActionResult CouponAdd(string coupon_name = "", decimal coupon_amount = 0,decimal condition_amount = 0, int valid_days = 0)
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
@@ -32,11 +34,22 @@ namespace OperationManager.Controllers
                 ajax.Msg = "优惠券名称不能为空";
                 return Json(ajax);
             }
-            if (coupon_amount <= 0)
+            if (condition_amount <= 0)
             {
-                ajax.Msg = "优惠券金额不正确";
+                ajax.Msg = "满足条件金额不正确";
                 return Json(ajax);
             }
+            if (coupon_amount <= 0)
+            {
+                ajax.Msg = "减免金额不正确";
+                return Json(ajax);
+            }
+            if (coupon_amount >= condition_amount)
+            {
+                ajax.Msg = "减免金额不能大于条件金额";
+                return Json(ajax);
+            }
+
             if (valid_days <= 0)
             {
                 ajax.Msg = "有效条数不正确";
@@ -51,6 +64,7 @@ namespace OperationManager.Controllers
             t_coupon model = new t_coupon() 
             {
                 coupon_name = coupon_name.Trim(),
+                condition_amount = condition_amount,
                 coupon_amount = coupon_amount,
                 valid_days = valid_days,
                 is_del = false,
@@ -71,7 +85,7 @@ namespace OperationManager.Controllers
 
 
         [HttpPost]
-        public ActionResult CouponEdit(int coupon_id = 0, string coupon_name = "", decimal coupon_amount = 0, int valid_days = 0)
+        public ActionResult CouponEdit(int coupon_id = 0, string coupon_name = "", decimal coupon_amount = 0,decimal condition_amount = 0, int valid_days = 0)
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
@@ -80,14 +94,24 @@ namespace OperationManager.Controllers
                 ajax.Msg = "优惠券名称不能为空";
                 return Json(ajax);
             }
+            if (condition_amount <= 0)
+            {
+                ajax.Msg = "满足条件金额不正确";
+                return Json(ajax);
+            }
             if (coupon_amount <= 0)
             {
-                ajax.Msg = "优惠券金额不正确";
+                ajax.Msg = "减免金额不正确";
+                return Json(ajax);
+            }
+            if (coupon_amount >= condition_amount)
+            {
+                ajax.Msg = "减免金额不能大于条件金额";
                 return Json(ajax);
             }
             if (valid_days <= 0)
             {
-                ajax.Msg = "有效条数不正确";
+                ajax.Msg = "有效天数不正确";
                 return Json(ajax);
             }
 
@@ -106,6 +130,7 @@ namespace OperationManager.Controllers
             //2.0 do
             editModel.coupon_name = coupon_name.Trim();
             editModel.coupon_amount = coupon_amount;
+            editModel.condition_amount = condition_amount;
             editModel.valid_days = valid_days;
             if (OperateContext.EFBLLSession.t_couponBLL.Modify(editModel))
             {

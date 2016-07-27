@@ -1,6 +1,7 @@
 ﻿using HelperCommon;
 using Model;
 using Model.DTOModel;
+using OperationManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using Webdiyer.WebControls.Mvc;
 
 namespace OperationManager.Controllers
 {
+    [LoginCheck]
     public class UserController : Controller
     {
         [HttpGet]

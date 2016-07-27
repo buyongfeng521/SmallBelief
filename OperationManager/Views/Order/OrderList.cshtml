@@ -44,7 +44,7 @@
                             <td>@item.order_sn</td>
                             <td>@item.goods_amount</td>
                             <td>@item.order_amount</td>
-                            <td>@item.order_status</td>
+                            <td>@HelperCommon.ContentHelper.GetOrderStatusMsg(item.order_status,item.pay_status)</td>
                             <td>
                                 <a href="javascript:" onclick="showDetail(@item.order_id)">查看</a>
                             </td>
@@ -125,7 +125,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -136,11 +136,40 @@
 <script>
     function showDetail(id) {
         if(id){
-            var url = "Order/OrderDetail?id=" + id;
-            $.get(ur,function(data){
-                alert(data.order_sn);
+            $("#tblOrderGoods").empty();
+
+            $("#tblOrderGoods").append(createHeader());
+            var url = "/Order/OrderDetail?id=" + id;
+            $.get(url,function(data){
+                $("#order_sn").html(data.order_sn),
+                $("#order_status_content").html(data.order_status_content);
+                $("#order_amount").html(data.order_amount);
+                $("#add_time").html(data.add_time);
+                $("#consignee").html(data.consignee);
+                $("#mobile").html(data.mobile);
+                $("#address").html(data.address);
+
+                $("#tblOrderGoods").append(createRow(data.order_goods[0]));
+
+                $("#modalDetail").modal("show");   
+
             });
-            $("#modalDetail").modal("show");    
+            
         }
+    }
+    function createHeader(item){
+        var $tr = $("<tr></tr>");
+        $tr.append("<th>商品名称</th>");
+        $tr.append("<th>商品数量</th");
+        $tr.append("<th>商品价格</th");
+        return $tr;
+    }
+
+    function createRow(item){
+        var $tr = $("<tr></tr>");
+        $tr.append("<td>" + item.goods_name + "</td>");
+        $tr.append("<td>" + item.goods_number + "</td>");
+        $tr.append("<td>" + item.goods_price + "</td>");
+        return $tr;
     }
 </script>

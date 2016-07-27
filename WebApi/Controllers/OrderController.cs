@@ -96,7 +96,7 @@ namespace WebApi.Controllers
 
                                 if (editCart != null)
                                 {
-                                    //editCart.goods_number = editCart.goods_number + number;
+                                    editCart.goods_number = editCart.goods_number + number;
                                     
                                     if (OperateContext.EFBLLSession.t_cartBLL.Modify(editCart))
                                     {
@@ -122,6 +122,7 @@ namespace WebApi.Controllers
                                         goods_price = goods.goods_price,
                                         goods_number = number
                                     };
+
                                     if (OperateContext.EFBLLSession.t_cartBLL.Add(addCart))
                                     {
                                         ret.status = true;
@@ -242,15 +243,6 @@ namespace WebApi.Controllers
                             List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListBy(c => c.user_id == user.ID && c.cart_type == cart_type && (c.t_goods.goods_number - c.t_goods.goods_lock_number) > 0);
                             if (listCart.Count > 0)
                             {
-                                //pre User_Coupon
-                                t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u=>u.uc_id == uc_id);
-                                if (userCoupon != null)
-                                {
-                                    //已使用
-                                    userCoupon.is_use = true;
-                                    userCoupon.use_time = DateTime.Now;
-                                    OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
-                                }
 
                                 //a Order_Base_Info
                                 t_order_info order = new t_order_info()
@@ -268,8 +260,8 @@ namespace WebApi.Controllers
                                     room_num = address.room_num,
                                     address = address.address,
 
-                                    uc_id = userCoupon == null?0:userCoupon.uc_id,
-                                    uc_amount = userCoupon == null?0:userCoupon.coupon_amount,
+                                    uc_id = 0, 
+                                    uc_amount = 0,
                                     expect_shipping_time = DateTime.Now.ToString("yyyy-MM-dd") + " " + expect_shipping_time,
 
                                     postscript = "",
@@ -300,8 +292,23 @@ namespace WebApi.Controllers
                                 });
 
                                 order.goods_amount = listOrderGoods.Sum(g => g.goods_number * g.goods_price);
-                                order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
-                                
+                                order.order_amount = order.goods_amount;
+                                //优惠券处理
+                                //pre User_Coupon
+                                t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == uc_id);
+                                if (userCoupon != null)
+                                {
+                                    if (userCoupon.condition_amount <= order.goods_amount)
+                                    {
+                                        order.uc_id = userCoupon.uc_id;
+                                        order.uc_amount = userCoupon.coupon_amount;
+                                        order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
+                                        //已使用
+                                        userCoupon.is_use = true;
+                                        userCoupon.use_time = DateTime.Now;
+                                        OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
+                                    }
+                                }
 
                                 //c to SQL
                                 if (OperateContext.EFBLLSession.t_order_infoBLL.Add(order))
@@ -399,15 +406,7 @@ namespace WebApi.Controllers
                             t_user_address address = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.address_id == address_id);
                             if (address != null)
                             {
-                                //pre User_Coupon
-                                t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == uc_id);
-                                if (userCoupon != null)
-                                { 
-                                    //已使用
-                                    userCoupon.is_use = true;
-                                    userCoupon.use_time = DateTime.Now;
-                                    OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
-                                }
+                                
 
                                 //a order_info
                                 t_order_info order = new t_order_info() 
@@ -425,9 +424,9 @@ namespace WebApi.Controllers
                                     room_num = address.room_num,
                                     address = address.address,
 
-                                    uc_id = userCoupon == null ? 0 : userCoupon.uc_id,
-                                    uc_amount = userCoupon == null ? 0 : userCoupon.coupon_amount,
-                                    expect_shipping_time = DateTime.Now.ToString("yyyy-MM-dd") + " " + expect_shipping_time,
+                                    uc_id = 0,
+                                    uc_amount = 0,
+                                    expect_shipping_time = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") + " " + expect_shipping_time,
 
                                     postscript = "",
                                     goods_amount = 0,
@@ -446,8 +445,23 @@ namespace WebApi.Controllers
                                     goods_price = goods.goods_price
                                 };
                                 order.goods_amount = order_goods.goods_number * order_goods.goods_price;
-                                //order.order_amount = order.goods_amount - order.uc_amount;
-                                order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
+                                order.order_amount = order.goods_amount;
+                                //优惠券处理
+                                t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == uc_id);
+                                if (userCoupon != null)
+                                {
+                                    if (userCoupon.condition_amount <= order.goods_amount)
+                                    {
+                                        order.uc_id = userCoupon.uc_id;
+                                        order.uc_amount = userCoupon.coupon_amount;
+                                        order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
+                                        //已使用
+                                        userCoupon.is_use = true;
+                                        userCoupon.use_time = DateTime.Now;
+                                        OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
+                                    }
+                                }
+                                
                                 //c goods lock_number
                                 goods.goods_lock_number += order_goods.goods_number;
                                 goods.goods_number = goods.goods_number - order_goods.goods_number;

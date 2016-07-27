@@ -20,5 +20,6 @@ namespace Model
         public Nullable<int> valid_days { get; set; }
         public Nullable<bool> is_del { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
+        public Nullable<decimal> condition_amount { get; set; }
     }
 }

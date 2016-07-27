@@ -2,6 +2,7 @@
 using Model;
 using Model.CommonModel;
 using Model.FormatModel;
+using OperationManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Web.Mvc;
 
 namespace OperationManager.Controllers
 {
+    [LoginCheck]
     public class ADController : Controller
     {
 

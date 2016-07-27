@@ -30,7 +30,8 @@
                 <tr>
                     <th>编号</th>
                     <th>优惠券名称</th>
-                    <th>优惠券金额</th>
+                    <th>满足条件金额</th>
+                    <th>减免金额</th>
                     <th>有效天数</th>
                     <th>创建时间</th>
                     <th>操作</th>
@@ -43,6 +44,7 @@
                         <tr>
                             <td>@i</td>
                             <td>@item.coupon_name</td>
+                            <td>@item.condition_amount</td>
                             <td>@item.coupon_amount</td>
                             <td>@item.valid_days</td>
                             <td>@item.create_time</td>
@@ -75,8 +77,12 @@
                         <input type="text" class="form-control" id="coupon_name" name="coupon_name" placeholder="优惠券名称">
                     </div>
                     <div class="form-group">
-                        <label>优惠券金额</label>
-                        <input type="number" class="form-control" id="coupon_amount" name="coupon_amount" placeholder="优惠券金额">
+                        <label>满足条件金额</label>
+                        <input type="number" class="form-control" id="condition_amount" name="condition_amount" placeholder="满足条件金额">
+                    </div>
+                    <div class="form-group">
+                        <label>减免金额</label>
+                        <input type="number" class="form-control" id="coupon_amount" name="coupon_amount" placeholder="减免金额">
                     </div>
                     <div class="form-group">
                         <label>有效天数</label>

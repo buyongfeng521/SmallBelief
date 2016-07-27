@@ -2,6 +2,7 @@
 using Model;
 using Model.CommonModel;
 using Model.FormatModel;
+using OperationManager.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,7 @@ using Webdiyer.WebControls.Mvc;
 
 namespace OperationManager.Controllers
 {
+    [LoginCheck]
     public class GoodsController : Controller
     {
 

@@ -78,8 +78,9 @@ namespace WebApi.Controllers
                             //发送短信
                             string strCode = new Random().Next(10000, 99999).ToString();
                            //string strContent = string.Format("{\"code\":\"{0}\"}", strCode);
-                            string strContent = "{\"code\":\"" + strCode + "\"}";
-                            if (SMSHelper.SendMsgByTaoBao(user_phone, strContent, "SMS_10895108"))
+                            //string strContent = "{\"code\":\"" + strCode + "\"}";
+                            string strContent = "{\"code\":\"" + strCode + "\",\"product\":\"浙理宅货\"}";
+                            if (SMSHelper.SendMsgByTaoBao(user_phone, strContent, "SMS_12735172"))
                             {
                                 t_user_code userCode = new t_user_code()
                                 {
@@ -191,6 +192,7 @@ namespace WebApi.Controllers
                                         {
                                             user_id = user.ID,
                                             coupon_id = coupon_model.coupon_id,
+                                            condition_amount = coupon_model.condition_amount,
                                             coupon_amount = coupon_model.coupon_amount,
                                             begin_time = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00")),
                                             end_time = DateTime.Parse(DateTime.Now.AddDays((int)coupon_model.valid_days).ToString("yyyy-MM-dd 00:00:00")),
@@ -248,8 +250,9 @@ namespace WebApi.Controllers
                             //发送短信
                             string strCode = new Random().Next(10000, 99999).ToString();
                            //string strContent = string.Format("{\"code\":\"{0}\"}", strCode);
-                            string strContent = "{\"code\":\"" + strCode + "\"}";
-                            if (SMSHelper.SendMsgByTaoBao(user_phone, strContent, "SMS_10895108"))
+                            string strContent = "{\"code\":\"" + strCode + "\",\"product\":\"浙理宅货\"}";
+                            //string strContent = "{\"code\":\"" + strCode + "\"}";
+                            if (SMSHelper.SendMsgByTaoBao(user_phone, strContent, "SMS_12735170"))
                             {
                                 t_psw_code userCode = new t_psw_code()
                                 {
