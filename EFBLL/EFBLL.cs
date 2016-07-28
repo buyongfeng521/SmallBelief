@@ -186,5 +186,13 @@ namespace EFBLL
         }
     }
 
+	public partial class t_wechat_sellerBLL : EFBLLBase<t_wechat_seller>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_wechat_sellerDAL();
+        }
+    }
+
 
 }

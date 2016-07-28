@@ -97,5 +97,9 @@ namespace EFDAL
     {
     }
 
+	public partial class t_wechat_sellerDAL : EFDALBase<t_wechat_seller>
+    {
+    }
+
 
 }

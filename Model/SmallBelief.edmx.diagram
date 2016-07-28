@@ -33,6 +33,7 @@
         <AssociationConnector Association="SmallBeliefModel.FK_t_comment_t_user" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_goods_gallery_t_goods" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_order_goods_t_order_info" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_wechat_seller" Width="1.5" PointX="14.375" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

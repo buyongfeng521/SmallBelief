@@ -341,6 +341,21 @@ namespace EFBLL
         }
 
         
+        private t_wechat_sellerBLL t_wechat_sellerbll;
+        public t_wechat_sellerBLL t_wechat_sellerBLL
+        {
+	        get
+	        {
+		        if(t_wechat_sellerbll == null)
+		        {
+			        t_wechat_sellerbll = new t_wechat_sellerBLL();
+		        }
+		        return t_wechat_sellerbll;
+	        }
+	        set{}
+        }
+
+        
     }
 
 }

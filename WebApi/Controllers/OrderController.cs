@@ -760,7 +760,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// 订单评论发表
         /// </summary>
-        /// <param name="obj">{"token":"用户token","order_id":订单ID,"comment":"评价"}</param>
+        /// <param name="obj">{"token":"用户token","order_id":订单ID,"comment":"评价","comment_imgs":"评论图集逗号分隔"}</param>
         /// <returns></returns>
         [HttpPost]
         public RetInfo<object> OrderCommentSumit(dynamic obj)

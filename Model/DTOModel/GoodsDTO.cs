@@ -10,6 +10,7 @@ namespace Model.DTOModel
     {
         public int goods_id { get; set; }
         public int cat_id { get; set; }
+        public int we_id { get; set; }
         public string goods_name { get; set; }
         public decimal goods_price { get; set; }
         public int goods_number { get; set; }

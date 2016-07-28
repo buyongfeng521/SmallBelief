@@ -69,7 +69,30 @@ namespace HelperCommon
 
             List<t_coupon> listCoupon = OperateContext.EFBLLSession.t_couponBLL.GetListBy(c => c.is_del == false, c => c.coupon_id);
 
-            SelectList result = new SelectList(listCoupon, "coupon_id", "coupon_name", 2);
+            SelectList result = new SelectList(listCoupon, "coupon_id", "coupon_name", selectValue);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 微商列表
+        /// </summary>
+        /// <returns></returns>
+        public static SelectList GetWechatSellerList()
+        {
+            List<t_wechat_seller> listWechat = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetListBy(w => w.we_id > 0, w => w.we_id);
+            listWechat.Insert(0, new t_wechat_seller() { we_id = 0, we_name = "无" });
+
+            SelectList result = new SelectList(listWechat, "we_id", "we_name");
+
+            return result;
+        }
+        public static SelectList GetWechatSellerList(string selectValue)
+        {
+            List<t_wechat_seller> listWechat = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetListBy(w => w.we_id > 0, w => w.we_id);
+            listWechat.Insert(0, new t_wechat_seller() { we_id = 0, we_name = "无" });
+
+            SelectList result = new SelectList(listWechat, "we_id", "we_name",selectValue);
 
             return result;
         }

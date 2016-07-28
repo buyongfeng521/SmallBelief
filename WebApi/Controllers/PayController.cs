@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
 using System.Web.Http;
 
@@ -82,13 +83,20 @@ namespace WebApi.Controllers
         [HttpGet]
         public void VerifyReturnURL(HttpRequestBase request)
         {
+            Logger.WritePayLog("同步通知。。。");
             try
             {
+                HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+                request = context.Request;
+
                 AliPay pay = new AliPay();
                 AliPayReturnModel returnModel = new AliPayReturnModel();
                 if (pay.VerifyReturnURL(request, out returnModel))
                 {
-                    APIHelper.AliPaySucProcess(returnModel);
+                    if (returnModel != null)
+                    {
+                        APIHelper.AliPaySucProcess(returnModel);
+                    }
                 }
             }
             catch (Exception ex)
@@ -104,13 +112,25 @@ namespace WebApi.Controllers
         [HttpPost]
         public void VerifyNotify(HttpRequestBase request)
         {
+            Logger.WritePayLog("异步通知。。。。");
             try
             {
+                //Request.Form["dfdfd"];
+                //(HttpContextBase)Request.Properties["MS_HttpContext"];
+                var c = (HttpContextBase)Request.Properties["MS_HttpContext"];//["MS_HttpContext"] as HttpRequestBase;
+                request = c.Request;
+                //Logger.WriteLog(request.ToString());
                 AliPay pay = new AliPay();
                 AliPayReturnModel returnModel = new AliPayReturnModel();
+                //var c = request.Form;
+                //Logger.WriteLog(request.ToString());
+                //Logger.WriteLog(request.Form.ToString());
                 if (pay.VerfyNotify(request, out returnModel))
                 {
-                    APIHelper.AliPaySucProcess(returnModel);
+                    if (returnModel != null)
+                    {
+                        APIHelper.AliPaySucProcess(returnModel);
+                    }
                 }
             }
             catch (Exception ex)

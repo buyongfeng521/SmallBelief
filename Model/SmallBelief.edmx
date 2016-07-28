@@ -121,6 +121,7 @@
           </Key>
           <Property Name="goods_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="cat_id" Type="int" />
+          <Property Name="we_id" Type="int" />
           <Property Name="goods_name" Type="nvarchar" MaxLength="200" />
           <Property Name="goods_price" Type="decimal" Precision="18" Scale="2" />
           <Property Name="goods_number" Type="int" />
@@ -281,6 +282,16 @@
           <Property Name="is_use" Type="bit" />
           <Property Name="use_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_wechat_seller">
+          <Key>
+            <PropertyRef Name="we_id" />
+          </Key>
+          <Property Name="we_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="we_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="we_star" Type="int" />
+          <Property Name="we_img" Type="nvarchar" MaxLength="100" />
+          <Property Name="we_desc" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <Association Name="FK_t_cart_t_goods">
           <End Role="t_goods" Type="Self.t_goods" Multiplicity="0..1" />
           <End Role="t_cart" Type="Self.t_cart" Multiplicity="*" />
@@ -376,6 +387,7 @@
           <EntitySet Name="t_user_address" EntityType="Self.t_user_address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user_code" EntityType="Self.t_user_code" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user_coupon" EntityType="Self.t_user_coupon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_wechat_seller" EntityType="Self.t_wechat_seller" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_t_cart_t_goods" Association="Self.FK_t_cart_t_goods">
             <End Role="t_goods" EntitySet="t_goods" />
             <End Role="t_cart" EntitySet="t_cart" />
@@ -452,6 +464,7 @@
             <End Role="t_order_info" EntitySet="t_order_info" />
             <End Role="t_order_goods" EntitySet="t_order_goods" />
           </AssociationSet>
+          <EntitySet Name="t_wechat_seller" EntityType="SmallBeliefModel.t_wechat_seller" />
         </EntityContainer>
         <EntityType Name="t_ad">
           <Key>
@@ -593,6 +606,7 @@
           <NavigationProperty Name="t_cart" Relationship="SmallBeliefModel.FK_t_cart_t_goods" FromRole="t_goods" ToRole="t_cart" />
           <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
           <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
+          <Property Name="we_id" Type="Int32" />
         </EntityType>
         <EntityType Name="t_goods_gallery">
           <Key>
@@ -813,6 +827,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="t_wechat_seller">
+          <Key>
+            <PropertyRef Name="we_id" />
+          </Key>
+          <Property Name="we_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="we_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="we_star" Type="Int32" />
+          <Property Name="we_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="we_desc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -942,6 +966,7 @@
           <EntitySetMapping Name="t_goods">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_goods">
               <MappingFragment StoreEntitySet="t_goods">
+                <ScalarProperty Name="we_id" ColumnName="we_id" />
                 <ScalarProperty Name="add_time" ColumnName="add_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
                 <ScalarProperty Name="is_on_sale" ColumnName="is_on_sale" />
@@ -1114,6 +1139,17 @@
                 <ScalarProperty Name="coupon_id" ColumnName="coupon_id" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="uc_id" ColumnName="uc_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_wechat_seller">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_wechat_seller">
+              <MappingFragment StoreEntitySet="t_wechat_seller">
+                <ScalarProperty Name="we_desc" ColumnName="we_desc" />
+                <ScalarProperty Name="we_img" ColumnName="we_img" />
+                <ScalarProperty Name="we_star" ColumnName="we_star" />
+                <ScalarProperty Name="we_name" ColumnName="we_name" />
+                <ScalarProperty Name="we_id" ColumnName="we_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -671,7 +671,97 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 全部订单
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<OrderInfoDTO>> OrderListAllGet()
+        {
+            RetInfo<List<OrderInfoDTO>> ret = new RetInfo<List<OrderInfoDTO>>();
 
+            try
+            {
+                List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o => o.order_id > 0, o => o.add_time);
+                ret.Data = DTOHelper.Map<List<OrderInfoDTO>>(listOrder);
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 待付款订单
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<OrderInfoDTO>> OrderListPrePayGet()
+        {
+            RetInfo<List<OrderInfoDTO>> ret = new RetInfo<List<OrderInfoDTO>>();
+
+            try
+            {
+                List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o => o.order_status == 1 && o.pay_status == 0, o => o.add_time);
+                ret.Data = DTOHelper.Map<List<OrderInfoDTO>>(listOrder);
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 配送中订单
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<OrderInfoDTO>> OrderListShippingGet()
+        {
+            RetInfo<List<OrderInfoDTO>> ret = new RetInfo<List<OrderInfoDTO>>();
+
+            try
+            {
+                List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o => o.order_status == 1 && o.pay_status == 1, o => o.add_time);
+                ret.Data = DTOHelper.Map<List<OrderInfoDTO>>(listOrder);
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 待评价订单
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<OrderInfoDTO>> OrderListPreCommentGet()
+        {
+            RetInfo<List<OrderInfoDTO>> ret = new RetInfo<List<OrderInfoDTO>>();
+
+            try
+            {
+                List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o => o.order_status == 3 && o.pay_status == 1, o => o.add_time);
+                ret.Data = DTOHelper.Map<List<OrderInfoDTO>>(listOrder);
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
 
 
 

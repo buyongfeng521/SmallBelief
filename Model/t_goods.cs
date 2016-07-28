@@ -39,6 +39,7 @@ namespace Model
         public Nullable<bool> is_on_sale { get; set; }
         public Nullable<bool> is_del { get; set; }
         public Nullable<System.DateTime> add_time { get; set; }
+        public Nullable<int> we_id { get; set; }
     
         public virtual ICollection<t_cart> t_cart { get; set; }
         public virtual t_category t_category { get; set; }

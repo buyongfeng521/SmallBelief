@@ -31,6 +31,10 @@
                         @Html.DropDownList("cat_id", ViewBag.ListCat as IEnumerable<SelectListItem>, new { @class = "form-control" })
                     </div>
                     <div class="form-group">
+                        <label>微商选择：</label>
+                        @Html.DropDownList("we_id", ViewBag.ListWechat as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
                         <label>商品价格：</label>
                         <div class="form-group input-group">
                             <input type="number" class="form-control" id="shop_price" name="shop_price" value="@Model.goods_price" placeholder="商品价格">

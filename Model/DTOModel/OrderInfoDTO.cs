@@ -12,6 +12,7 @@ namespace Model.DTOModel
         public byte order_type { get; set; }
         public string order_sn { get; set; }
         public int user_id { get; set; }
+        public string order_status_msg { get; set; }
         public byte order_status { get; set; }
         public byte shipping_status { get; set; }
         public byte pay_status { get; set; }

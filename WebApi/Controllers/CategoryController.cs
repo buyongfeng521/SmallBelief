@@ -164,6 +164,54 @@ namespace WebApi.Controllers
         }
 
 
+        /// <summary>
+        /// 获取微商列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<WechatSellerDTO>> WechatSellerListGet()
+        {
+            RetInfo<List<WechatSellerDTO>> ret = new RetInfo<List<WechatSellerDTO>>();
+
+            try
+            {
+                List<t_wechat_seller> listSeller = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetListBy(s => s.we_id > 0);
+                ret.Data = DTOHelper.Map<List<WechatSellerDTO>>(listSeller);
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 根据微商ID获得商品集合
+        /// </summary>
+        /// <param name="we_id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<GoodsDTO>> GoodsListGetBySellerID(int we_id)
+        {
+            RetInfo<List<GoodsDTO>> ret = new RetInfo<List<GoodsDTO>>();
+
+            try
+            {
+                List<t_goods> listSeller = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => g.is_del == false && g.is_on_sale == true && g.we_id == we_id, g => g.goods_id);
+                ret.Data = DTOHelper.Map<List<GoodsDTO>>(listSeller);
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
+
+
 
 
     }

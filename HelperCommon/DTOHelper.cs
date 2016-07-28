@@ -27,10 +27,11 @@ namespace HelperCommon
 
             //Order
             Mapper.CreateMap<t_order_info, OrderInfoDTO>()
-                .ForMember(desc => desc.add_time, opt =>opt.MapFrom(src => src.add_time == null ? "":((DateTime)src.add_time).ToString("yyyy-MM-dd HH:mm:ss")))
-                .ForMember(desc => desc.confirm_time, opt => opt.MapFrom(src =>src.confirm_time == null? "": ((DateTime)src.confirm_time).ToString("yyyy-MM-dd HH:mm:ss")))
+                .ForMember(desc => desc.add_time, opt => opt.MapFrom(src => src.add_time == null ? "" : ((DateTime)src.add_time).ToString("yyyy-MM-dd HH:mm:ss")))
+                .ForMember(desc => desc.confirm_time, opt => opt.MapFrom(src => src.confirm_time == null ? "" : ((DateTime)src.confirm_time).ToString("yyyy-MM-dd HH:mm:ss")))
                 .ForMember(desc => desc.pay_time, opt => opt.MapFrom(src => src.pay_time == null ? "" : ((DateTime)src.pay_time).ToString("yyyy-MM-dd HH:mm:ss")))
-                .ForMember(desc => desc.shipping_time, opt => opt.MapFrom(src => src.shipping_time == null? "": ((DateTime)src.shipping_time).ToString("yyyy-MM-dd HH:mm:ss")));
+                .ForMember(desc => desc.shipping_time, opt => opt.MapFrom(src => src.shipping_time == null ? "" : ((DateTime)src.shipping_time).ToString("yyyy-MM-dd HH:mm:ss")))
+                .ForMember(desc => desc.order_status_msg, opt => opt.MapFrom(src => ContentHelper.GetOrderStatusMsg(src.order_status, src.pay_status)));
             Mapper.CreateMap<t_order_goods, OrderGoodsDTO>();
             Mapper.CreateMap<t_cart, CartDTO>().ForMember(desc => desc.goods_img, opt => opt.MapFrom(src =>ConfigurationHelper.AppSetting("Domain") + src.t_goods.goods_img));
             Mapper.CreateMap<t_comment, CommentDTO>()
@@ -45,6 +46,9 @@ namespace HelperCommon
                 .ForMember(desc => desc.end_time, opt => opt.MapFrom(src => src.end_time == null ? "" : ((DateTime)src.end_time).ToString("yyyy-MM-dd")))
                 .ForMember(desc => desc.use_time, opt => opt.MapFrom(src => src.use_time == null ? "" : ((DateTime)src.use_time).ToString("yyyy-MM-dd HH:mm:ss")));
 
+            //Goods
+            Mapper.CreateMap<t_wechat_seller, WechatSellerDTO>()
+                .ForMember(desc => desc.we_img, opt => opt.MapFrom(src => ConfigurationHelper.AppSetting("Domain") + src.we_img));
 
             //VM
             Mapper.CreateMap<t_order_goods, OrderGoodsViewModel>();

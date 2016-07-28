@@ -66,8 +66,9 @@ namespace HelperCommon
                     order.money_paid = returnModel.TotalFee;
                     order.pay_status = 1;
                     order.pay_time = DateTime.Now;
+                    OperateContext.EFBLLSession.t_order_infoBLL.Modify(order);
                 }
-                OperateContext.EFBLLSession.t_order_infoBLL.Modify(order);
+                
             }
         }
 

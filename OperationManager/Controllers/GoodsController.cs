@@ -47,6 +47,9 @@ namespace OperationManager.Controllers
             if (goods_id == 0)
             {
                 ViewBag.ListCat = SelectHelper.GetCategorySelList();
+
+                ViewBag.ListWechat = SelectHelper.GetWechatSellerList();
+
                 return View(new t_goods());
             }
             else
@@ -54,6 +57,8 @@ namespace OperationManager.Controllers
                 t_goods goodsModel = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == goods_id);
 
                 ViewBag.ListCat = SelectHelper.GetCategorySelListBy(goodsModel.cat_id.ToString());
+
+                ViewBag.ListWechat = SelectHelper.GetWechatSellerList(goodsModel.we_id.ToString());
 
                 List<t_goods_gallery> listGallery = OperateContext.EFBLLSession.t_goods_galleryBLL.GetListBy(g=>g.goods_id == goods_id);
                 ViewBag.ListGallery = listGallery;
@@ -63,7 +68,7 @@ namespace OperationManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult GoodsAdd(int goods_id = 0,string goods_name = "", int cat_id = 0, string shop_price = "", string goods_number = "",string goods_unit = "",
+        public ActionResult GoodsAdd(int goods_id = 0,string goods_name = "", int cat_id = 0,int we_id = 0, string shop_price = "", string goods_number = "",string goods_unit = "",
             HttpPostedFileBase goods_img = null, string is_on_sale = "", string is_hot = "", string is_best = "", string is_new = "", string is_activity = "", string goods_brief = "", string is_pre_sale = "")
         {
             AjaxMsg ajax = new AjaxMsg();
@@ -126,6 +131,7 @@ namespace OperationManager.Controllers
                 {
                     editModel.goods_name = goods_name.Trim();
                     editModel.cat_id = cat_id;
+                    editModel.we_id = we_id;
                     editModel.goods_price = dShop_price;
                     editModel.goods_number = iGoods_number;
 
@@ -183,6 +189,7 @@ namespace OperationManager.Controllers
                 {
                     goods_name = goods_name.Trim(),
                     cat_id = cat_id,
+                    we_id = we_id,
                     goods_price = dShop_price,
                     goods_number = iGoods_number,
                     goods_lock_number = 0,
