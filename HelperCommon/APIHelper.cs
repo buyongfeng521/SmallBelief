@@ -67,9 +67,58 @@ namespace HelperCommon
                     order.pay_status = 1;
                     order.pay_time = DateTime.Now;
                     OperateContext.EFBLLSession.t_order_infoBLL.Modify(order);
+                    //更新数据
+                    List<t_order_goods> listGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o=>o.order_id == order.order_id);
+                    listGoods.ForEach(data => {
+                        t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == data.goods_id);
+                        if (goods != null)
+                        {
+                            goods.goods_lock_number = (goods.goods_lock_number - data.goods_number) < 0 ? 0 : (goods.goods_lock_number - data.goods_number);
+                            goods.goods_number = (goods.goods_number - data.goods_number) < 0 ? 0 : (goods.goods_number - data.goods_number);
+                            OperateContext.EFBLLSession.t_goodsBLL.Modify(goods);
+                        }
+                    });
                 }
                 
             }
+        }
+
+
+        public static bool OrderCancel(int order_id = 0)
+        {
+            bool result = false;
+
+            t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o => o.order_id == order_id && o.order_status == 1 && o.pay_status == 0);
+            if (order != null)
+            {
+                //1.0 锁定库存
+                List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == order.order_id);
+                listOrderGoods.ForEach(item =>
+                {
+                    t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == item.goods_id);
+                    if (goods != null)
+                    {
+                        goods.goods_lock_number = (goods.goods_lock_number - item.goods_number) >= 0 ? (goods.goods_lock_number - item.goods_number) : 0;
+                        OperateContext.EFBLLSession.t_goodsBLL.Modify(goods);
+                    }
+                });
+                //2.0 订单状态
+                order.order_status = 2;
+                order.cancel_time = DateTime.Now;
+                OperateContext.EFBLLSession.t_order_infoBLL.Modify(order);
+                //3.0 优惠券
+                if (order.uc_id > 0)
+                {
+                    t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == order.uc_id);
+                    userCoupon.is_use = false;
+                    userCoupon.use_time = null;
+                    OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
+                }
+
+                result = true;
+            }
+
+            return result;
         }
 
 

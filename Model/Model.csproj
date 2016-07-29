@@ -60,6 +60,7 @@
     <Compile Include="DTOModel\CategoryGoodsDTO.cs" />
     <Compile Include="DTOModel\CatTypeDTO.cs" />
     <Compile Include="DTOModel\CommentDTO.cs" />
+    <Compile Include="DTOModel\OrderListDTO.cs" />
     <Compile Include="DTOModel\UserCouponDTO.cs" />
     <Compile Include="DTOModel\GoodsDetailDTO.cs" />
     <Compile Include="DTOModel\GoodsDTO.cs" />

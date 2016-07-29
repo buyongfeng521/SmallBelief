@@ -83,6 +83,16 @@ namespace HelperCommon
         }
 
         /// <summary>
+        /// 登录用户名
+        /// </summary>
+        /// <returns></returns>
+        public static t_admin_user LoginUser()
+        {
+            t_admin_user user = Session[OperateMsgModel.SessionLoginUser] as t_admin_user;
+            return user;
+        }
+
+        /// <summary>
         /// 拼接两个字符串
         /// </summary>
         /// <param name="oneStr"></param>

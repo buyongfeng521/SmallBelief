@@ -674,17 +674,43 @@ namespace WebApi.Controllers
         /// <summary>
         /// 全部订单
         /// </summary>
+        /// <param name="token">用户token</param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<List<OrderInfoDTO>> OrderListAllGet()
+        public RetInfo<List<OrderListDTO>> OrderListAllGet(string token)
         {
-            RetInfo<List<OrderInfoDTO>> ret = new RetInfo<List<OrderInfoDTO>>();
+            RetInfo<List<OrderListDTO>> ret = new RetInfo<List<OrderListDTO>>();
 
             try
             {
-                List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o => o.order_id > 0, o => o.add_time);
-                ret.Data = DTOHelper.Map<List<OrderInfoDTO>>(listOrder);
-                ret.status = true;
+                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u=>u.token == token);
+                if (user != null)
+                {
+
+
+                    List<OrderListDTO> dto = new List<OrderListDTO>();
+                    List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o => o.user_id == user.ID, o => o.add_time);
+                    listOrder.ForEach(data =>
+                    {
+                        OrderListDTO itemDTO = new OrderListDTO();
+                        List<t_order_goods> listGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == data.order_id);
+                        itemDTO.order_info = DTOHelper.Map<OrderInfoDTO>(data);
+                        itemDTO.order_detail = DTOHelper.Map<List<OrderGoodsDTO>>(listGoods);
+                        dto.Add(itemDTO);
+                        //取消订单
+                        if (((DateTime)data.add_time).AddMinutes(30) < DateTime.Now && data.pay_status == 0 && data.order_status == 1)
+                        {
+                            APIHelper.OrderCancel(data.order_id);
+                        }
+                    });
+
+                    ret.Data = dto;
+                    ret.status = true;
+                }
+                else
+                {
+                    ret.msg = CommonBasicMsg.NoLogin;
+                }
             }
             catch (Exception ex)
             {
@@ -697,17 +723,44 @@ namespace WebApi.Controllers
         /// <summary>
         /// 待付款订单
         /// </summary>
+        /// <param name="token">用户Token</param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<List<OrderInfoDTO>> OrderListPrePayGet()
+        public RetInfo<List<OrderListDTO>> OrderListPrePayGet(string token)
         {
-            RetInfo<List<OrderInfoDTO>> ret = new RetInfo<List<OrderInfoDTO>>();
+            
+            RetInfo<List<OrderListDTO>> ret = new RetInfo<List<OrderListDTO>>();
 
             try
             {
-                List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o => o.order_status == 1 && o.pay_status == 0, o => o.add_time);
-                ret.Data = DTOHelper.Map<List<OrderInfoDTO>>(listOrder);
-                ret.status = true;
+                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+                if (user != null)
+                {
+                    List<OrderListDTO> dto = new List<OrderListDTO>();
+                    List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o =>o.user_id == user.ID && o.order_status == 1 && o.pay_status == 0, o => o.add_time);
+                    listOrder.ForEach(data =>
+                    {
+                        OrderListDTO itemDTO = new OrderListDTO();
+                        List<t_order_goods> listGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == data.order_id);
+                        itemDTO.order_info = DTOHelper.Map<OrderInfoDTO>(data);
+                        itemDTO.order_detail = DTOHelper.Map<List<OrderGoodsDTO>>(listGoods);
+                        dto.Add(itemDTO);
+                        //取消订单
+                        if (((DateTime)data.add_time).AddMinutes(30) < DateTime.Now && data.pay_status == 0 && data.order_status == 1)
+                        {
+                            APIHelper.OrderCancel(data.order_id);
+                        }
+                    });
+
+                    
+
+                    ret.Data = dto;
+                    ret.status = true;
+                }
+                else
+                {
+                    ret.msg = CommonBasicMsg.NoLogin;
+                }
             }
             catch (Exception ex)
             {
@@ -720,17 +773,36 @@ namespace WebApi.Controllers
         /// <summary>
         /// 配送中订单
         /// </summary>
+        /// <param name="token">用户Token</param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<List<OrderInfoDTO>> OrderListShippingGet()
+        public RetInfo<List<OrderListDTO>> OrderListShippingGet(string token)
         {
-            RetInfo<List<OrderInfoDTO>> ret = new RetInfo<List<OrderInfoDTO>>();
+            RetInfo<List<OrderListDTO>> ret = new RetInfo<List<OrderListDTO>>();
 
             try
             {
-                List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o => o.order_status == 1 && o.pay_status == 1, o => o.add_time);
-                ret.Data = DTOHelper.Map<List<OrderInfoDTO>>(listOrder);
-                ret.status = true;
+                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+                if (user != null)
+                {
+                    List<OrderListDTO> dto = new List<OrderListDTO>();
+                    List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o =>o.user_id == user.ID && o.order_status == 1 && o.pay_status == 1, o => o.add_time);
+                    listOrder.ForEach(data =>
+                    {
+                        OrderListDTO itemDTO = new OrderListDTO();
+                        List<t_order_goods> listGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == data.order_id);
+                        itemDTO.order_info = DTOHelper.Map<OrderInfoDTO>(data);
+                        itemDTO.order_detail = DTOHelper.Map<List<OrderGoodsDTO>>(listGoods);
+                        dto.Add(itemDTO);
+                    });
+
+                    ret.Data = dto;
+                    ret.status = true;
+                }
+                else
+                {
+                    ret.msg = CommonBasicMsg.NoLogin;
+                }
             }
             catch (Exception ex)
             {
@@ -743,17 +815,36 @@ namespace WebApi.Controllers
         /// <summary>
         /// 待评价订单
         /// </summary>
+        /// <param name="token">用户Token</param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<List<OrderInfoDTO>> OrderListPreCommentGet()
+        public RetInfo<List<OrderListDTO>> OrderListPreCommentGet(string token)
         {
-            RetInfo<List<OrderInfoDTO>> ret = new RetInfo<List<OrderInfoDTO>>();
+            RetInfo<List<OrderListDTO>> ret = new RetInfo<List<OrderListDTO>>();
 
             try
             {
-                List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o => o.order_status == 3 && o.pay_status == 1, o => o.add_time);
-                ret.Data = DTOHelper.Map<List<OrderInfoDTO>>(listOrder);
-                ret.status = true;
+                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+                if (user != null)
+                {
+                    List<OrderListDTO> dto = new List<OrderListDTO>();
+                    List<t_order_info> listOrder = OperateContext.EFBLLSession.t_order_infoBLL.GetListByDesc(o =>o.user_id == user.ID && o.order_status == 3 && o.pay_status == 1, o => o.add_time);
+                    listOrder.ForEach(data =>
+                    {
+                        OrderListDTO itemDTO = new OrderListDTO();
+                        List<t_order_goods> listGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == data.order_id);
+                        itemDTO.order_info = DTOHelper.Map<OrderInfoDTO>(data);
+                        itemDTO.order_detail = DTOHelper.Map<List<OrderGoodsDTO>>(listGoods);
+                        dto.Add(itemDTO);
+                    });
+
+                    ret.Data = dto;
+                    ret.status = true;
+                }
+                else
+                {
+                    ret.msg = CommonBasicMsg.NoLogin;
+                }
             }
             catch (Exception ex)
             {

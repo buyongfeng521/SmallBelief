@@ -214,6 +214,7 @@
     <Content Include="Views\AD\ADAdd.cshtml" />
     <Content Include="Views\SOPartial\PartialClickType.cshtml" />
     <Content Include="Views\AD\ADEdit.cshtml" />
+    <Content Include="Views\Goods\WechatSellerList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

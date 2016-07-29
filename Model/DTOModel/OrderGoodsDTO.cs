@@ -12,6 +12,7 @@ namespace Model.DTOModel
         //public int order_id { get; set; }
         //public int goods_id { get; set; }
         public string goods_name { get; set; }
+        public string goods_img { get; set; }
         public int goods_number { get; set; }
         //public decimal market_price { get; set; }
         public decimal goods_price { get; set; }

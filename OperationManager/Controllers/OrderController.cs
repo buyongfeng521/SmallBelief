@@ -1,5 +1,6 @@
 ﻿using HelperCommon;
 using Model;
+using Model.CommonModel;
 using Model.FormatModel;
 using Model.ViewModel;
 using OperationManager.Models;
@@ -78,12 +79,75 @@ namespace OperationManager.Controllers
             return Json(vm, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 取消订单
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult OrderCancel(int id = 0)
         {
             AjaxMsg ajax = new AjaxMsg();
 
             //t_order_info t_order = 
+            t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o => o.order_id == id && o.order_status == 1 && o.pay_status == 0);
+            if (order != null)
+            {
+                //1.0 商品库存
+                List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.order_id == order.order_id);
+                listOrderGoods.ForEach(item => {
+                    t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(G=>G.goods_id == item.goods_id);
+                    if (goods != null)
+                    {
+                        goods.goods_lock_number = (goods.goods_lock_number - item.goods_number) < 0 ? 0 : (goods.goods_lock_number - item.goods_number);
+                        OperateContext.EFBLLSession.t_goodsBLL.Modify(goods);
+                    }
+                });
+                //2.0 订单状态
+                order.order_status = 2;
+                if (OperateContext.EFBLLSession.t_order_infoBLL.Modify(order))
+                {
+                    ajax.Msg = CommonBasicMsg.OrderCancelSuc;
+                    ajax.Status = "ok";
+                }
+                else
+                {
+                    ajax.Msg = CommonBasicMsg.OrderCommentErr;
+                }
+
+            }
+            else
+            {
+                ajax.Msg = "订单不存在或此状态订单不允许操作";
+            }
+
+
+            return Json(ajax);
+        }
+
+        [HttpPost]
+        public ActionResult ShippingEnd(int id = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o=>o.order_id == id && o.order_status == 1 && o.pay_status == 1);
+            if (order != null)
+            {
+                order.order_status = 3;
+                if (OperateContext.EFBLLSession.t_order_infoBLL.Modify(order))
+                {
+                    ajax.Msg = CommonBasicMsg.OperateSuc;
+                    ajax.Status = "ok";
+                }
+                else
+                {
+                    ajax.Msg = CommonBasicMsg.OperateFail;
+                }
+            }
+            else
+            {
+                ajax.Msg = "订单不存在或此状态订单不允许操作";
+            }
 
             return Json(ajax);
         }

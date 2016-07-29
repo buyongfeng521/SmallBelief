@@ -30,9 +30,11 @@ namespace HelperCommon
                 .ForMember(desc => desc.add_time, opt => opt.MapFrom(src => src.add_time == null ? "" : ((DateTime)src.add_time).ToString("yyyy-MM-dd HH:mm:ss")))
                 .ForMember(desc => desc.confirm_time, opt => opt.MapFrom(src => src.confirm_time == null ? "" : ((DateTime)src.confirm_time).ToString("yyyy-MM-dd HH:mm:ss")))
                 .ForMember(desc => desc.pay_time, opt => opt.MapFrom(src => src.pay_time == null ? "" : ((DateTime)src.pay_time).ToString("yyyy-MM-dd HH:mm:ss")))
+                .ForMember(desc => desc.pay_end_time, opt => opt.MapFrom(src => src.add_time == null ? "" : ((DateTime)src.add_time).AddMinutes(30).ToString("yyyy-MM-dd HH:mm:ss")))
                 .ForMember(desc => desc.shipping_time, opt => opt.MapFrom(src => src.shipping_time == null ? "" : ((DateTime)src.shipping_time).ToString("yyyy-MM-dd HH:mm:ss")))
                 .ForMember(desc => desc.order_status_msg, opt => opt.MapFrom(src => ContentHelper.GetOrderStatusMsg(src.order_status, src.pay_status)));
-            Mapper.CreateMap<t_order_goods, OrderGoodsDTO>();
+            Mapper.CreateMap<t_order_goods, OrderGoodsDTO>()
+                .ForMember(desc => desc.goods_img, opt => opt.MapFrom(src => ContentHelper.GetGoodsImg(src.goods_id)));
             Mapper.CreateMap<t_cart, CartDTO>().ForMember(desc => desc.goods_img, opt => opt.MapFrom(src =>ConfigurationHelper.AppSetting("Domain") + src.t_goods.goods_img));
             Mapper.CreateMap<t_comment, CommentDTO>()
                 .ForMember(desc=>desc.create_time,opt=>opt.MapFrom(src=>((DateTime)src.create_time).ToString("yyyy-MM-dd HH:mm:ss")))

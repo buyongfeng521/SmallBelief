@@ -37,6 +37,18 @@ namespace WebApi.Controllers
                     if (user != null)
                     {
                         List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListByDesc(c => c.user_id == user.ID && c.cart_type == cart_type, c => c.cart_id);
+                        listCart.ForEach(item => { 
+                            t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == item.goods_id);
+                            if(goods != null)
+                            {
+                                if((goods.goods_number - goods.goods_lock_number) < item.goods_number)
+                                {
+                                    item.goods_number = (goods.goods_number - goods.goods_lock_number);
+                                    OperateContext.EFBLLSession.t_cartBLL.Modify(item);
+                                }
+                            }
+                        });
+                        listCart = OperateContext.EFBLLSession.t_cartBLL.GetListByDesc(c => c.user_id == user.ID && c.cart_type == cart_type, c => c.cart_id);
                         dto.cart = DTOHelper.Map<List<CartDTO>>(listCart);
                     }
 
@@ -96,19 +108,27 @@ namespace WebApi.Controllers
 
                                 if (editCart != null)
                                 {
-                                    editCart.goods_number = editCart.goods_number + number;
-                                    
-                                    if (OperateContext.EFBLLSession.t_cartBLL.Modify(editCart))
+                                    if ((goods.goods_number - goods.goods_lock_number - editCart.goods_number) >= number)
                                     {
-                                        ret.status = true;
-                                        ret.msg = CommonBasicMsg.EditSuc;
-                                        //购物车数量
-                                        ret.recordCount = editCart.goods_number;
+                                        editCart.goods_number = editCart.goods_number + number;
+
+                                        if (OperateContext.EFBLLSession.t_cartBLL.Modify(editCart))
+                                        {
+                                            ret.status = true;
+                                            ret.msg = CommonBasicMsg.EditSuc;
+                                            //购物车数量
+                                            ret.recordCount = editCart.goods_number;
+                                        }
+                                        else
+                                        {
+                                            ret.msg = CommonBasicMsg.EditFail;
+                                        }
                                     }
                                     else
                                     {
-                                        ret.msg = CommonBasicMsg.EditFail;
+                                        ret.msg = "库存不足";
                                     }
+                                    
                                 }
                                 else
                                 {
@@ -269,6 +289,53 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 订单检查（购物车）
+        /// </summary>
+        /// <param name="token">用户token</param>
+        /// <param name="cart_type">购物车类型0(普通)1(预购)</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<CartDTO>> OrderCartCheck(string token, int cart_type)
+        {
+            RetInfo<List<CartDTO>> ret = new RetInfo<List<CartDTO>>();
+
+            t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+            if (user != null)
+            {
+                bool flag = true;
+                List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListByDesc(c => c.user_id == user.ID && c.cart_type == cart_type, c => c.cart_id);
+                listCart.ForEach(item =>
+                {
+                    t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == item.goods_id);
+                    if (goods != null)
+                    {
+                        if ((goods.goods_number - goods.goods_lock_number) < item.goods_number)
+                        {
+                            flag = false;
+                            item.goods_number = (goods.goods_number - goods.goods_lock_number);
+                            OperateContext.EFBLLSession.t_cartBLL.Modify(item);
+                        }
+                    }
+                });
+                //是否生成
+                if (flag == false)
+                {
+                    listCart = OperateContext.EFBLLSession.t_cartBLL.GetListByDesc(c => c.user_id == user.ID && c.cart_type == cart_type, c => c.cart_id);
+                    ret.Data = DTOHelper.Map<List<CartDTO>>(listCart);
+                }
+                else
+                {
+                    ret.status = true;
+                }
+            }
+            else
+            {
+                ret.msg = CommonBasicMsg.NoLogin;
+            }
+
+            return ret;
+        }
 
         /// <summary>
         /// 购物车订单确认
@@ -335,69 +402,80 @@ namespace WebApi.Controllers
                                 {
                                     if (data.t_goods.is_on_sale == true)
                                     {
-                                        t_order_goods orderGoods = new t_order_goods()
+                                        if ((data.t_goods.goods_number - data.t_goods.goods_lock_number) > 0)
                                         {
-                                            //order_id = order.order_id,
-                                            goods_id = data.goods_id,
-                                            goods_name = data.t_goods.goods_name,
-                                            goods_number = (data.t_goods.goods_number - data.t_goods.goods_lock_number) > data.goods_number ? data.goods_number : (data.t_goods.goods_number - data.t_goods.goods_lock_number),
-                                            market_price = data.market_price,
-                                            goods_price = data.goods_price
-                                        };
-                                        listOrderGoods.Add(orderGoods);
+                                            t_order_goods orderGoods = new t_order_goods()
+                                            {
+                                                //order_id = order.order_id,
+                                                goods_id = data.goods_id,
+                                                goods_name = data.t_goods.goods_name,
+                                                goods_number = (data.t_goods.goods_number - data.t_goods.goods_lock_number) > data.goods_number ? data.goods_number : (data.t_goods.goods_number - data.t_goods.goods_lock_number),
+                                                market_price = data.market_price,
+                                                goods_price = data.goods_price
+                                            };
+                                            listOrderGoods.Add(orderGoods);
+                                        }
                                     }
                                 });
-
-                                order.goods_amount = listOrderGoods.Sum(g => g.goods_number * g.goods_price);
-                                order.order_amount = order.goods_amount;
-                                //优惠券处理
-                                //pre User_Coupon
-                                t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == uc_id);
-                                if (userCoupon != null)
+                                //有效数量
+                                if (listOrderGoods.Count > 0)
                                 {
-                                    if (userCoupon.condition_amount <= order.goods_amount)
+                                    order.goods_amount = listOrderGoods.Sum(g => g.goods_number * g.goods_price);
+                                    order.order_amount = order.goods_amount;
+                                    //优惠券处理
+                                    //pre User_Coupon
+                                    t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == uc_id);
+                                    if (userCoupon != null)
                                     {
-                                        order.uc_id = userCoupon.uc_id;
-                                        order.uc_amount = userCoupon.coupon_amount;
-                                        order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
-                                        //已使用
-                                        userCoupon.is_use = true;
-                                        userCoupon.use_time = DateTime.Now;
-                                        OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
-                                    }
-                                }
-
-                                //c to SQL
-                                if (OperateContext.EFBLLSession.t_order_infoBLL.Add(order))
-                                {
-                                    listOrderGoods.ForEach(data =>
-                                    {
-                                        data.order_id = order.order_id;
-                                        OperateContext.EFBLLSession.t_order_goodsBLL.Add(data);
-                                        // goods lock_number update
-                                        t_goods editGoods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == data.goods_id);
-                                        if (editGoods != null)
+                                        if (userCoupon.condition_amount <= order.goods_amount)
                                         {
-                                            editGoods.goods_lock_number += data.goods_number;
-                                            editGoods.goods_number = editGoods.goods_number - editGoods.goods_lock_number;
+                                            order.uc_id = userCoupon.uc_id;
+                                            order.uc_amount = userCoupon.coupon_amount;
+                                            order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
+                                            //已使用
+                                            userCoupon.is_use = true;
+                                            userCoupon.use_time = DateTime.Now;
+                                            OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
                                         }
+                                    }
 
-                                    });
-                                    //delete cart
-                                    OperateContext.EFBLLSession.t_cartBLL.DeleteBy(c => c.user_id == user.ID && c.cart_type == cart_type);
+                                    //c to SQL
+                                    if (OperateContext.EFBLLSession.t_order_infoBLL.Add(order))
+                                    {
+                                        listOrderGoods.ForEach(data =>
+                                        {
+                                            data.order_id = order.order_id;
+                                            OperateContext.EFBLLSession.t_order_goodsBLL.Add(data);
+                                            // goods lock_number update
+                                            t_goods editGoods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == data.goods_id);
+                                            if (editGoods != null)
+                                            {
+                                                editGoods.goods_lock_number += data.goods_number;
+                                                //editGoods.goods_number = editGoods.goods_number - editGoods.goods_lock_number;
+                                                OperateContext.EFBLLSession.t_goodsBLL.Modify(editGoods);
+                                            }
 
-                                    ret.status = true;
-                                    ret.msg = Message.OrderCreateSuc;
-                                    //result data
-                                    OrderDetailDTO dto = new OrderDetailDTO();
-                                    dto.order_info = DTOHelper.Map<OrderInfoDTO>(order);
-                                    dto.order_goods = DTOHelper.Map<List<OrderGoodsDTO>>(listOrderGoods);
-                                    ret.Data = dto;
+                                        });
+                                        //delete cart
+                                        OperateContext.EFBLLSession.t_cartBLL.DeleteBy(c => c.user_id == user.ID && c.cart_type == cart_type);
 
+                                        ret.status = true;
+                                        ret.msg = Message.OrderCreateSuc;
+                                        //result data
+                                        OrderDetailDTO dto = new OrderDetailDTO();
+                                        dto.order_info = DTOHelper.Map<OrderInfoDTO>(order);
+                                        dto.order_goods = DTOHelper.Map<List<OrderGoodsDTO>>(listOrderGoods);
+                                        ret.Data = dto;
+
+                                    }
+                                    else
+                                    {
+                                        ret.msg = Message.OrderCreateFail;
+                                    }
                                 }
                                 else
                                 {
-                                    ret.msg = Message.OrderCreateFail;
+                                    ret.msg = "全部售罄";
                                 }
                             }
                             else
@@ -432,6 +510,61 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
+        /// 订单检查（直接购买）
+        /// </summary>
+        /// <param name="token">用户token</param>
+        /// <param name="goods_id">商品ID</param>
+        /// <param name="number">数量</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<CartDTO> OrderCheck(string token, int goods_id, int number)
+        {
+            RetInfo<CartDTO> ret = new RetInfo<CartDTO>();
+
+            t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+            if (user != null)
+            {
+                bool flag = true;
+               
+                t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == goods_id);
+                if (goods != null)
+                {
+                    if ((goods.goods_number - goods.goods_lock_number) < number)
+                    {
+                        CartDTO dto = new CartDTO();
+                        dto.cart_type = (byte)(goods.is_pre_sale == true ? 1:0);
+                        dto.user_id = user.ID;
+                        dto.goods_id = goods.goods_id;
+                        dto.goods_name = goods.goods_name;
+                        dto.goods_img = ConfigurationHelper.AppSetting("Domain") + goods.goods_img;
+                        dto.goods_price = (decimal)goods.goods_price;
+                        dto.goods_number = (int)(goods.goods_number - goods.goods_lock_number);
+                        ret.Data = dto;
+
+                        flag = false;
+                    }
+                }
+
+                //是否生成
+                if (flag == false)
+                {
+                    
+
+                }
+                else
+                {
+                    ret.status = true;
+                }
+            }
+            else
+            {
+                ret.msg = CommonBasicMsg.NoLogin;
+            }
+
+            return ret;
+        }
+
+        /// <summary>
         /// 直接购买订单确认
         /// </summary>
         /// <param name="obj">{"token":"用户Token","goods_id":商品ID,"order_type":购物车类型0(普通)1(预购),"number":购买数量,"address_id":用户地址ID,"uc_id":用户优惠券ID,无则0,"expect_shipping_time":"期望配送时间"}</param>
@@ -458,13 +591,11 @@ namespace WebApi.Controllers
                     t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == goods_id && g.is_on_sale == true);
                     if (goods != null)
                     {
-                        if ((goods.goods_number - goods.goods_lock_number) > 0)
+                        if ((goods.goods_number - goods.goods_lock_number) >= number)
                         {
                             t_user_address address = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.address_id == address_id);
                             if (address != null)
                             {
-                                
-
                                 //a order_info
                                 t_order_info order = new t_order_info() 
                                 {
@@ -521,7 +652,7 @@ namespace WebApi.Controllers
                                 
                                 //c goods lock_number
                                 goods.goods_lock_number += order_goods.goods_number;
-                                goods.goods_number = goods.goods_number - order_goods.goods_number;
+                                //goods.goods_number = goods.goods_number - order_goods.goods_number;
                                 //d to SQL
                                 if (OperateContext.EFBLLSession.t_order_infoBLL.Add(order))
                                 {
@@ -552,7 +683,7 @@ namespace WebApi.Controllers
                         }
                         else
                         {
-                            ret.msg = "已售罄";
+                            ret.msg = "库存不足";
                         }
                     }
                     else

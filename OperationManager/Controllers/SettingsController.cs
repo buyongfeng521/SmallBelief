@@ -17,11 +17,58 @@ namespace OperationManager.Controllers
     [LoginCheck]
     public class SettingsController : Controller
     {
-        
+        [HttpGet]
         public ActionResult UserInfo()
         {
-            return View();
+            t_admin_user user = OperateHelper.LoginUser();
+            if (user == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            return View(user);
         }
+
+        [HttpPost]
+        public ActionResult UserInfo(int ID, string user_psw)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            if (string.IsNullOrWhiteSpace(user_psw))
+            {
+                ajax.Msg = "密码不能为空";
+                return Json(ajax);
+            }
+
+            t_admin_user user = OperateContext.EFBLLSession.t_admin_userBLL.GetModelBy(u => u.ID == ID);
+            if (user != null)
+            {
+                if (user_psw != "**********************")
+                {
+                    user.user_psw = Common.SecurityHelper.GetMD5(user_psw.Trim());
+                    if (OperateContext.EFBLLSession.t_admin_userBLL.Modify(user))
+                    {
+                        ajax.Msg = CommonBasicMsg.EditSuc;
+                        ajax.Status = "ok";
+                    }
+                    else
+                    {
+                        ajax.Msg = CommonBasicMsg.EditFail;
+                    }
+                }
+                else
+                {
+                    ajax.Msg = "没有任何修改";
+                }
+            }
+            else
+            {
+                ajax.Msg = CommonBasicMsg.VoidModel;
+            }
+
+            return Json(ajax);
+        }
+
 
 
         #region Admin_User

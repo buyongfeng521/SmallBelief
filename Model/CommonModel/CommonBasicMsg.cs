@@ -8,6 +8,9 @@ namespace Model.CommonModel
 {
     public class CommonBasicMsg
     {
+        //Operate
+        public const string OperateSuc = "操作成功";
+        public const string OperateFail = "操作失败";
         //Add
         public const string AddSuc = "新增成功";
         public const string AddFail = "新增失败";

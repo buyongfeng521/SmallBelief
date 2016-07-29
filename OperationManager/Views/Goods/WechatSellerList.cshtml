@@ -1,0 +1,162 @@
+﻿@model List<Model.t_wechat_seller>
+@{
+    ViewBag.Title = "微商列表";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<!--head-->
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">微商列表</h3>
+    </div>
+</div>
+
+<!--content-->
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("WechatSellerList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
+        {
+            <div class="form-group">
+                <label class="sr-only">keywords</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">
+            </div>
+            <button class="btn btn-default">搜索</button>
+
+            <a href="javascript:" class="btn btn-info pull-right" onclick="add()">增加微商</a>
+        }
+        <hr />
+        <div class="dataTable_wrapper">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>编号</th>
+                    <th>微商名称</th>
+                    <th>星级</th>
+                    <th>描述</th>
+                    <th>操作</th>
+                </tr>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.we_name</td>
+                            <td>@item.we_star</td>
+                            <td>@item.we_desc</td>
+                            <td>
+                                <a href="javascript:" onclick="edit(@item.we_id)">修改</a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalWechat" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">微商详情</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmWechat">
+                    @Html.Hidden("we_id")
+                    <div class="form-group">
+                        <label>微商名称</label>
+                        <input type="text" class="form-control" id="we_name" name="we_name" placeholder="微商名称">
+                    </div>
+                    <div class="form-group">
+                        <label>星级</label>
+                        <input type="number" class="form-control" id="we_star" name="we_star" placeholder="星级">
+                        <p class="help-block">请填写0-5之间的数字</p>
+                    </div>
+                    <div class="form-group">
+                        <label>微商图片</label>
+                        <input type="file" id="we_img" name="we_img">
+
+                        <div id="divImg" style="display:none">
+                            <img src="" id="imgWe" class="img-rounded" height="50" width="50">
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label>描述</label>
+                        <textarea class="form-control" rows="3" id="we_desc" name="we_desc"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="save()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- JS -->
+<script src="~/Scripts/Common/ViewCommon.js"></script>
+<script src="~/Scripts/jquery.form.js"></script>
+<script>
+    $(function () {
+        View_File_Input_Init("we_img", 1000);
+    })
+</script>
+
+<script>
+    function add() {
+        $("#we_id").val("0");
+        $("#we_name").val("");
+        $("#we_star").val("");
+        $("#we_desc").text("");
+        $("#divImg").attr("style", "display:none");
+
+        $("#modalWechat").modal("show");
+    }
+
+    function edit(id) {
+        
+        if (id) {
+            $.get("/Goods/WechartModelGet", { "we_id": id }, function (data) {
+                //alert(data);
+                if (data) {
+                    $("#we_id").val(data.we_id);
+                    $("#we_name").val(data.we_name);
+                    $("#we_star").val(data.we_star);
+                    $("#we_desc").text(data.we_desc);
+                    $("#divImg").attr("style", "display:block");
+                    //alert(data.we_img);
+                    $("#imgWe").attr("src", data.we_img);
+
+                    $("#modalWechat").modal("show");
+                }
+            });
+        }
+    }
+</script>
+
+<script>
+    function save() {
+        $("#frmWechat").ajaxSubmit({
+            type: "post",
+            url: "/Goods/WechatAdd",
+            success: function (data) {
+                $.procAjaxData(data, function (data) {
+                    location.href = "/Goods/WechatSellerList";
+                });
+            }
+        });
+    }
+</script>

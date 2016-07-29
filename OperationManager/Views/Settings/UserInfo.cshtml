@@ -1,4 +1,4 @@
-﻿
+﻿@model Model.t_admin_user
 @{
     ViewBag.Title = "UserInfo";
     Layout = "~/Views/_Layout.cshtml";
@@ -14,24 +14,35 @@
 <!--content-->
 <div class="row">
 
-    <form class="form-horizontal">
+    <form class="form-horizontal" id="frmUser">
         <div class="form-group">
-            <label class="col-sm-2 control-label">用户名</label>
+            @Html.HiddenFor(u => u.ID)
+            <label class="col-sm-2 control-label">用户名：</label>
             <div class="col-sm-5">
-                <input type="email" class="form-control" id="inputEmail3" placeholder="用户名">
+                @*<input type="email" class="form-control" id="user_name" name="user_name" placeholder="用户名">*@
+                <p class="form-control-static">@Model.user_name</p>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">密码</label>
+            <label class="col-sm-2 control-label">密码：</label>
             <div class="col-sm-5">
-                <input type="password" class="form-control" id="inputPassword3" placeholder="密码">
+                <input type="password" class="form-control" id="user_psw" name="user_psw" value="**********************" placeholder="密码">
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-info">保存</button>
+                <button type="button" class="btn btn-info" onclick="saveInfo()">保存</button>
             </div>
         </div>
     </form>
 
 </div>
+
+<script>
+    function saveInfo() {
+        var url = "/Settings/UserInfo";
+        $.post(url, $("#frmUser").serialize(), function (data) {
+            $.procAjaxData(data);
+        });
+    }
+</script>

@@ -29,6 +29,7 @@
                 <tr>
                     <th>编号</th>
                     <th>订单号</th>
+                    <th>创建时间</th>
                     <th>商品总金额</th>
                     <th>应付款金额</th>
                     <th>订单状态</th>
@@ -42,11 +43,22 @@
                         <tr>
                             <td>@i</td>
                             <td>@item.order_sn</td>
+                            <td>@item.add_time</td>
                             <td>@item.goods_amount</td>
                             <td>@item.order_amount</td>
                             <td>@HelperCommon.ContentHelper.GetOrderStatusMsg(item.order_status,item.pay_status)</td>
                             <td>
                                 <a href="javascript:" onclick="showDetail(@item.order_id)">查看</a>
+                                &nbsp;&nbsp;
+                                @if (item.order_status == 1 && item.pay_status == 1)
+                                { 
+                                    <a href="javascript:" onclick="shippingEnd(@item.order_id)">配送完成</a>
+                                }
+                                &nbsp;&nbsp;
+                                @if (item.order_status == 1 && item.pay_status == 0)
+                                { 
+                                    <a href="javascript:" onclick="cancelOrder(@item.order_id)">取消</a>
+                                }
                             </td>
                         </tr>
                     }
@@ -111,16 +123,6 @@
                             <th>商品数量</th>
                             <th>商品价格</th>
                         </tr>
-                        <tr>
-                            <td>商品名称</td>
-                            <td>商品数量</td>
-                            <td>商品价格</td>
-                        </tr>
-                        <tr>
-                            <td>商品名称</td>
-                            <td>商品数量</td>
-                            <td>商品价格</td>
-                        </tr>
                     </table>
                 </form>
             </div>
@@ -171,5 +173,35 @@
         $tr.append("<td>" + item.goods_number + "</td>");
         $tr.append("<td>" + item.goods_price + "</td>");
         return $tr;
+    }
+</script>
+
+
+<script>
+    function shippingEnd(id) {
+        if (id) {
+            if (confirm("配送完毕?")) {
+                var url = "/Order/ShippingEnd";
+                $.post(url, { "id": id }, function (data) {
+                    $.procAjaxData(data, function (data) {
+                        location.href = "/Order/OrderList";
+                    }, function (data) {
+                        location.href = "/Order/OrderList";
+                    });
+                });
+            }
+        }
+    }
+    function cancelOrder(id) {
+        if (id) {
+            if ("确定取消?") {
+                var url = "/Order/OrderCancel";
+                $.post(url, { "id": id }, function (data) {
+                    $.procAjaxData(data, function (data) {
+                        location.href = "/Order/OrderList";
+                    });
+                });
+            }
+        }
     }
 </script>

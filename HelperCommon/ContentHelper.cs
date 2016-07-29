@@ -25,6 +25,24 @@ namespace HelperCommon
             }
             return result;
         }
+        /// <summary>
+        /// 获得产品图片
+        /// </summary>
+        /// <param name="goods_id"></param>
+        /// <returns></returns>
+        public static string GetGoodsImg(int? goods_id = 0)
+        {
+            string result = "";
+            t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == goods_id);
+            if (goods != null)
+            {
+                if (!string.IsNullOrEmpty(goods.goods_img))
+                {
+                    result = ConfigurationHelper.AppSetting("Domain") + goods.goods_img;
+                }
+            }
+            return result;
+        }
 
         /// <summary>
         /// 获得订单状态

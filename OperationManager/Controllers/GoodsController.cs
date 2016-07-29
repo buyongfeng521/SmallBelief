@@ -1,6 +1,7 @@
 ﻿using HelperCommon;
 using Model;
 using Model.CommonModel;
+using Model.DTOModel;
 using Model.FormatModel;
 using OperationManager.Models;
 using System;
@@ -561,6 +562,115 @@ namespace OperationManager.Controllers
             return Json(model);
         }
         #endregion
+
+
+
+        public ActionResult WechatSellerList(string keywords = "")
+        {
+            List<t_wechat_seller> listWechat = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetListBy(w=>w.we_name.Contains(keywords));
+
+            //result
+            ViewBag.Keywords = keywords;
+            return View(listWechat);
+        }
+
+        [HttpPost]
+        public ActionResult WechatAdd(int we_id = 0, string we_name = "", int we_star = 0, HttpPostedFileBase we_img = null, string we_desc = "")
+        {
+            AjaxMsg ajax = new AjaxMsg();
+            //1.0 check
+            if (string.IsNullOrWhiteSpace(we_name))
+            {
+                ajax.Msg = "微商名称不能为空";
+                return Json(ajax);
+            }
+            //2.0 do
+            //Edit
+            if (we_id > 0)
+            {
+                t_wechat_seller editModel = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetModelBy(w => w.we_id == we_id);
+                if (editModel != null)
+                {
+                    string strImg = "";
+                    if (we_img != null)
+                    {
+                        strImg = UploadHelper.UploadImage(we_img);
+                    }
+                    editModel.we_name = we_name;
+                    editModel.we_star = we_star;
+                    if (!string.IsNullOrEmpty(strImg))
+                    {
+                        editModel.we_img = strImg;
+                    }
+                    editModel.we_desc = we_desc;
+                    if (OperateContext.EFBLLSession.t_wechat_sellerBLL.Modify(editModel))
+                    {
+                        ajax.Msg = CommonBasicMsg.EditSuc;
+                        ajax.Status = "ok";
+                    }
+                    else
+                    {
+                        ajax.Msg = CommonBasicMsg.EditFail;
+                    }
+
+                }
+                else
+                {
+                    ajax.Msg = CommonBasicMsg.VoidModel;
+                }
+            }
+            //Add
+            else
+            {
+                if (we_img == null)
+                {
+                    ajax.Msg = "微商图片不能为空";
+                    return Json(ajax);
+                }
+                string strImg = UploadHelper.UploadImage(we_img);
+                if(string.IsNullOrEmpty(strImg))
+                {
+                    ajax.Msg = CommonBasicMsg.UploadImgFail;
+                    return Json(ajax);
+                }
+                t_wechat_seller modelAdd = new t_wechat_seller() 
+                {
+                    we_name = we_name.Trim(),
+                    we_star = we_star,
+                    we_img = strImg,
+                    we_desc = we_desc
+                };
+                if (OperateContext.EFBLLSession.t_wechat_sellerBLL.Add(modelAdd))
+                {
+                    ajax.Status = "ok";
+                    ajax.Msg = CommonBasicMsg.AddSuc;
+                }
+                else
+                {
+                    ajax.Msg = CommonBasicMsg.AddFail;
+                }
+            }
+
+            return Json(ajax);
+
+        }
+
+
+        [HttpGet]
+        public ActionResult WechartModelGet(int we_id = 0)
+        {
+            t_wechat_seller wechatModel = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetModelBy(w => w.we_id == we_id);
+            if (wechatModel != null)
+            {
+                WechatSellerDTO dto = DTOHelper.Map<WechatSellerDTO>(wechatModel);
+                return Json(dto, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
 
 	}
