@@ -38,7 +38,7 @@ namespace HelperCommon
             Mapper.CreateMap<t_cart, CartDTO>().ForMember(desc => desc.goods_img, opt => opt.MapFrom(src =>ConfigurationHelper.AppSetting("Domain") + src.t_goods.goods_img));
             Mapper.CreateMap<t_comment, CommentDTO>()
                 .ForMember(desc=>desc.create_time,opt=>opt.MapFrom(src=>((DateTime)src.create_time).ToString("yyyy-MM-dd HH:mm:ss")))
-                .ForMember(desc=>desc.user_name,opt=>opt.MapFrom(src=>src.t_user.user_name))
+                .ForMember(desc=>desc.user_name,opt=>opt.MapFrom(src=>string.IsNullOrEmpty(src.t_user.user_name) == true ? ContentHelper.GetHidePhone(src.t_user.user_phone): src.t_user.user_name))
                 .ForMember(desc=>desc.user_img,opt=>opt.MapFrom(src=>src.t_user.user_img == null?"":ConfigurationHelper.AppSetting("Domain") + src.t_user.user_img))
                 .ForMember(desc=>desc.comment_imgs,opt=>opt.MapFrom(src=>ContentHelper.GetCommentImgs(src.comment_imgs)));
 
@@ -46,7 +46,8 @@ namespace HelperCommon
             Mapper.CreateMap<t_user_coupon, UserCouponDTO>()
                 .ForMember(desc => desc.begin_time, opt => opt.MapFrom(src => src.begin_time == null ? "" : ((DateTime)src.begin_time).ToString("yyyy-MM-dd")))
                 .ForMember(desc => desc.end_time, opt => opt.MapFrom(src => src.end_time == null ? "" : ((DateTime)src.end_time).ToString("yyyy-MM-dd")))
-                .ForMember(desc => desc.use_time, opt => opt.MapFrom(src => src.use_time == null ? "" : ((DateTime)src.use_time).ToString("yyyy-MM-dd HH:mm:ss")));
+                .ForMember(desc => desc.use_time, opt => opt.MapFrom(src => src.use_time == null ? "" : ((DateTime)src.use_time).ToString("yyyy-MM-dd HH:mm:ss")))
+                .ForMember(desc => desc.coupon_img, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.coupon_img) ? "" : ConfigurationHelper.AppSetting("Domain") + src.coupon_img)); ;
 
             //Goods
             Mapper.CreateMap<t_wechat_seller, WechatSellerDTO>()
@@ -54,6 +55,8 @@ namespace HelperCommon
 
             //VM
             Mapper.CreateMap<t_order_goods, OrderGoodsViewModel>();
+            Mapper.CreateMap<t_coupon, CouponVM>()
+                .ForMember(desc => desc.coupon_img, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.coupon_img) ? "" : ConfigurationHelper.AppSetting("Domain") + src.coupon_img));
 
 
         }

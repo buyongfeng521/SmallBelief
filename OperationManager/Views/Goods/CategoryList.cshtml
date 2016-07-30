@@ -127,7 +127,7 @@
 
     function editCat(id){
         var urlModel = "/Goods/CategoryGet";
-        $.post(urlModel,{"id":id},function(data){
+        $.get(urlModel,{"id":id},function(data){
             $("#hideCatID").val(data.cat_id);
             $("#cat_name").val(data.cat_name);
             $("#cat_note").val(data.cat_note);

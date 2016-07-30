@@ -109,6 +109,7 @@
           </Key>
           <Property Name="coupon_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="coupon_name" Type="nvarchar" MaxLength="20" />
+          <Property Name="coupon_img" Type="nvarchar" MaxLength="100" />
           <Property Name="condition_amount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="coupon_amount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="valid_days" Type="int" />
@@ -275,6 +276,7 @@
           <Property Name="uc_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="user_id" Type="int" />
           <Property Name="coupon_id" Type="int" />
+          <Property Name="coupon_img" Type="nvarchar" MaxLength="100" />
           <Property Name="condition_amount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="coupon_amount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="begin_time" Type="datetime" />
@@ -579,6 +581,7 @@
           <Property Name="is_del" Type="Boolean" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="condition_amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="coupon_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="t_goods">
           <Key>
@@ -754,6 +757,7 @@
           <Property Name="is_use" Type="Boolean" />
           <Property Name="use_time" Type="DateTime" Precision="3" />
           <Property Name="condition_amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="coupon_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_t_cart_t_goods">
           <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="0..1" />
@@ -953,6 +957,7 @@
           <EntitySetMapping Name="t_coupon">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_coupon">
               <MappingFragment StoreEntitySet="t_coupon">
+                <ScalarProperty Name="coupon_img" ColumnName="coupon_img" />
                 <ScalarProperty Name="condition_amount" ColumnName="condition_amount" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
@@ -1130,6 +1135,7 @@
           <EntitySetMapping Name="t_user_coupon">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_user_coupon">
               <MappingFragment StoreEntitySet="t_user_coupon">
+                <ScalarProperty Name="coupon_img" ColumnName="coupon_img" />
                 <ScalarProperty Name="condition_amount" ColumnName="condition_amount" />
                 <ScalarProperty Name="use_time" ColumnName="use_time" />
                 <ScalarProperty Name="is_use" ColumnName="is_use" />

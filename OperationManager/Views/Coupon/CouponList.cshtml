@@ -77,6 +77,14 @@
                         <input type="text" class="form-control" id="coupon_name" name="coupon_name" placeholder="优惠券名称">
                     </div>
                     <div class="form-group">
+                        <label>优惠券图片</label>
+                        <input type="file" id="coupon_img" name="coupon_img">
+
+                        <div id="divImg" style="display:none">
+                            <img src="" id="imgCoupon" class="img-rounded" height="50" width="50">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label>满足条件金额</label>
                         <input type="number" class="form-control" id="condition_amount" name="condition_amount" placeholder="满足条件金额">
                     </div>
@@ -100,53 +108,61 @@
 
 
 <!-- JS -->
+<script src="~/Scripts/Common/ViewCommon.js"></script>
+<script src="~/Scripts/jquery.form.js"></script>
+<script>
+    $(function () {
+        View_File_Input_Init("coupon_img", 1000);
+    })
+</script>
 <script>
     function add() {
         $("#coupon_id").val("");
         $("#coupon_name").val("");
+        $("#condition_amount").val("10");
         $("#coupon_amount").val("1");
         $("#valid_days").val("30");
+        $("#divImg").attr("style", "display:none");
         $("#modalCoupon").modal("show");
     }
 
     function edit(obj,id) {
-        //alert($(obj).text());
-        //alert($(obj).parent().prev().prev().text());
         if(id){
-            var valid_days = $(obj).parent().prev().prev().text();
-            var coupon_amount = $(obj).parent().prev().prev().prev().text();
-            var coupon_name = $(obj).parent().prev().prev().prev().prev().text();
+            $.get("/Coupon/CouponModelGet", { "coupon_id": id }, function (data) {
+                if (data) {
+                    $("#coupon_id").val(id);
+                    $("#coupon_name").val(data.coupon_name);
+                    $("#condition_amount").val(data.condition_amount);
+                    $("#coupon_amount").val(data.coupon_amount);
+                    $("#valid_days").val(data.valid_days);
+                    $("#imgCoupon").attr("src",data.coupon_img);
+                    $("#divImg").attr("style", "display:block");
 
-            $("#coupon_id").val(id);
-            $("#coupon_name").val(coupon_name);
-            $("#coupon_amount").val(coupon_amount);
-            $("#valid_days").val(valid_days);
-
-            $("#modalCoupon").modal("show");
+                    $("#modalCoupon").modal("show");
+                }
+            });
         }
 
     }
 
     function save(){
         var coupon_id = $("#coupon_id").val();
-        //edit
-        if(coupon_id){
-            var url = "/Coupon/CouponEdit";
-            $.post(url,$("#frmCoupon").serialize(),function(data){
-                $.procAjaxData(data,function(){
+
+        var url = "/Coupon/CouponAdd";
+        if (coupon_id) {
+            url = "/Coupon/CouponEdit";
+        }
+
+        $("#frmCoupon").ajaxSubmit({
+            type: "post",
+            url: url,
+            success: function (data) {
+                $.procAjaxData(data, function (data) {
                     window.location.href = "/Coupon/CouponList";
                 });
-            });
-        }
-        //add
-        else{
-            var url = "/Coupon/CouponAdd";
-            $.post(url,$("#frmCoupon").serialize(),function(data){
-                $.procAjaxData(data,function(){
-                    window.location.href = "/Coupon/CouponList";
-                });
-            });
-        }
+            }
+        });
+
     }
 </script>
 

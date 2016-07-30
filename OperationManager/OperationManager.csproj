@@ -142,6 +142,7 @@
     <Content Include="content\wangEditor-2.1.12\css\wangEditor.less" />
     <Content Include="content\wangEditor-2.1.12\emotions.data" />
     <None Include="Properties\PublishProfiles\ZLZHManager.pubxml" />
+    <None Include="Properties\PublishProfiles\ZLZHManagerLocal.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Common\GoodsCommon.js" />
     <Content Include="Scripts\Common\GoodsCommon2.js" />
@@ -215,6 +216,7 @@
     <Content Include="Views\SOPartial\PartialClickType.cshtml" />
     <Content Include="Views\AD\ADEdit.cshtml" />
     <Content Include="Views\Goods\WechatSellerList.cshtml" />
+    <Content Include="Views\Goods\CatTypeList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

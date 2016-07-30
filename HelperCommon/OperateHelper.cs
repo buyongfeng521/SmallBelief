@@ -93,6 +93,21 @@ namespace HelperCommon
         }
 
         /// <summary>
+        /// 是否是管理员
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsAdmin()
+        {
+            bool result = false;
+            t_admin_user user = Session[OperateMsgModel.SessionLoginUser] as t_admin_user;
+            if (user.ID == 1)
+            {
+                result = true;
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 拼接两个字符串
         /// </summary>
         /// <param name="oneStr"></param>

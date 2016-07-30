@@ -121,6 +121,27 @@ namespace HelperCommon
             return result;
         }
 
+        /// <summary>
+        /// 处理手机号码显示（136****5747）
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        public static string GetHidePhone(string phone)
+        {
+            string result = "136****5747";
+
+            if(!string.IsNullOrEmpty(phone))
+            {
+            
+                if (phone.Length == 11)
+                {
+                    result = phone.Substring(0, 3) + "****" + phone.Substring(7, 4);
+                }
+            }
+
+            return result;
+        }
+
 
     }
 }

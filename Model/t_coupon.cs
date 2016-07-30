@@ -21,5 +21,6 @@ namespace Model
         public Nullable<bool> is_del { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public Nullable<decimal> condition_amount { get; set; }
+        public string coupon_img { get; set; }
     }
 }

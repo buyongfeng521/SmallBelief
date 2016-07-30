@@ -49,9 +49,12 @@
                                     <i class="fa fa-edit"></i>
                                 </a>
                                 &nbsp;&nbsp;
-                                <a href="javascript:" title="删除" onclick="Del(@item.ID)">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
+                                @if(HelperCommon.OperateHelper.IsAdmin())
+                                { 
+                                    <a href="javascript:" title="删除" onclick="Del(@item.ID)">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                }
                             </td>
                         </tr>
                     }

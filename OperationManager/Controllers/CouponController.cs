@@ -2,6 +2,7 @@
 using Model;
 using Model.CommonModel;
 using Model.FormatModel;
+using Model.ViewModel;
 using OperationManager.Models;
 using System;
 using System.Collections.Generic;
@@ -25,13 +26,18 @@ namespace OperationManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult CouponAdd(string coupon_name = "", decimal coupon_amount = 0,decimal condition_amount = 0, int valid_days = 0)
+        public ActionResult CouponAdd(string coupon_name = "", HttpPostedFileBase coupon_img = null, decimal coupon_amount = 0, decimal condition_amount = 0, int valid_days = 0)
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
             if (string.IsNullOrEmpty(coupon_name))
             {
                 ajax.Msg = "优惠券名称不能为空";
+                return Json(ajax);
+            }
+            if (coupon_img == null)
+            {
+                ajax.Msg = "优惠券图片不能为空";
                 return Json(ajax);
             }
             if (condition_amount <= 0)
@@ -52,7 +58,7 @@ namespace OperationManager.Controllers
 
             if (valid_days <= 0)
             {
-                ajax.Msg = "有效条数不正确";
+                ajax.Msg = "有效天数不正确";
                 return Json(ajax);
             }
             if (OperateContext.EFBLLSession.t_couponBLL.GetCountBy(c => c.is_del == false && c.coupon_name == coupon_name.Trim()) > 0)
@@ -61,9 +67,17 @@ namespace OperationManager.Controllers
                 return Json(ajax);
             }
             //2.0 do
+            string strImg = UploadHelper.UploadImage(coupon_img);
+            if (string.IsNullOrEmpty(strImg))
+            {
+                ajax.Msg = CommonBasicMsg.UploadImgFail;
+                return Json(ajax);
+            }
+            
             t_coupon model = new t_coupon() 
             {
                 coupon_name = coupon_name.Trim(),
+                coupon_img = strImg,
                 condition_amount = condition_amount,
                 coupon_amount = coupon_amount,
                 valid_days = valid_days,
@@ -85,7 +99,7 @@ namespace OperationManager.Controllers
 
 
         [HttpPost]
-        public ActionResult CouponEdit(int coupon_id = 0, string coupon_name = "", decimal coupon_amount = 0,decimal condition_amount = 0, int valid_days = 0)
+        public ActionResult CouponEdit(int coupon_id = 0, string coupon_name = "", HttpPostedFileBase coupon_img = null, decimal coupon_amount = 0, decimal condition_amount = 0, int valid_days = 0)
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
@@ -128,6 +142,16 @@ namespace OperationManager.Controllers
                 return Json(ajax);
             }
             //2.0 do
+            string strImg = "";
+            if (coupon_img != null)
+            {
+                strImg = UploadHelper.UploadImage(coupon_img);
+            }
+            if (!string.IsNullOrEmpty(strImg))
+            {
+                editModel.coupon_img = strImg;
+            }
+
             editModel.coupon_name = coupon_name.Trim();
             editModel.coupon_amount = coupon_amount;
             editModel.condition_amount = condition_amount;
@@ -143,6 +167,21 @@ namespace OperationManager.Controllers
             }
             //3.0 result
             return Json(ajax);
+        }
+
+        [HttpGet]
+        public ActionResult CouponModelGet(int coupon_id = 0)
+        {
+            t_coupon coupon = OperateContext.EFBLLSession.t_couponBLL.GetModelBy(c => c.coupon_id == coupon_id);
+            if (coupon != null)
+            {
+                CouponVM vm = DTOHelper.Map<CouponVM>(coupon);
+                return Json(vm,JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return null;
+            }
         }
 
 

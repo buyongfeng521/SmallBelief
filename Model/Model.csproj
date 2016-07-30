@@ -160,6 +160,7 @@
     <Compile Include="t_wechat_seller.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\CouponVM.cs" />
     <Compile Include="ViewModel\OrderDetailViewModel.cs" />
     <Compile Include="ViewModel\OrderGoodsViewModel.cs" />
   </ItemGroup>

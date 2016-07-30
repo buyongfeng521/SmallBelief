@@ -1,0 +1,141 @@
+﻿@model List<Model.t_category_type>
+@{
+    ViewBag.Title = "CatTypeList";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<!--head-->
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">分类类型</h3>
+    </div>
+</div>
+
+<!--content-->
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("CatTypeList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
+        {
+            <div class="form-group">
+                <label class="sr-only">keywords</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">
+            </div>
+            <button class="btn btn-default">搜索</button>
+
+            @*<a href="javascript:" class="btn btn-info pull-right" onclick="add()">增加类型</a>*@
+        }
+        <hr />
+        <div class="dataTable_wrapper">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>编号</th>
+                    <th>类型名称</th>
+                    <th>图片</th>
+                    <th>操作</th>
+                </tr>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.type_name</td>
+                            <td>
+                                <img src='@Common.ConfigurationHelper.AppSetting("Domain")@item.type_img' alt="hi" height="40" width="40" />
+                            </td>
+                            <td>
+                                <a href="javascript:" onclick="edit(@item.cat_type_id)">修改</a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modelType" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">分类类型</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmType">
+                    @Html.Hidden("cat_type_id")
+                    <div class="form-group">
+                        <label>类型名称</label>
+                        <input type="text" class="form-control" id="type_name" name="type_name" placeholder="类型名称">
+                    </div>
+                    <div class="form-group">
+                        <label>类型图片</label>
+                        <input type="file" id="type_img" name="type_img">
+
+                        <div id="divImg" style="display:none">
+                            <img src="" id="imgType" class="img-rounded" height="50" width="50">
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="save()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/Common/ViewCommon.js"></script>
+<script src="~/Scripts/jquery.form.js"></script>
+<script>
+    $(function () {
+        View_File_Input_Init("type_img", 1000);
+    })
+</script>
+
+
+<script>
+    function edit(id) {
+
+        if (id >=0) {
+            $.get("/Goods/CatTypeModelGet", { "cat_type_id": id }, function (data) {
+                //alert(data);
+                if (data) {
+                    $("#cat_type_id").val(data.cat_type_id);
+                    $("#type_name").val(data.type_name);
+                    $("#divImg").attr("style", "display:block");
+                    //alert(data.we_img);
+                    $("#imgType").attr("src", data.type_img);
+
+                    $("#modelType").modal("show");
+                }
+            });
+        }
+    }
+</script>
+
+<script>
+    function save() {
+        $("#frmType").ajaxSubmit({
+            type: "post",
+            url: "/Goods/CatTypeSave",
+            success: function (data) {
+                $.procAjaxData(data, function (data) {
+                    location.href = "/Goods/CatTypeList";
+                });
+            }
+        });
+    }
+</script>
+
+

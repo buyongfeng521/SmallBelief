@@ -4,20 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model.DTOModel
+namespace Model.ViewModel
 {
-    public class UserCouponDTO
+    public class CouponVM
     {
-        public int uc_id { get; set; }
-        public int user_id { get; set; }
         public int coupon_id { get; set; }
+        public string coupon_name { get; set; }
         public string coupon_img { get; set; }
         public decimal condition_amount { get; set; }
         public decimal coupon_amount { get; set; }
-        public string begin_time { get; set; }
-        public string end_time { get; set; }
-        public bool is_use { get; set; }
-        public string use_time { get; set; }
-
+        public int valid_days { get; set; }
+        //public bool is_del { get; set; }
+        //public datetime create_time { get; set; }
     }
 }

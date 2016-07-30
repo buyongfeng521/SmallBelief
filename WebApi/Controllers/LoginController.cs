@@ -192,6 +192,7 @@ namespace WebApi.Controllers
                                         {
                                             user_id = user.ID,
                                             coupon_id = coupon_model.coupon_id,
+                                            coupon_img = coupon_model.coupon_img,
                                             condition_amount = coupon_model.condition_amount,
                                             coupon_amount = coupon_model.coupon_amount,
                                             begin_time = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00")),

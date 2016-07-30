@@ -551,23 +551,109 @@ namespace OperationManager.Controllers
             return Json(ajax);
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult CategoryGet(int id = 0)
         {
-            t_category model = new t_category();
-            if (id > 0)
+
+            t_category model = OperateContext.EFBLLSession.t_categoryBLL.GetModelBy(c => c.cat_id == id);
+            if (model != null)
             {
-                model = OperateContext.EFBLLSession.t_categoryBLL.GetModelBy(c=>c.cat_id == id);
+                CategoryDTO dto = DTOHelper.Map<CategoryDTO>(model);
+                return Json(dto, JsonRequestBehavior.AllowGet);
             }
-            return Json(model);
+            else
+            {
+                return null;
+            }
+
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
 
 
+        #region 分类类型
+        public ActionResult CatTypeList(string keywords = "")
+        {
+            List<t_category_type> listType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
+            //Result
+            ViewBag.Keywords = keywords;
+            return View(listType);
+        }
+
+        [HttpPost]
+        public ActionResult CatTypeSave(int cat_type_id = -1, string type_name = "", HttpPostedFileBase type_img = null)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+            //1.0 check
+            if (cat_type_id < 0)
+            {
+                ajax.Msg = CommonBasicMsg.VoidModel;
+                return Json(ajax);
+            }
+            if (string.IsNullOrWhiteSpace(type_name))
+            {
+                ajax.Msg = "名称不能为空";
+                return Json(ajax);
+            }
+            if (OperateContext.EFBLLSession.t_category_typeBLL.GetCountBy(c => c.cat_type_id != cat_type_id && c.type_name == type_name.Trim()) > 0)
+            {
+                ajax.Msg = "已存在的名称";
+                return Json(ajax);
+            }
+            //2.0 do
+            t_category_type editModel = OperateContext.EFBLLSession.t_category_typeBLL.GetModelBy(c => c.cat_type_id == cat_type_id);
+            if (editModel != null)
+            {
+                string strImg = "";
+                if (type_img != null)
+                {
+                    strImg = UploadHelper.UploadImage(type_img);
+                }
+                //img
+                if (!string.IsNullOrWhiteSpace(strImg))
+                {
+                    editModel.type_img = strImg;
+                }
+                editModel.type_name = type_name.Trim();
+                if (OperateContext.EFBLLSession.t_category_typeBLL.Modify(editModel))
+                {
+                    ajax.Msg = CommonBasicMsg.EditSuc;
+                    ajax.Status = "ok";
+                }
+                else
+                {
+                    ajax.Msg = CommonBasicMsg.EditFail;
+                }
+            }
+            else
+            {
+                ajax.Msg = CommonBasicMsg.VoidModel;
+            }
+            return Json(ajax);
+        }
+
+        [HttpGet]
+        public ActionResult CatTypeModelGet(int cat_type_id = -1)
+        {
+            t_category_type catModel = OperateContext.EFBLLSession.t_category_typeBLL.GetModelBy(c => c.cat_type_id == cat_type_id);
+            if (catModel != null)
+            {
+                CatTypeDTO dto = DTOHelper.Map<CatTypeDTO>(catModel);
+                return Json(dto, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return null;
+            }
+        } 
+        #endregion
+
+
+        #region 微商管理
         public ActionResult WechatSellerList(string keywords = "")
         {
-            List<t_wechat_seller> listWechat = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetListBy(w=>w.we_name.Contains(keywords));
+            List<t_wechat_seller> listWechat = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetListBy(w => w.we_name.Contains(keywords));
 
             //result
             ViewBag.Keywords = keywords;
@@ -628,12 +714,12 @@ namespace OperationManager.Controllers
                     return Json(ajax);
                 }
                 string strImg = UploadHelper.UploadImage(we_img);
-                if(string.IsNullOrEmpty(strImg))
+                if (string.IsNullOrEmpty(strImg))
                 {
                     ajax.Msg = CommonBasicMsg.UploadImgFail;
                     return Json(ajax);
                 }
-                t_wechat_seller modelAdd = new t_wechat_seller() 
+                t_wechat_seller modelAdd = new t_wechat_seller()
                 {
                     we_name = we_name.Trim(),
                     we_star = we_star,
@@ -655,6 +741,38 @@ namespace OperationManager.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult WechartDelete(int we_id = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            if (OperateContext.EFBLLSession.t_wechat_sellerBLL.GetCountBy(w => w.we_id == we_id) > 0)
+            {
+                if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.we_id == we_id) <= 0)
+                {
+                    if (OperateContext.EFBLLSession.t_wechat_sellerBLL.DeleteBy(w => w.we_id == we_id))
+                    {
+                        ajax.Msg = CommonBasicMsg.DelSuc;
+                        ajax.Status = "ok";
+                    }
+                    else
+                    {
+                        ajax.Msg = CommonBasicMsg.DelFail;
+                    }
+                }
+                else
+                {
+                    ajax.Msg = "有部分商品依赖此微商，请处理后再删除";
+                }
+            }
+            else
+            {
+                ajax.Msg = CommonBasicMsg.VoidModel;
+            }
+
+            return Json(ajax);
+        }
+
 
         [HttpGet]
         public ActionResult WechartModelGet(int we_id = 0)
@@ -669,7 +787,8 @@ namespace OperationManager.Controllers
             {
                 return null;
             }
-        }
+        } 
+        #endregion
 
 
 
