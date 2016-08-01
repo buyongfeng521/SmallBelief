@@ -71,15 +71,22 @@ namespace EFDAL
         /// <returns></returns>
         public int DeleteBy(Expression<Func<T, bool>> delWhere)
         {
-            List<T> listDeleting = db.Set<T>().Where(delWhere).ToList();
-
-            listDeleting.ForEach(u =>
+            try
             {
-                db.Set<T>().Attach(u);
-                db.Set<T>().Remove(u);
-            });
+                List<T> listDeleting = db.Set<T>().Where(delWhere).ToList();
 
-            return db.SaveChanges();
+                listDeleting.ForEach(u =>
+                {
+                    db.Set<T>().Attach(u);
+                    db.Set<T>().Remove(u);
+                });
+
+                return db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
         }
         #endregion 
 

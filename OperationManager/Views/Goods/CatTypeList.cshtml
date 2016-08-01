@@ -22,7 +22,7 @@
             </div>
             <button class="btn btn-default">搜索</button>
 
-            @*<a href="javascript:" class="btn btn-info pull-right" onclick="add()">增加类型</a>*@
+            <a href="javascript:" class="btn btn-info pull-right" onclick="add()">增加类型</a>
         }
         <hr />
         <div class="dataTable_wrapper">
@@ -46,6 +46,8 @@
                             </td>
                             <td>
                                 <a href="javascript:" onclick="edit(@item.cat_type_id)">修改</a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:" onclick="del(@item.cat_type_id)">删除</a>
                             </td>
                         </tr>
                     }
@@ -105,9 +107,20 @@
 
 
 <script>
+
+    function add() {
+        $("#cat_type_id").val("-1");
+        $("#type_name").val("");
+        $("#divImg").attr("style", "display:none");
+        //alert(data.we_img);
+        //$("#imgType").attr("src", data.type_img);
+
+        $("#modelType").modal("show");
+    }
+
     function edit(id) {
 
-        if (id >=0) {
+        if (id >= 0) {
             $.get("/Goods/CatTypeModelGet", { "cat_type_id": id }, function (data) {
                 //alert(data);
                 if (data) {
@@ -120,6 +133,19 @@
                     $("#modelType").modal("show");
                 }
             });
+        }
+    }
+
+    function del(id){
+        if(id >= 0){
+            if(confirm("确定删除?")){
+                var url = "/Goods/CatTypeDelete";
+                $.post(url,{"cat_type_id":id},function(data){
+                    $.procAjaxData(data, function (data) {
+                        location.href = "/Goods/CatTypeList";
+                    });
+                });
+            }
         }
     }
 </script>

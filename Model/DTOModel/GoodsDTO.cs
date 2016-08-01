@@ -20,6 +20,7 @@ namespace Model.DTOModel
         public string goods_brief { get; set; }
         public string goods_desc { get; set; }
         public int sort { get; set; }
+        public bool is_pre_sale { get; set; }
         public bool is_hot { get; set; }
         public bool is_best { get; set; }
         public bool is_new { get; set; }

@@ -442,6 +442,7 @@
           <EntitySet Name="t_user_address" EntityType="SmallBeliefModel.t_user_address" />
           <EntitySet Name="t_user_code" EntityType="SmallBeliefModel.t_user_code" />
           <EntitySet Name="t_user_coupon" EntityType="SmallBeliefModel.t_user_coupon" />
+          <EntitySet Name="t_wechat_seller" EntityType="SmallBeliefModel.t_wechat_seller" />
           <AssociationSet Name="FK_t_cart_t_goods" Association="SmallBeliefModel.FK_t_cart_t_goods">
             <End Role="t_goods" EntitySet="t_goods" />
             <End Role="t_cart" EntitySet="t_cart" />
@@ -466,7 +467,6 @@
             <End Role="t_order_info" EntitySet="t_order_info" />
             <End Role="t_order_goods" EntitySet="t_order_goods" />
           </AssociationSet>
-          <EntitySet Name="t_wechat_seller" EntityType="SmallBeliefModel.t_wechat_seller" />
         </EntityContainer>
         <EntityType Name="t_ad">
           <Key>
@@ -565,10 +565,10 @@
           <Property Name="order_id" Type="Int32" />
           <Property Name="goods_id" Type="Int32" />
           <Property Name="comment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="comment_imgs" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="is_del" Type="Boolean" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_user" Relationship="SmallBeliefModel.FK_t_comment_t_user" FromRole="t_comment" ToRole="t_user" />
-          <Property Name="comment_imgs" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="t_coupon">
           <Key>
@@ -576,12 +576,12 @@
           </Key>
           <Property Name="coupon_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="coupon_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="coupon_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="condition_amount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="coupon_amount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="valid_days" Type="Int32" />
           <Property Name="is_del" Type="Boolean" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
-          <Property Name="condition_amount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="coupon_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="t_goods">
           <Key>
@@ -589,6 +589,7 @@
           </Key>
           <Property Name="goods_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="cat_id" Type="Int32" />
+          <Property Name="we_id" Type="Int32" />
           <Property Name="goods_name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="goods_price" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="goods_number" Type="Int32" />
@@ -609,7 +610,6 @@
           <NavigationProperty Name="t_cart" Relationship="SmallBeliefModel.FK_t_cart_t_goods" FromRole="t_goods" ToRole="t_cart" />
           <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
           <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
-          <Property Name="we_id" Type="Int32" />
         </EntityType>
         <EntityType Name="t_goods_gallery">
           <Key>
@@ -751,13 +751,23 @@
           <Property Name="uc_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="user_id" Type="Int32" />
           <Property Name="coupon_id" Type="Int32" />
+          <Property Name="coupon_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="condition_amount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="coupon_amount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="begin_time" Type="DateTime" Precision="3" />
           <Property Name="end_time" Type="DateTime" Precision="3" />
           <Property Name="is_use" Type="Boolean" />
           <Property Name="use_time" Type="DateTime" Precision="3" />
-          <Property Name="condition_amount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="coupon_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="t_wechat_seller">
+          <Key>
+            <PropertyRef Name="we_id" />
+          </Key>
+          <Property Name="we_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="we_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="we_star" Type="Int32" />
+          <Property Name="we_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="we_desc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_t_cart_t_goods">
           <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="0..1" />
@@ -831,16 +841,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="t_wechat_seller">
-          <Key>
-            <PropertyRef Name="we_id" />
-          </Key>
-          <Property Name="we_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="we_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="we_star" Type="Int32" />
-          <Property Name="we_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="we_desc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -943,9 +943,9 @@
           <EntitySetMapping Name="t_comment">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_comment">
               <MappingFragment StoreEntitySet="t_comment">
-                <ScalarProperty Name="comment_imgs" ColumnName="comment_imgs" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
+                <ScalarProperty Name="comment_imgs" ColumnName="comment_imgs" />
                 <ScalarProperty Name="comment" ColumnName="comment" />
                 <ScalarProperty Name="goods_id" ColumnName="goods_id" />
                 <ScalarProperty Name="order_id" ColumnName="order_id" />
@@ -957,12 +957,12 @@
           <EntitySetMapping Name="t_coupon">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_coupon">
               <MappingFragment StoreEntitySet="t_coupon">
-                <ScalarProperty Name="coupon_img" ColumnName="coupon_img" />
-                <ScalarProperty Name="condition_amount" ColumnName="condition_amount" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
                 <ScalarProperty Name="valid_days" ColumnName="valid_days" />
                 <ScalarProperty Name="coupon_amount" ColumnName="coupon_amount" />
+                <ScalarProperty Name="condition_amount" ColumnName="condition_amount" />
+                <ScalarProperty Name="coupon_img" ColumnName="coupon_img" />
                 <ScalarProperty Name="coupon_name" ColumnName="coupon_name" />
                 <ScalarProperty Name="coupon_id" ColumnName="coupon_id" />
               </MappingFragment>
@@ -971,7 +971,6 @@
           <EntitySetMapping Name="t_goods">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_goods">
               <MappingFragment StoreEntitySet="t_goods">
-                <ScalarProperty Name="we_id" ColumnName="we_id" />
                 <ScalarProperty Name="add_time" ColumnName="add_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
                 <ScalarProperty Name="is_on_sale" ColumnName="is_on_sale" />
@@ -989,6 +988,7 @@
                 <ScalarProperty Name="goods_number" ColumnName="goods_number" />
                 <ScalarProperty Name="goods_price" ColumnName="goods_price" />
                 <ScalarProperty Name="goods_name" ColumnName="goods_name" />
+                <ScalarProperty Name="we_id" ColumnName="we_id" />
                 <ScalarProperty Name="cat_id" ColumnName="cat_id" />
                 <ScalarProperty Name="goods_id" ColumnName="goods_id" />
               </MappingFragment>
@@ -1135,13 +1135,13 @@
           <EntitySetMapping Name="t_user_coupon">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_user_coupon">
               <MappingFragment StoreEntitySet="t_user_coupon">
-                <ScalarProperty Name="coupon_img" ColumnName="coupon_img" />
-                <ScalarProperty Name="condition_amount" ColumnName="condition_amount" />
                 <ScalarProperty Name="use_time" ColumnName="use_time" />
                 <ScalarProperty Name="is_use" ColumnName="is_use" />
                 <ScalarProperty Name="end_time" ColumnName="end_time" />
                 <ScalarProperty Name="begin_time" ColumnName="begin_time" />
                 <ScalarProperty Name="coupon_amount" ColumnName="coupon_amount" />
+                <ScalarProperty Name="condition_amount" ColumnName="condition_amount" />
+                <ScalarProperty Name="coupon_img" ColumnName="coupon_img" />
                 <ScalarProperty Name="coupon_id" ColumnName="coupon_id" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="uc_id" ColumnName="uc_id" />

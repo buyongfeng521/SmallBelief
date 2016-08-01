@@ -52,7 +52,7 @@ namespace WebApi.Controllers
                         dto.cart = DTOHelper.Map<List<CartDTO>>(listCart);
                     }
 
-                    List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetPageList(1, 6, g => g.is_del == false && g.is_on_sale == true, g => g.sort);
+                    List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetPageListDesc(1, 6, g => g.is_del == false && g.is_on_sale == true, g => g.sort);
                     dto.goods = DTOHelper.Map<List<GoodsDTO>>(listGoods);
                     ret.Data = dto;
                     ret.status = true;
@@ -517,9 +517,9 @@ namespace WebApi.Controllers
         /// <param name="number">数量</param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<CartDTO> OrderCheck(string token, int goods_id, int number)
+        public RetInfo<List<CartDTO>> OrderCheck(string token, int goods_id, int number)
         {
-            RetInfo<CartDTO> ret = new RetInfo<CartDTO>();
+            RetInfo<List<CartDTO>> ret = new RetInfo<List<CartDTO>>();
 
             t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
             if (user != null)
@@ -539,7 +539,7 @@ namespace WebApi.Controllers
                         dto.goods_img = ConfigurationHelper.AppSetting("Domain") + goods.goods_img;
                         dto.goods_price = (decimal)goods.goods_price;
                         dto.goods_number = (int)(goods.goods_number - goods.goods_lock_number);
-                        ret.Data = dto;
+                        ret.Data.Add(dto) ;
 
                         flag = false;
                     }
@@ -549,7 +549,6 @@ namespace WebApi.Controllers
                 if (flag == false)
                 {
                     
-
                 }
                 else
                 {
@@ -574,131 +573,139 @@ namespace WebApi.Controllers
         {
             RetInfo<OrderDetailDTO> ret = new RetInfo<OrderDetailDTO>();
 
-            string token = obj.token;
-            int number = obj.number;
-            int goods_id = obj.goods_id;
-            int order_type = obj.order_type;
-            int address_id = obj.address_id;
-            int uc_id = obj.uc_id;
-            string expect_shipping_time = obj.expect_shipping_time;
-
-
-            if (APIHelper.IsLogin(token))
+            try
             {
-                t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u=>u.token == token);
-                if (user != null)
+                string token = obj.token;
+                int number = obj.number;
+                int goods_id = obj.goods_id;
+                int order_type = obj.order_type;
+                int address_id = obj.address_id;
+                int uc_id = obj.uc_id;
+                string expect_shipping_time = obj.expect_shipping_time;
+
+
+                if (APIHelper.IsLogin(token))
                 {
-                    t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == goods_id && g.is_on_sale == true);
-                    if (goods != null)
+                    t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token);
+                    if (user != null)
                     {
-                        if ((goods.goods_number - goods.goods_lock_number) >= number)
+                        t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == goods_id && g.is_on_sale == true);
+                        if (goods != null)
                         {
-                            t_user_address address = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.address_id == address_id);
-                            if (address != null)
+                            if ((goods.goods_number - goods.goods_lock_number) >= number)
                             {
-                                //a order_info
-                                t_order_info order = new t_order_info() 
+                                t_user_address address = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.address_id == address_id);
+                                if (address != null)
                                 {
-                                    order_type = (byte)order_type,
-                                    order_sn = DateTime.Now.ToString("yyyyMMddHHmmssfff") + user.ID.ToString(),
-                                    user_id = user.ID,
-                                    order_status = 1,
-                                    shipping_status = 0,
-                                    pay_status = 0,
-                                    consignee = address.receipt_person,
-                                    mobile = address.receipt_phone,
-                                    area = address.area,
-                                    building = address.building,
-                                    room_num = address.room_num,
-                                    address = address.address,
-
-                                    uc_id = 0,
-                                    uc_amount = 0,
-                                    expect_shipping_time = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") + " " + expect_shipping_time,
-
-                                    postscript = "",
-                                    goods_amount = 0,
-                                    order_amount = 0,
-                                    money_paid = 0,
-                                    add_time = DateTime.Now,
-                                    confirm_time = DateTime.Now
-                                };
-                                //b order_goods
-                                t_order_goods order_goods = new t_order_goods() 
-                                {
-                                    goods_id = goods.goods_id,
-                                    goods_name = goods.goods_name,
-                                    goods_number = (goods.goods_number - goods.goods_lock_number) > number ? number : (goods.goods_number - goods.goods_lock_number),
-                                    market_price = goods.goods_price,
-                                    goods_price = goods.goods_price
-                                };
-                                order.goods_amount = order_goods.goods_number * order_goods.goods_price;
-                                order.order_amount = order.goods_amount;
-                                //优惠券处理
-                                t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == uc_id);
-                                if (userCoupon != null)
-                                {
-                                    if (userCoupon.condition_amount <= order.goods_amount)
+                                    //a order_info
+                                    t_order_info order = new t_order_info()
                                     {
-                                        order.uc_id = userCoupon.uc_id;
-                                        order.uc_amount = userCoupon.coupon_amount;
-                                        order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
-                                        //已使用
-                                        userCoupon.is_use = true;
-                                        userCoupon.use_time = DateTime.Now;
-                                        OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
+                                        order_type = (byte)order_type,
+                                        order_sn = DateTime.Now.ToString("yyyyMMddHHmmssfff") + user.ID.ToString(),
+                                        user_id = user.ID,
+                                        order_status = 1,
+                                        shipping_status = 0,
+                                        pay_status = 0,
+                                        consignee = address.receipt_person,
+                                        mobile = address.receipt_phone,
+                                        area = address.area,
+                                        building = address.building,
+                                        room_num = address.room_num,
+                                        address = address.address,
+
+                                        uc_id = 0,
+                                        uc_amount = 0,
+                                        expect_shipping_time = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") + " " + expect_shipping_time,
+
+                                        postscript = "",
+                                        goods_amount = 0,
+                                        order_amount = 0,
+                                        money_paid = 0,
+                                        add_time = DateTime.Now,
+                                        confirm_time = DateTime.Now
+                                    };
+                                    //b order_goods
+                                    t_order_goods order_goods = new t_order_goods()
+                                    {
+                                        goods_id = goods.goods_id,
+                                        goods_name = goods.goods_name,
+                                        goods_number = (goods.goods_number - goods.goods_lock_number) > number ? number : (goods.goods_number - goods.goods_lock_number),
+                                        market_price = goods.goods_price,
+                                        goods_price = goods.goods_price
+                                    };
+                                    order.goods_amount = order_goods.goods_number * order_goods.goods_price;
+                                    order.order_amount = order.goods_amount;
+                                    //优惠券处理
+                                    t_user_coupon userCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetModelBy(u => u.uc_id == uc_id);
+                                    if (userCoupon != null)
+                                    {
+                                        if (userCoupon.condition_amount <= order.goods_amount)
+                                        {
+                                            order.uc_id = userCoupon.uc_id;
+                                            order.uc_amount = userCoupon.coupon_amount;
+                                            order.order_amount = (order.goods_amount - order.uc_amount) <= 0 ? 0 : (order.goods_amount - order.uc_amount);//listOrderGoods.Sum(g => g.goods_number * g.goods_price);
+                                            //已使用
+                                            userCoupon.is_use = true;
+                                            userCoupon.use_time = DateTime.Now;
+                                            OperateContext.EFBLLSession.t_user_couponBLL.Modify(userCoupon);
+                                        }
                                     }
-                                }
-                                
-                                //c goods lock_number
-                                goods.goods_lock_number += order_goods.goods_number;
-                                //goods.goods_number = goods.goods_number - order_goods.goods_number;
-                                //d to SQL
-                                if (OperateContext.EFBLLSession.t_order_infoBLL.Add(order))
-                                {
-                                    order_goods.order_id = order.order_id;
-                                    OperateContext.EFBLLSession.t_order_goodsBLL.Add(order_goods);
-                                    OperateContext.EFBLLSession.t_goodsBLL.Modify(goods);
 
-                                    //retult
-                                    ret.msg = Message.OrderCreateSuc;
-                                    ret.status = true;
+                                    //c goods lock_number
+                                    goods.goods_lock_number += order_goods.goods_number;
+                                    //goods.goods_number = goods.goods_number - order_goods.goods_number;
+                                    //d to SQL
+                                    if (OperateContext.EFBLLSession.t_order_infoBLL.Add(order))
+                                    {
+                                        order_goods.order_id = order.order_id;
+                                        OperateContext.EFBLLSession.t_order_goodsBLL.Add(order_goods);
+                                        OperateContext.EFBLLSession.t_goodsBLL.Modify(goods);
 
-                                    //return data
-                                    OrderDetailDTO dto = new OrderDetailDTO();
-                                    dto.order_goods = DTOHelper.Map<List<OrderGoodsDTO>>(new List<t_order_goods>() { order_goods });
-                                    dto.order_info = DTOHelper.Map<OrderInfoDTO>(order);
-                                    ret.Data = dto;
+                                        //retult
+                                        ret.msg = Message.OrderCreateSuc;
+                                        ret.status = true;
+
+                                        //return data
+                                        OrderDetailDTO dto = new OrderDetailDTO();
+                                        dto.order_goods = DTOHelper.Map<List<OrderGoodsDTO>>(new List<t_order_goods>() { order_goods });
+                                        dto.order_info = DTOHelper.Map<OrderInfoDTO>(order);
+                                        ret.Data = dto;
+                                    }
+                                    else
+                                    {
+                                        ret.msg = Message.OrderCreateFail;
+                                    }
+
                                 }
                                 else
                                 {
-                                    ret.msg = Message.OrderCreateFail;
+                                    ret.msg = CommonBasicMsg.VoidAddress;
                                 }
-
                             }
                             else
                             {
-                                ret.msg = CommonBasicMsg.VoidAddress;
+                                ret.msg = "库存不足";
                             }
                         }
                         else
                         {
-                            ret.msg = "库存不足";
+                            ret.msg = CommonBasicMsg.VoidGoods;
                         }
                     }
                     else
                     {
-                        ret.msg = CommonBasicMsg.VoidGoods;
+                        ret.msg = CommonBasicMsg.VoidUser;
                     }
                 }
                 else
                 {
-                    ret.msg = CommonBasicMsg.VoidUser;
+                    ret.msg = Message.NoLogin;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                ret.msg = Message.NoLogin;
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
             }
 
 

@@ -47,7 +47,10 @@ namespace OperationManager.Controllers
         {
             if (goods_id == 0)
             {
-                ViewBag.ListCat = SelectHelper.GetCategorySelList();
+                int cat_type_id = 0;
+                ViewBag.ListCatType = SelectHelper.GetCategoryTypeSelList(out cat_type_id);
+
+                ViewBag.ListCat = SelectHelper.GetCategorySelList(cat_type_id);
 
                 ViewBag.ListWechat = SelectHelper.GetWechatSellerList();
 
@@ -57,7 +60,10 @@ namespace OperationManager.Controllers
             {
                 t_goods goodsModel = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g=>g.goods_id == goods_id);
 
-                ViewBag.ListCat = SelectHelper.GetCategorySelListBy(goodsModel.cat_id.ToString());
+                //int cat_type_id = 0;
+                ViewBag.ListCatType = SelectHelper.GetCategoryTypeSelList(goodsModel.t_category.cat_type.ToString());
+
+                ViewBag.ListCat = SelectHelper.GetCategorySelListBy((int)goodsModel.t_category.cat_type,goodsModel.cat_id.ToString());
 
                 ViewBag.ListWechat = SelectHelper.GetWechatSellerList(goodsModel.we_id.ToString());
 
@@ -70,7 +76,8 @@ namespace OperationManager.Controllers
 
         [HttpPost]
         public ActionResult GoodsAdd(int goods_id = 0,string goods_name = "", int cat_id = 0,int we_id = 0, string shop_price = "", string goods_number = "",string goods_unit = "",
-            HttpPostedFileBase goods_img = null, string is_on_sale = "", string is_hot = "", string is_best = "", string is_new = "", string is_activity = "", string goods_brief = "", string is_pre_sale = "")
+            HttpPostedFileBase goods_img = null, string is_on_sale = "", string is_hot = "", string is_best = "", string is_new = "", string is_activity = "", string is_pre_sale = "",
+            int? sort = null, string goods_brief = "" )
         {
             AjaxMsg ajax = new AjaxMsg();
             
@@ -118,11 +125,11 @@ namespace OperationManager.Controllers
             if (goods_id > 0)
             {
                 string strImg = "";
-                if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_id != goods_id && g.goods_name == goods_name.Trim()) > 0)
-                {
-                    ajax.Msg = "已存在此名称的商品";
-                    return Json(ajax);
-                }
+                //if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_id != goods_id && g.goods_name == goods_name.Trim()) > 0)
+                //{
+                //    ajax.Msg = "已存在此名称的商品";
+                //    return Json(ajax);
+                //}
                 if (goods_img != null)
                 {
                     strImg = UploadHelper.UploadImage(goods_img);
@@ -140,6 +147,11 @@ namespace OperationManager.Controllers
                     if (!string.IsNullOrEmpty(strImg))
                     {
                         editModel.goods_img = strImg;
+                    }
+
+                    if (sort != null)
+                    {
+                        editModel.sort = sort;
                     }
 
                     editModel.is_pre_sale = is_pre_sale == "1" ? true : false;
@@ -175,11 +187,11 @@ namespace OperationManager.Controllers
                     ajax.Msg = "商品图片不能为空";
                     return Json(ajax);
                 }
-                if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_name == goods_name.Trim()) > 0)
-                {
-                    ajax.Msg = "已存在此名称的商品";
-                    return Json(ajax);
-                }
+                //if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_name == goods_name.Trim()) > 0)
+                //{
+                //    ajax.Msg = "已存在此名称的商品";
+                //    return Json(ajax);
+                //}
                 string strImg = UploadHelper.UploadImage(goods_img);
                 if (string.IsNullOrEmpty(strImg))
                 {
@@ -204,7 +216,7 @@ namespace OperationManager.Controllers
                     is_activity = is_activity == "on" ? true : false,
                     goods_brief = goods_brief.Trim(),
                     goods_desc = "",
-                    sort = 0,
+                    sort = sort == null?0:sort,
                     is_del = false,
                     add_time = DateTime.Now
                 };
@@ -426,7 +438,15 @@ namespace OperationManager.Controllers
             
             return Json(ajax);
         }
-        
+
+        [HttpGet]
+        public ActionResult CategoryListGet(int cat_type_id = -1)
+        {
+            List<t_category> listCat = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_type == cat_type_id, c => c.sort);
+            List<CategoryDTO> listDTO = DTOHelper.Map<List<CategoryDTO>>(listCat);
+            return Json(listDTO, JsonRequestBehavior.AllowGet);
+        }
+
 
         #endregion
 
@@ -438,7 +458,7 @@ namespace OperationManager.Controllers
             Expression<Func<t_category, bool>> where = c => c.cat_name.Contains(keywords);
             List<t_category> listCat = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(where);
 
-            ViewBag.TypeList = SelectHelper.GetEnumSelectListItem(Enums.CategoryType.零用品);
+            ViewBag.TypeList = SelectHelper.GetCategoryTypeSelList();
 
             ViewBag.Keywords = keywords;
             return View(listCat);
@@ -566,7 +586,6 @@ namespace OperationManager.Controllers
                 return null;
             }
 
-            return Json(model, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -586,11 +605,11 @@ namespace OperationManager.Controllers
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
-            if (cat_type_id < 0)
-            {
-                ajax.Msg = CommonBasicMsg.VoidModel;
-                return Json(ajax);
-            }
+            //if (cat_type_id < 0)
+            //{
+            //    ajax.Msg = CommonBasicMsg.VoidModel;
+            //    return Json(ajax);
+            //}
             if (string.IsNullOrWhiteSpace(type_name))
             {
                 ajax.Msg = "名称不能为空";
@@ -602,34 +621,106 @@ namespace OperationManager.Controllers
                 return Json(ajax);
             }
             //2.0 do
-            t_category_type editModel = OperateContext.EFBLLSession.t_category_typeBLL.GetModelBy(c => c.cat_type_id == cat_type_id);
-            if (editModel != null)
+            //a edit
+            if (cat_type_id >= 0)
             {
-                string strImg = "";
-                if (type_img != null)
+                t_category_type editModel = OperateContext.EFBLLSession.t_category_typeBLL.GetModelBy(c => c.cat_type_id == cat_type_id);
+                if (editModel != null)
                 {
-                    strImg = UploadHelper.UploadImage(type_img);
+                    string strImg = "";
+                    if (type_img != null)
+                    {
+                        strImg = UploadHelper.UploadImage(type_img);
+                    }
+                    //img
+                    if (!string.IsNullOrWhiteSpace(strImg))
+                    {
+                        editModel.type_img = strImg;
+                    }
+                    editModel.type_name = type_name.Trim();
+                    if (OperateContext.EFBLLSession.t_category_typeBLL.Modify(editModel))
+                    {
+                        ajax.Msg = CommonBasicMsg.EditSuc;
+                        ajax.Status = "ok";
+                    }
+                    else
+                    {
+                        ajax.Msg = CommonBasicMsg.EditFail;
+                    }
                 }
-                //img
-                if (!string.IsNullOrWhiteSpace(strImg))
+                else
                 {
-                    editModel.type_img = strImg;
+                    ajax.Msg = CommonBasicMsg.VoidModel;
                 }
-                editModel.type_name = type_name.Trim();
-                if (OperateContext.EFBLLSession.t_category_typeBLL.Modify(editModel))
+            }
+            //add
+            else
+            {
+                if (type_img == null)
                 {
-                    ajax.Msg = CommonBasicMsg.EditSuc;
+                    ajax.Msg = "图片不能为空";
+                    return Json(ajax);
+                }
+                string strImg = UploadHelper.UploadImage(type_img);
+                if (string.IsNullOrEmpty(strImg))
+                {
+                    ajax.Msg = CommonBasicMsg.UploadImgFail;
+                    return Json(ajax);
+                }
+                //DO
+                int id = 0;
+                List<t_category_type> listModel = OperateContext.EFBLLSession.t_category_typeBLL.GetListByDesc(c => c.cat_type_id >= 0, c => c.cat_type_id);
+                if (listModel.Count > 0)
+                {
+                    id = listModel[0].cat_type_id + 1;
+                }
+                t_category_type modelAdd = new t_category_type() 
+                {
+                    cat_type_id = id,
+                    type_name = type_name.Trim(),
+                    type_img = strImg
+                };
+                if (OperateContext.EFBLLSession.t_category_typeBLL.Add(modelAdd))
+                {
+                    ajax.Msg = CommonBasicMsg.AddSuc;
                     ajax.Status = "ok";
                 }
                 else
                 {
-                    ajax.Msg = CommonBasicMsg.EditFail;
+                    ajax.Msg = CommonBasicMsg.AddFail;
                 }
+            }
+            
+            return Json(ajax);
+        }
+
+        [HttpPost]
+        public ActionResult CatTypeDelete(int cat_type_id = -1)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            if (OperateContext.EFBLLSession.t_category_typeBLL.GetCountBy(c => c.cat_type_id == cat_type_id) <= 0)
+            {
+                ajax.Msg = "此类型不存在";
+                return Json(ajax);
+            }
+            if (OperateContext.EFBLLSession.t_categoryBLL.GetCountBy(c => c.cat_type == cat_type_id) > 0)
+            {
+                ajax.Msg = "此类型下面有所属商品分类，无法删除";
+                return Json(ajax);
+            }
+
+            if (OperateContext.EFBLLSession.t_category_typeBLL.DeleteBy(c => c.cat_type_id == cat_type_id))
+            {
+                ajax.Msg = CommonBasicMsg.DelSuc;
+                ajax.Status = "ok";
             }
             else
             {
-                ajax.Msg = CommonBasicMsg.VoidModel;
+                ajax.Msg = CommonBasicMsg.DelFail;
             }
+            
+
             return Json(ajax);
         }
 

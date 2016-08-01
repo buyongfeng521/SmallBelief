@@ -13,27 +13,27 @@
         <EntityTypeShape EntityType="SmallBeliefModel.t_category" Width="1.5" PointX="0.75" PointY="2.625" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_category_type" Width="1.5" PointX="11.75" PointY="6.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_city" Width="1.5" PointX="11.75" PointY="9.75" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_comment" Width="1.5" PointX="5.25" PointY="9.625" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_comment" Width="1.5" PointX="5.25" PointY="9.5" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_coupon" Width="1.5" PointX="12.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_goods" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_goods" Width="1.5" PointX="3" PointY="1.25" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_goods_gallery" Width="1.5" PointX="5.25" PointY="6.5" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_order_goods" Width="1.5" PointX="10" PointY="2.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_order_info" Width="1.5" PointX="7.75" PointY="1.125" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_province" Width="1.5" PointX="12.75" PointY="3.75" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_psw_code" Width="1.5" PointX="7.75" PointY="12.75" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_room" Width="1.5" PointX="9.75" PointY="12.75" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_setting" Width="1.5" PointX="11.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_province" Width="1.5" PointX="7.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_psw_code" Width="1.5" PointX="9.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_room" Width="1.5" PointX="11.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_setting" Width="1.5" PointX="2.75" PointY="13.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_user" Width="1.5" PointX="3" PointY="7.25" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_user_address" Width="1.5" PointX="2.75" PointY="13.75" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_user_address" Width="1.5" PointX="13.75" PointY="4.75" />
         <EntityTypeShape EntityType="SmallBeliefModel.t_user_code" Width="1.5" PointX="4.75" PointY="13.75" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_user_coupon" Width="1.5" PointX="13.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_user_coupon" Width="1.5" PointX="13.75" PointY="8.75" />
+        <EntityTypeShape EntityType="SmallBeliefModel.t_wechat_seller" Width="1.5" PointX="13.75" PointY="12.75" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_cart_t_goods" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_cart_t_user" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_goods_t_category" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_comment_t_user" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_goods_gallery_t_goods" />
         <AssociationConnector Association="SmallBeliefModel.FK_t_order_goods_t_order_info" />
-        <EntityTypeShape EntityType="SmallBeliefModel.t_wechat_seller" Width="1.5" PointX="14.375" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

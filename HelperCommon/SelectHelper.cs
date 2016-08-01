@@ -14,6 +14,38 @@ namespace HelperCommon
     {
 
         #region 分类
+        //分类类型
+        public static SelectList GetCategoryTypeSelList()
+        {
+            List<t_category_type> listType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
+
+            SelectList result = new SelectList(listType, "cat_type_id", "type_name");
+
+            return result;
+        }
+        public static SelectList GetCategoryTypeSelList(out int cat_type_id)
+        {
+            List<t_category_type> listType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
+
+            SelectList result = new SelectList(listType, "cat_type_id", "type_name");
+
+            cat_type_id = 0;
+            if (listType.Count > 0)
+            {
+                cat_type_id = listType[0].cat_type_id;
+            }
+
+            return result;
+        }
+        public static SelectList GetCategoryTypeSelList(string selectValue)
+        {
+            List<t_category_type> listType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
+
+            SelectList result = new SelectList(listType, "cat_type_id", "type_name", selectValue);
+
+            return result;
+        }
+
         //分类
         public static SelectList GetCategorySelList()
         {
@@ -24,13 +56,33 @@ namespace HelperCommon
             return result;
         }
 
-        
-
         public static SelectList GetCategorySelListBy(string selectValue)
         {
             SelectList result = null;
 
             List<t_category> listType = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_id > 0, c => c.sort);
+
+            result = new SelectList(listType, "cat_id", "cat_name", selectValue);
+
+            return result;
+        }
+
+        public static SelectList GetCategorySelList(int cat_type_id)
+        {
+            List<t_category> listType = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_id > 0 && c.cat_type == cat_type_id, c => c.sort);
+
+            SelectList result = new SelectList(listType, "cat_id", "cat_name");
+
+            return result;
+        }
+
+        
+
+        public static SelectList GetCategorySelListBy(int cat_type_id,string selectValue)
+        {
+            SelectList result = null;
+
+            List<t_category> listType = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_id > 0 && c.cat_type == cat_type_id, c => c.sort);
 
             result = new SelectList(listType, "cat_id", "cat_name", selectValue);
 

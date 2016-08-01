@@ -22,6 +22,7 @@ namespace Model
     
         public int goods_id { get; set; }
         public Nullable<int> cat_id { get; set; }
+        public Nullable<int> we_id { get; set; }
         public string goods_name { get; set; }
         public Nullable<decimal> goods_price { get; set; }
         public Nullable<int> goods_number { get; set; }
@@ -39,7 +40,6 @@ namespace Model
         public Nullable<bool> is_on_sale { get; set; }
         public Nullable<bool> is_del { get; set; }
         public Nullable<System.DateTime> add_time { get; set; }
-        public Nullable<int> we_id { get; set; }
     
         public virtual ICollection<t_cart> t_cart { get; set; }
         public virtual t_category t_category { get; set; }
