@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using Webdiyer.WebControls.Mvc;
+using Common;
 
 namespace OperationManager.Controllers
 {
@@ -21,8 +22,12 @@ namespace OperationManager.Controllers
         #region 购物车
         public ActionResult CartList(string keywords = "")
         {
-            List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListBy(c=>c.t_user.user_name.Contains(keywords),c=>c.user_id);
-
+            //1.0 where
+            List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListBy(c => c.t_user.user_name.Contains(keywords) || c.t_user.user_phone.Contains(keywords), c => c.user_id);
+            List<int> listUserID = listCart.Select(c=>(int)c.user_id).Distinct().ToList();
+            List<t_user> listUsers = OperateContext.EFBLLSession.t_userBLL.GetListBy(u=>listUserID.Contains((int)u.ID));
+            //2.0 result
+            ViewBag.ListUser = listUsers;
             ViewBag.Keywords = keywords;
             return View(listCart);
         } 
@@ -31,10 +36,40 @@ namespace OperationManager.Controllers
 
 
         #region 订单
-        public ActionResult OrderList(int? index = 1, string keywords = "")
+        public ActionResult OrderList(int? index = 1, string keywords = "",int ddlOrderStatus = 0,int ddlOrderType = 0)
         {
             //1.0 where
-            Expression<Func<t_order_info, bool>> where = o => o.consignee.Contains(keywords);
+            Expression<Func<t_order_info, bool>> where = o => (o.consignee.Contains(keywords) || o.order_sn.Contains(keywords));
+            //a OrderType
+            if (ddlOrderType == (int)Enums.OrderTypePlus.普通订单)
+            {
+                where = where.And(o=>o.order_type == 0);
+            }
+            else if (ddlOrderType == (int)Enums.OrderTypePlus.预购订单)
+            {
+                where = where.And(o=>o.order_type == 1);
+            }
+            //b OrderStatus
+            if (ddlOrderStatus == (int)Enums.OrderStatus.待付款)
+            {
+                where = where.And(o=>o.order_status == 1 && o.pay_status == 0);
+            }
+            else if (ddlOrderStatus == (int)Enums.OrderStatus.已取消)
+            {
+                where = where.And(o=>o.order_status == 2 && o.pay_status == 0);
+            }
+            else if (ddlOrderStatus == (int)Enums.OrderStatus.配送中)
+            {
+                where = where.And(o => o.order_status == 1 && o.pay_status == 1);
+            }
+            else if (ddlOrderStatus == (int)Enums.OrderStatus.待评价)
+            {
+                where = where.And(o => o.order_status == 3 && o.pay_status == 1);
+            }
+            else if (ddlOrderStatus == (int)Enums.OrderStatus.已完成)
+            {
+                where = where.And(o => o.order_status == 4 && o.pay_status == 1);
+            }
             //2.0 Pager
             int pageSize = 20;
             int totalCount = OperateContext.EFBLLSession.t_order_infoBLL.GetCountBy(where);
@@ -46,6 +81,8 @@ namespace OperationManager.Controllers
             mPage.CurrentPageIndex = (int)(index ?? 1);
             //3.0 Result
             ViewBag.Keywords = keywords;
+            ViewBag.ListOrderType = SelectHelper.GetEnumSelectListItem(Enums.OrderTypePlus.全部类型, ddlOrderType.ToString());
+            ViewBag.ListOrderStatus = SelectHelper.GetEnumSelectListItem(Enums.OrderStatus.全部订单, ddlOrderStatus.ToString());
 
             return View(mPage);
         }

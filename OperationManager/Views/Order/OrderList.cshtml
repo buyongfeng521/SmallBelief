@@ -1,4 +1,5 @@
 ﻿@using Webdiyer.WebControls.Mvc;
+@using Model.CommonModel;
 @model PagedList<Model.t_order_info>
 @{
     ViewBag.Title = "订单列表";
@@ -19,8 +20,10 @@
         {
             <div class="form-group">
                 <label class="sr-only">keywords</label>
-                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">
+                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="订单号/收货人" value="@ViewBag.Keywords" maxlength="20">
             </div>
+            @Html.DropDownList("ddlOrderType", ViewBag.ListOrderType as IEnumerable<SelectListItem>, new { @class="form-control"})
+            @Html.DropDownList("ddlOrderStatus", ViewBag.ListOrderStatus as IEnumerable<SelectListItem>, new { @class="form-control"})
             <button class="btn btn-default">搜索</button>
         }
         <hr />
@@ -29,9 +32,12 @@
                 <tr>
                     <th>编号</th>
                     <th>订单号</th>
+                    <th>收货人</th>
                     <th>创建时间</th>
                     <th>商品总金额</th>
                     <th>应付款金额</th>
+                    <th>订单类型</th>
+                    <th>期望送达时间</th>
                     <th>订单状态</th>
                     <th>操作</th>
                 </tr>
@@ -43,21 +49,31 @@
                         <tr>
                             <td>@i</td>
                             <td>@item.order_sn</td>
+                            <td>@item.consignee</td>
                             <td>@item.add_time</td>
                             <td>@item.goods_amount</td>
                             <td>@item.order_amount</td>
+                            <td>@((Enums.OrderType)item.order_type)</td>
+                            <td>
+                                @if (item.order_type == 1)
+                                { 
+                                    <span>@item.expect_shipping_time</span>
+                                }
+                            </td>
                             <td>@HelperCommon.ContentHelper.GetOrderStatusMsg(item.order_status,item.pay_status)</td>
                             <td>
                                 <a href="javascript:" onclick="showDetail(@item.order_id)">查看</a>
-                                &nbsp;&nbsp;
+                                
                                 @if (item.order_status == 1 && item.pay_status == 1)
                                 { 
-                                    <a href="javascript:" onclick="shippingEnd(@item.order_id)">配送完成</a>
+                                    <span>&nbsp;&nbsp;</span>
+                                    <a href="javascript:" class="text-success" onclick="shippingEnd(@item.order_id)">配送完成</a>
                                 }
-                                &nbsp;&nbsp;
+                                
                                 @if (item.order_status == 1 && item.pay_status == 0)
                                 { 
-                                    <a href="javascript:" onclick="cancelOrder(@item.order_id)">取消</a>
+                                    <span>&nbsp;&nbsp;</span>
+                                    <a href="javascript:" class="text-danger" onclick="cancelOrder(@item.order_id)">取消</a>
                                 }
                             </td>
                         </tr>
@@ -65,6 +81,22 @@
                 }
 
             </table>
+
+            <div class="text-center">
+                <nav>
+                    @Html.Pager(Model, new PagerOptions
+                    {
+                        PageIndexParameterName = "index",
+                        ContainerTagName = "ul",
+                        CssClass = "pagination",
+
+                        CurrentPagerItemWrapperFormatString = "<li class=\"active\"><a href=\"javascript:form.submit();\">{0}</a></li>",
+                        PagerItemWrapperFormatString = "<li>{0}</li>",
+                        Id = "bootstrappager"
+                    })
+                </nav>
+            </div>
+
         </div>
     </div>
 </div>

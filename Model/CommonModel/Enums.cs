@@ -73,6 +73,25 @@ namespace Model.CommonModel
             预购 = 1
         }
 
+        //订单类型plus
+        public enum OrderTypePlus
+        { 
+            全部类型 = 0,
+            普通订单 = 1,
+            预购订单 = 2
+        }
+
+        //订单状态
+        public enum OrderStatus
+        { 
+            全部订单 = 0,
+            待付款= 1,
+            已取消 = 2,
+            配送中 = 3,
+            待评价 = 4,
+            已完成 = 5
+        }
+
 
 
 

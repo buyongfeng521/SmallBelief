@@ -386,7 +386,7 @@ namespace WebApi.Controllers
 
                                     uc_id = 0, 
                                     uc_amount = 0,
-                                    expect_shipping_time = DateTime.Now.ToString("yyyy-MM-dd") + " " + expect_shipping_time,
+                                    expect_shipping_time = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") + " " + expect_shipping_time,
 
                                     postscript = "",
                                     goods_amount = 0,
