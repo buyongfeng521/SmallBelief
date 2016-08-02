@@ -45,8 +45,11 @@ namespace WebApi.Controllers
                                 {
                                     ret.msg = CommonBasicMsg.EditSuc;
                                     ret.status = true;
-                                    user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
-                                    ret.Data = user;
+                                    if (!string.IsNullOrEmpty(user.user_img))
+                                    {
+                                        user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
+                                    }
+                                    ret.Data = DTOHelper.Map<UserDTO>(user);
                                 }
                                 else
                                 {
@@ -114,8 +117,12 @@ namespace WebApi.Controllers
                                 {
                                     ret.msg = CommonBasicMsg.EditSuc;
                                     ret.status = true;
-                                    user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
-                                    ret.Data = user;
+                                    //user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
+                                    if (!string.IsNullOrEmpty(user.user_img))
+                                    {
+                                        user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
+                                    }
+                                    ret.Data = DTOHelper.Map<UserDTO>(user);
                                 }
                                 else
                                 {
@@ -177,8 +184,12 @@ namespace WebApi.Controllers
                             {
                                 ret.msg = CommonBasicMsg.EditSuc;
                                 ret.status = true;
-                                user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
-                                ret.Data = user;
+                                //user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
+                                if (!string.IsNullOrEmpty(user.user_img))
+                                {
+                                    user.user_img = ConfigurationHelper.AppSetting("Domain") + user.user_img;
+                                }
+                                ret.Data = DTOHelper.Map<UserDTO>(user);
                             }
                             else
                             {
