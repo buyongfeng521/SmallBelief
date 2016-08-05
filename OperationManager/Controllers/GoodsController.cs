@@ -1,4 +1,5 @@
-﻿using HelperCommon;
+﻿using Common;
+using HelperCommon;
 using Model;
 using Model.CommonModel;
 using Model.DTOModel;
@@ -6,6 +7,7 @@ using Model.FormatModel;
 using OperationManager.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -285,10 +287,13 @@ namespace OperationManager.Controllers
                 {
                     string strGallerys = gallerys.TrimEnd(',');
                     string[] array = strGallerys.Split(',');
+                    StringBuilder sb = new StringBuilder();
+
                     bool flag = true;
                     //to sql
                     for (int i = 0; i < array.Length; i++)
                     {
+                        sb.Append(ConfigurationHelper.AppSetting("Domain")).Append(array[i]).Append(",");
                         t_goods_gallery galleryModel = new t_goods_gallery()
                         {
                             goods_id = goods_id,
@@ -302,7 +307,7 @@ namespace OperationManager.Controllers
                     }
                     if (flag)
                     {
-                        ajax.Data = strGallerys;
+                        ajax.Data = sb.ToString().TrimEnd(',');
                         ajax.Msg = CommonBasicMsg.UploadSuc;
                         ajax.Status = "ok";
                     }

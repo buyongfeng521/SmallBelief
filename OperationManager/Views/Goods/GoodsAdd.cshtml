@@ -242,7 +242,8 @@
     function GalleryCreateHtml(src) {
         var imgDiv = $('<div class="alert alert-dismissible col-sm-4"></div>');
         var imgClose = $("<button type='button' class='close' onclick='delGallery(this," + "\"" + src + "\"" + ")'><span>&times;</span></button>");
-        var imgImg = $("<img src='http://7xj3q7.com1.z0.glb.clouddn.com/" + src + "' class='img-thumbnail'>");
+        //var imgImg = $("<img src='http://7xj3q7.com1.z0.glb.clouddn.com/" + src + "' class='img-thumbnail'>");
+        var imgImg = $("<img src='" + src + "' class='img-thumbnail'>");
         imgDiv.append(imgClose);
         imgDiv.append(imgImg);
         $("#divGallery").append(imgDiv);
