@@ -17,6 +17,7 @@ namespace Model.DTOModel
         public decimal market_price { get; set; }
         public decimal goods_price { get; set; }
         public int goods_number { get; set; }
+        public int repertory_number { get; set; }
 
     }
 }

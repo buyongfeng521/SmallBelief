@@ -35,7 +35,9 @@ namespace HelperCommon
                 .ForMember(desc => desc.order_status_msg, opt => opt.MapFrom(src => ContentHelper.GetOrderStatusMsg(src.order_status, src.pay_status)));
             Mapper.CreateMap<t_order_goods, OrderGoodsDTO>()
                 .ForMember(desc => desc.goods_img, opt => opt.MapFrom(src => ContentHelper.GetGoodsImg(src.goods_id)));
-            Mapper.CreateMap<t_cart, CartDTO>().ForMember(desc => desc.goods_img, opt => opt.MapFrom(src =>ConfigurationHelper.AppSetting("Domain") + src.t_goods.goods_img));
+            Mapper.CreateMap<t_cart, CartDTO>()
+                .ForMember(desc => desc.goods_img, opt => opt.MapFrom(src =>ConfigurationHelper.AppSetting("Domain") + src.t_goods.goods_img))
+                .ForMember(desc => desc.repertory_number, opt => opt.MapFrom(src => (src.t_goods.goods_number - src.t_goods.goods_lock_number)));
             Mapper.CreateMap<t_comment, CommentDTO>()
                 .ForMember(desc=>desc.create_time,opt=>opt.MapFrom(src=>((DateTime)src.create_time).ToString("yyyy-MM-dd HH:mm:ss")))
                 .ForMember(desc=>desc.user_name,opt=>opt.MapFrom(src=>string.IsNullOrEmpty(src.t_user.user_name) == true ? ContentHelper.GetHidePhone(src.t_user.user_phone): src.t_user.user_name))
