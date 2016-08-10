@@ -183,7 +183,12 @@
                 $("#mobile").html(data.mobile);
                 $("#address").html(data.address);
 
-                $("#tblOrderGoods").append(createRow(data.order_goods[0]));
+                //alert(data.order_goods.length);
+
+                for(var i=0;i<data.order_goods.length; i++){
+                    $("#tblOrderGoods").append(createRow(data.order_goods[i]));
+                }
+                //$("#tblOrderGoods").append(createRow(data.order_goods[0]));
 
                 $("#modalDetail").modal("show");   
 

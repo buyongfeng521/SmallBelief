@@ -65,7 +65,7 @@ namespace WebApi.Controllers
 
             try
             {
-                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => g.is_del == false && g.is_hot == true, g => g.goods_id);
+                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(g => g.is_del == false && g.is_hot == true, g => g.sort);
                 if (listGoods.Count > 0)
                 {
                     List<GoodsDTO> listGoodsDTO = DTOHelper.MapList<GoodsDTO>(listGoods);
@@ -99,7 +99,7 @@ namespace WebApi.Controllers
 
             try
             {
-                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => g.is_del == false && g.is_best == true, g => g.goods_id);
+                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(g => g.is_del == false && g.is_best == true, g => g.sort);
                 if (listGoods.Count > 0)
                 {
                     List<GoodsDTO> listGoodsDTO = DTOHelper.MapList<GoodsDTO>(listGoods);
