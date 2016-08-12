@@ -31,10 +31,12 @@ namespace WebApi.Controllers
                 t_setting service_tel_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "service_tel");
                 t_setting wx_id_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "wx_id");
                 t_setting wx_public_id_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "wx_public_id");
+                t_setting service_qq_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "service_qq");
 
                 dtoModel.service_tel = service_tel_model.set_value;
                 dtoModel.wx_id = wx_id_model.set_value;
                 dtoModel.wx_public_id = wx_public_id_model.set_value;
+                dtoModel.service_qq = service_qq_model.set_value;
 
                 ret.Data = dtoModel;
                 ret.status = true;

@@ -459,6 +459,13 @@ namespace OperationManager.Controllers
             return Json(listDTO, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public ActionResult RecommendGoods()
+        {
+            return View();
+        }
+
+
 
         #endregion
 

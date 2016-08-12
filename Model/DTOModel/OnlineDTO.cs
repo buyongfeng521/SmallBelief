@@ -11,5 +11,6 @@ namespace Model.DTOModel
         public string service_tel { get; set; }
         public string wx_id { get; set; }
         public string wx_public_id { get; set; }
+        public string service_qq { get; set; }
     }
 }
