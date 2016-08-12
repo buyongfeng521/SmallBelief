@@ -25,10 +25,14 @@ namespace OperationManager.Controllers
         #region 商品
 
         [HttpGet]
-        public ActionResult GoodsList(int? index = 1, string keywords = "")
+        public ActionResult GoodsList(int? index = 1, string keywords = "", int ddlCatType = -1)
         {
             //1.0 where
             Expression<Func<t_goods, bool>> where = g => g.goods_name.Contains(keywords);
+            if (ddlCatType != -1)
+            {
+                where = where.And(g=>g.t_category.cat_type == ddlCatType);
+            }
             //2.0 Pager
             int pageSize = 20;
             int totalCount = OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(where);
@@ -40,6 +44,7 @@ namespace OperationManager.Controllers
             mPage.CurrentPageIndex = (int)(index ?? 1);
             //3.0 Result
             ViewBag.Keywords = keywords;
+            ViewBag.CatTypeSelList = SelectHelper.GetCategoryTypeSelListPlus(ddlCatType.ToString());
 
             return View(mPage);
         }
@@ -79,7 +84,7 @@ namespace OperationManager.Controllers
         [HttpPost]
         public ActionResult GoodsAdd(int goods_id = 0,string goods_name = "", int cat_id = 0,int we_id = 0, string shop_price = "", string goods_number = "",string goods_unit = "",
             HttpPostedFileBase goods_img = null, string is_on_sale = "", string is_hot = "", string is_best = "", string is_new = "", string is_activity = "", string is_pre_sale = "",
-            int? sort = null, string goods_brief = "" )
+            int? sort = null, string goods_brief = "", string goods_brief2 = "")
         {
             AjaxMsg ajax = new AjaxMsg();
             
@@ -163,6 +168,7 @@ namespace OperationManager.Controllers
                     editModel.is_new = is_new == "true" ? true : false;
                     editModel.is_activity = is_activity == "true" ? true : false;
                     editModel.goods_brief = goods_brief.Trim();
+                    editModel.goods_brief2 = goods_brief2.Trim();
                     if (OperateContext.EFBLLSession.t_goodsBLL.Modify(editModel))
                     {
                         ajax.Data = editModel.goods_id;
@@ -217,6 +223,7 @@ namespace OperationManager.Controllers
                     is_new = is_new == "on" ? true : false,
                     is_activity = is_activity == "on" ? true : false,
                     goods_brief = goods_brief.Trim(),
+                    goods_brief2 = goods_brief2.Trim(),
                     goods_desc = "",
                     sort = sort == null?0:sort,
                     is_del = false,

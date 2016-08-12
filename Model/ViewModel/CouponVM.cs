@@ -10,6 +10,7 @@ namespace Model.ViewModel
     {
         public int coupon_id { get; set; }
         public string coupon_name { get; set; }
+        public int coupon_type { get; set; }
         public string coupon_img { get; set; }
         public decimal condition_amount { get; set; }
         public decimal coupon_amount { get; set; }

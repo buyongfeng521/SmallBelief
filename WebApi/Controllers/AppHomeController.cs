@@ -160,10 +160,21 @@ namespace WebApi.Controllers
                 List<t_ad> listAD = OperateContext.EFBLLSession.t_adBLL.GetListBy(a => a.ad_id > 0, a => a.sort);
                 List<t_goods> listGoodsHot = OperateContext.EFBLLSession.t_goodsBLL.GetPageList(1, 6, g => g.is_del == false && g.is_hot == true, g => g.sort);
                 List<t_goods> listGoodsBest = OperateContext.EFBLLSession.t_goodsBLL.GetPageList(1, 6, g => g.is_del == false && g.is_best == true, g => g.sort);
+                //秒杀
+                List<t_goods> listSkill = OperateContext.EFBLLSession.t_goodsBLL.GetPageList(1, 6, g => g.is_del == false && g.is_activity == true, g => g.sort);
+                t_setting begin_time_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "goods_begin_time");
+                t_setting end_time_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "goods_end_time");
+                GoodsSeckillDTO seckillDTO = new GoodsSeckillDTO();
+                seckillDTO.goods_begin_time = begin_time_model.set_value;
+                seckillDTO.goods_end_time = end_time_model.set_value;
+                seckillDTO.list_seckill_goods = DTOHelper.Map<List<GoodsDTO>>(listSkill);
+
+
                 //2.0 to dto
                 dto.Banner = DTOHelper.Map<List<BannerDTO>>(listBanner);
                 dto.Category = DTOHelper.Map<List<CatTypeDTO>>(listCatType);
                 dto.AD = DTOHelper.Map<List<ADDTO>>(listAD);
+                dto.GoodsSeckill = seckillDTO;
                 dto.GoodsHot = DTOHelper.MapList<GoodsDTO>(listGoodsHot);
                 dto.GoodsBest = DTOHelper.MapList<GoodsDTO>(listGoodsBest);
                 //3.0 result

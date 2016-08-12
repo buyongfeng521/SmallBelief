@@ -23,6 +23,15 @@ namespace HelperCommon
 
             return result;
         }
+        public static SelectList GetCategoryTypeSelListPlus(string selectedValue)
+        {
+            List<t_category_type> listType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
+            listType.Insert(0, new t_category_type() { cat_type_id = -1, type_name = "全部" });
+
+            SelectList result = new SelectList(listType, "cat_type_id", "type_name", selectedValue);
+
+            return result;
+        }
         public static SelectList GetCategoryTypeSelList(out int cat_type_id)
         {
             List<t_category_type> listType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
@@ -103,6 +112,28 @@ namespace HelperCommon
         }
         #endregion
 
+
+        /// <summary>
+        /// 优惠券列表
+        /// </summary>
+        /// <param name="selectValue"></param>
+        /// <returns></returns>
+        public static SelectList GetCouponSelList()
+        {
+            //SelectList result = null;
+
+            //List<t_coupon> listCoupon = OperateContext.EFBLLSession.t_couponBLL.GetListBy(c => c.is_del == false, c => c.coupon_id);
+
+            //result = new SelectList(listCoupon, "coupon_id", "coupon_name", selectValue);
+
+            //return result;
+
+            List<t_coupon> listCoupon = OperateContext.EFBLLSession.t_couponBLL.GetListBy(c => c.is_del == false, c => c.coupon_id);
+
+            SelectList result = new SelectList(listCoupon, "coupon_id", "coupon_name");
+
+            return result;
+        }
 
         /// <summary>
         /// 优惠券列表

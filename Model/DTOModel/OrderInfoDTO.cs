@@ -31,6 +31,7 @@ namespace Model.DTOModel
         public string confirm_time { get; set; }
         public string pay_time { get; set; }
         public string shipping_time { get; set; }
+        public string expect_shipping_time { get; set; }
     }
 
 }

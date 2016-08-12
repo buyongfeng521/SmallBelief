@@ -93,6 +93,16 @@ namespace Model.CommonModel
         }
 
 
+        //优惠券类型
+        public enum CouponType
+        {
+            [Description("及时送达")]
+            及时送达 = 0,
+            [Description("预购")]
+            预购 = 1
+        }
+
+
 
 
 

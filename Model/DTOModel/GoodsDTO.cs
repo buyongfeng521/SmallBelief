@@ -18,12 +18,14 @@ namespace Model.DTOModel
         public string goods_unit { get; set; }
         public string goods_img { get; set; }
         public string goods_brief { get; set; }
+        public string goods_brief2 { get; set; }
         public string goods_desc { get; set; }
         public int sort { get; set; }
         public bool is_pre_sale { get; set; }
         public bool is_hot { get; set; }
         public bool is_best { get; set; }
         public bool is_new { get; set; }
+        public bool is_sellout { get;set; }
         public bool is_activity { get; set; }
         public bool is_on_sale { get; set; }
         public bool is_del { get; set; }

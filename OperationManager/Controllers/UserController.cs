@@ -1,6 +1,7 @@
 ﻿using HelperCommon;
 using Model;
 using Model.DTOModel;
+using Model.FormatModel;
 using OperationManager.Models;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,56 @@ namespace OperationManager.Controllers
             mPage.CurrentPageIndex = (int)(index ?? 1);
             //3.0 Result
             ViewBag.Keywords = keywords;
+            ViewBag.CouponSelList = SelectHelper.GetCouponSelList();
 
             return View(mPage);
+        }
+
+        [HttpPost]
+        public ActionResult ApplyCoupon(int hideUserID = 0, int ddlCouponID = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u=>u.ID == hideUserID);
+            if (user != null)
+            {
+                t_coupon coupon = OperateContext.EFBLLSession.t_couponBLL.GetModelBy(c=>c.coupon_id == ddlCouponID);
+                if (coupon != null)
+                {
+                    t_user_coupon addCoupon = new t_user_coupon()
+                    {
+                        user_id = user.ID,
+                        coupon_id = coupon.coupon_id,
+                        coupon_type = coupon.coupon_type,
+                        coupon_img = coupon.coupon_img,
+                        condition_amount = coupon.condition_amount,
+                        coupon_amount = coupon.coupon_amount,
+                        begin_time = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00")),
+                        end_time = DateTime.Parse(DateTime.Now.AddDays((int)coupon.valid_days).ToString("yyyy-MM-dd 00:00:00")),
+                        is_use = false,
+                        use_time = null
+                    };
+                    if (OperateContext.EFBLLSession.t_user_couponBLL.Add(addCoupon))
+                    {
+                        ajax.Msg = "分配成功";
+                        ajax.Status = "ok";
+                    }
+                    else
+                    {
+                        ajax.Msg = "分配失败";
+                    }
+                }
+                else
+                {
+                    ajax.Msg = "该优惠卷不存在";
+                }
+            }
+            else
+            {
+                ajax.Msg = "该用户不存在";
+            }
+
+            return Json(ajax);
         }
 
         [HttpGet]

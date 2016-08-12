@@ -108,6 +108,7 @@
             <PropertyRef Name="coupon_id" />
           </Key>
           <Property Name="coupon_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="coupon_type" Type="int" />
           <Property Name="coupon_name" Type="nvarchar" MaxLength="20" />
           <Property Name="coupon_img" Type="nvarchar" MaxLength="100" />
           <Property Name="condition_amount" Type="decimal" Precision="18" Scale="2" />
@@ -130,6 +131,7 @@
           <Property Name="goods_unit" Type="nvarchar" MaxLength="10" />
           <Property Name="goods_img" Type="nvarchar" MaxLength="200" />
           <Property Name="goods_brief" Type="nvarchar" MaxLength="100" />
+          <Property Name="goods_brief2" Type="nvarchar" MaxLength="100" />
           <Property Name="goods_desc" Type="nvarchar(max)" />
           <Property Name="sort" Type="int" />
           <Property Name="is_pre_sale" Type="bit" />
@@ -276,6 +278,7 @@
           <Property Name="uc_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="user_id" Type="int" />
           <Property Name="coupon_id" Type="int" />
+          <Property Name="coupon_type" Type="int" />
           <Property Name="coupon_img" Type="nvarchar" MaxLength="100" />
           <Property Name="condition_amount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="coupon_amount" Type="decimal" Precision="18" Scale="2" />
@@ -582,6 +585,7 @@
           <Property Name="valid_days" Type="Int32" />
           <Property Name="is_del" Type="Boolean" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
+          <Property Name="coupon_type" Type="Int32" />
         </EntityType>
         <EntityType Name="t_goods">
           <Key>
@@ -610,6 +614,7 @@
           <NavigationProperty Name="t_cart" Relationship="SmallBeliefModel.FK_t_cart_t_goods" FromRole="t_goods" ToRole="t_cart" />
           <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
           <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
+          <Property Name="goods_brief2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="t_goods_gallery">
           <Key>
@@ -758,6 +763,7 @@
           <Property Name="end_time" Type="DateTime" Precision="3" />
           <Property Name="is_use" Type="Boolean" />
           <Property Name="use_time" Type="DateTime" Precision="3" />
+          <Property Name="coupon_type" Type="Int32" />
         </EntityType>
         <EntityType Name="t_wechat_seller">
           <Key>
@@ -957,6 +963,7 @@
           <EntitySetMapping Name="t_coupon">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_coupon">
               <MappingFragment StoreEntitySet="t_coupon">
+                <ScalarProperty Name="coupon_type" ColumnName="coupon_type" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
                 <ScalarProperty Name="valid_days" ColumnName="valid_days" />
@@ -971,6 +978,7 @@
           <EntitySetMapping Name="t_goods">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_goods">
               <MappingFragment StoreEntitySet="t_goods">
+                <ScalarProperty Name="goods_brief2" ColumnName="goods_brief2" />
                 <ScalarProperty Name="add_time" ColumnName="add_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
                 <ScalarProperty Name="is_on_sale" ColumnName="is_on_sale" />
@@ -1135,6 +1143,7 @@
           <EntitySetMapping Name="t_user_coupon">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_user_coupon">
               <MappingFragment StoreEntitySet="t_user_coupon">
+                <ScalarProperty Name="coupon_type" ColumnName="coupon_type" />
                 <ScalarProperty Name="use_time" ColumnName="use_time" />
                 <ScalarProperty Name="is_use" ColumnName="is_use" />
                 <ScalarProperty Name="end_time" ColumnName="end_time" />

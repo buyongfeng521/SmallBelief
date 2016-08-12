@@ -54,6 +54,21 @@
                         <label>注册优惠券：</label>
                         @Html.DropDownList("reg_coupon_value", ViewBag.Reg_coupon as IEnumerable<SelectListItem>, new { @class = "form-control" })
                     </div>
+                    <div class="form-group clearfix">
+                        <label>商品抢购时间(年-月-日 时:分:秒)：</label>
+                        
+                        <div class="col-sm-12">
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="goods_begin_time" name="goods_begin_time" value="@ViewBag.Begin_Time" placeholder="抢购开始时间">
+                            </div>
+                            <div style="float:left">
+                                至
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="goods_end_time" name="goods_end_time" value="@ViewBag.End_Time" placeholder="抢购结束时间">
+                            </div>
+                        </div>
+                    </div>
 
                     <button type="button" class="btn btn-success" onclick="saveOtherInfo()">保存</button>
                 </form>

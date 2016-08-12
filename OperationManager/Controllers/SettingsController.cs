@@ -208,11 +208,16 @@ namespace OperationManager.Controllers
             t_setting reg_coupon = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "reg_coupon");
             ViewBag.Reg_coupon = SelectHelper.GetCouponSelList(reg_coupon.set_value);
 
+            t_setting begin_time_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "goods_begin_time");
+            ViewBag.Begin_Time = begin_time_model.set_value;
+            t_setting end_time_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "goods_end_time");
+            ViewBag.End_Time = end_time_model.set_value;
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult AppSet(string service_tel, string wx_id, string wx_public_id,string service_qq)
+        public ActionResult AppSet(string service_tel, string wx_id, string wx_public_id, string service_qq)
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
@@ -264,14 +269,22 @@ namespace OperationManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult AppOtherSet(string reg_coupon_value = "")
+        public ActionResult AppOtherSet(string reg_coupon_value = "", string goods_begin_time = "", string goods_end_time = "")
         {
             AjaxMsg ajax = new AjaxMsg();
             if (!string.IsNullOrEmpty(reg_coupon_value))
             {
                 t_setting reg_coupon_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "reg_coupon");
                 reg_coupon_model.set_value = reg_coupon_value;
-                if (OperateContext.EFBLLSession.t_settingBLL.Modify(reg_coupon_model))
+
+                t_setting begin_time_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "goods_begin_time");
+                begin_time_model.set_value = goods_begin_time;
+                t_setting end_time_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "goods_end_time");
+                end_time_model.set_value = goods_end_time;
+
+                if (OperateContext.EFBLLSession.t_settingBLL.Modify(reg_coupon_model) 
+                    && OperateContext.EFBLLSession.t_settingBLL.Modify(begin_time_model)
+                    && OperateContext.EFBLLSession.t_settingBLL.Modify(end_time_model))
                 {
                     ajax.Msg = CommonBasicMsg.EditSuc;
                     ajax.Status = "ok";

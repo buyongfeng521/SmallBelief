@@ -11,6 +11,7 @@ namespace Model.DTOModel
         public List<BannerDTO> Banner { get; set; }
         public List<CatTypeDTO> Category { get; set; }
         public List<ADDTO> AD { get; set; }
+        public GoodsSeckillDTO GoodsSeckill { get; set; }
         public List<GoodsDTO> GoodsHot { get; set; }
         public List<GoodsDTO> GoodsBest{get;set;}
     }

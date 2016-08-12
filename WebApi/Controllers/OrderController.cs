@@ -718,9 +718,10 @@ namespace WebApi.Controllers
         /// 用户有效优惠券
         /// </summary>
         /// <param name="token">用户Token</param>
+        /// <param name="type">优惠券类型（0：及时送达，1：预购，2：全部）</param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<List<UserCouponDTO>> UserCouponsGet(string token)
+        public RetInfo<List<UserCouponDTO>> UserCouponsGet(string token,int type = 2)
         {
             RetInfo<List<UserCouponDTO>> ret = new RetInfo<List<UserCouponDTO>>();
 
@@ -734,7 +735,21 @@ namespace WebApi.Controllers
                         List<t_user_coupon> listCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetListByDesc(a => a.user_id == user.ID && a.is_use == false, a => a.end_time);
                         if (listCoupon.Count > 0)
                         {
-                            ret.Data = DTOHelper.Map<List<UserCouponDTO>>(listCoupon);
+                            //i 及时送达
+                            if (type == 0)
+                            {
+                                ret.Data = DTOHelper.Map<List<UserCouponDTO>>(listCoupon.Where(c => c.coupon_type == 0));
+                            }
+                            //ii 预购
+                            else if (type == 1)
+                            {
+                                ret.Data = DTOHelper.Map<List<UserCouponDTO>>(listCoupon.Where(c => c.coupon_type == 1));
+                            }
+                            //iii 全部
+                            else if (type == 2)
+                            {
+                                ret.Data = DTOHelper.Map<List<UserCouponDTO>>(listCoupon);
+                            }
                         }
                         else
                         {

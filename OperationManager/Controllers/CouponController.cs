@@ -22,11 +22,12 @@ namespace OperationManager.Controllers
             List<t_coupon> listCoupon = OperateContext.EFBLLSession.t_couponBLL.GetListByDesc(c => c.is_del == false && c.coupon_name.Contains(keywords), c => c.create_time);
 
             ViewBag.Keywords = keywords;
+            ViewBag.CouponSelList = SelectHelper.GetEnumSelectListItem(Enums.CouponType.及时送达);
             return View(listCoupon);
         }
 
         [HttpPost]
-        public ActionResult CouponAdd(string coupon_name = "", HttpPostedFileBase coupon_img = null, decimal coupon_amount = 0, decimal condition_amount = 0, int valid_days = 0)
+        public ActionResult CouponAdd(string coupon_name = "",int coupon_type = 0, HttpPostedFileBase coupon_img = null, decimal coupon_amount = 0, decimal condition_amount = 0, int valid_days = 0)
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
@@ -77,6 +78,7 @@ namespace OperationManager.Controllers
             t_coupon model = new t_coupon() 
             {
                 coupon_name = coupon_name.Trim(),
+                coupon_type = coupon_type,
                 coupon_img = strImg,
                 condition_amount = condition_amount,
                 coupon_amount = coupon_amount,
@@ -99,7 +101,7 @@ namespace OperationManager.Controllers
 
 
         [HttpPost]
-        public ActionResult CouponEdit(int coupon_id = 0, string coupon_name = "", HttpPostedFileBase coupon_img = null, decimal coupon_amount = 0, decimal condition_amount = 0, int valid_days = 0)
+        public ActionResult CouponEdit(int coupon_id = 0, string coupon_name = "", int coupon_type = 0, HttpPostedFileBase coupon_img = null, decimal coupon_amount = 0, decimal condition_amount = 0, int valid_days = 0)
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
@@ -153,6 +155,7 @@ namespace OperationManager.Controllers
             }
 
             editModel.coupon_name = coupon_name.Trim();
+            editModel.coupon_type = coupon_type;
             editModel.coupon_amount = coupon_amount;
             editModel.condition_amount = condition_amount;
             editModel.valid_days = valid_days;

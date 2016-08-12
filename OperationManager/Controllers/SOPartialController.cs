@@ -10,7 +10,15 @@ namespace OperationManager.Controllers
 {
     public class SOPartialController : Controller
     {
+        /// <summary>
+        /// 菜单
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult PartialMenu()
+        {
 
+            return View();
+        }
 
         /// <summary>
         /// Partial点击类型

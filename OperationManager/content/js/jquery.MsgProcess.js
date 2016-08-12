@@ -19,7 +19,6 @@
         				if (funcErr) funcErr(data);
         				break;
         		    case "nologin":
-        			    alert(data.Msg);
         			    if (data.BackUrl) window.location = data.BackUrl;
         				break;
         		}

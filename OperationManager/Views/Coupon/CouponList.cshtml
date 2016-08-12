@@ -1,4 +1,7 @@
-﻿@model List<Model.t_coupon>
+﻿
+@using Model.CommonModel;
+@model List<Model.t_coupon>
+           
 @{
     ViewBag.Title = "优惠券列表";
     Layout = "~/Views/_Layout.cshtml";
@@ -30,6 +33,7 @@
                 <tr>
                     <th>编号</th>
                     <th>优惠券名称</th>
+                    <th>优惠券类型</th>
                     <th>满足条件金额</th>
                     <th>减免金额</th>
                     <th>有效天数</th>
@@ -44,6 +48,7 @@
                         <tr>
                             <td>@i</td>
                             <td>@item.coupon_name</td>
+                            <td>@((Enums.CouponType)item.coupon_type)</td>
                             <td>@item.condition_amount</td>
                             <td>@item.coupon_amount</td>
                             <td>@item.valid_days</td>
@@ -75,6 +80,10 @@
                     <div class="form-group">
                         <label>优惠券名称</label>
                         <input type="text" class="form-control" id="coupon_name" name="coupon_name" placeholder="优惠券名称">
+                    </div>
+                    <div class="form-group">
+                        <label>优惠券类型</label>
+                        @Html.DropDownList("coupon_type", ViewBag.CouponSelList as List<SelectListItem>, new { @class="form-control"})
                     </div>
                     <div class="form-group">
                         <label>优惠券图片</label>
@@ -119,6 +128,7 @@
     function add() {
         $("#coupon_id").val("");
         $("#coupon_name").val("");
+        $("#coupon_type").val("0");
         $("#condition_amount").val("10");
         $("#coupon_amount").val("1");
         $("#valid_days").val("30");
@@ -132,6 +142,7 @@
                 if (data) {
                     $("#coupon_id").val(id);
                     $("#coupon_name").val(data.coupon_name);
+                    $("#coupon_type").val(data.coupon_type);
                     $("#condition_amount").val(data.condition_amount);
                     $("#coupon_amount").val(data.coupon_amount);
                     $("#valid_days").val(data.valid_days);
