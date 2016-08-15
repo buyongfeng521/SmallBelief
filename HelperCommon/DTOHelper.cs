@@ -61,6 +61,10 @@ namespace HelperCommon
             Mapper.CreateMap<t_order_goods, OrderGoodsViewModel>();
             Mapper.CreateMap<t_coupon, CouponVM>()
                 .ForMember(desc => desc.coupon_img, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.coupon_img) ? "" : ConfigurationHelper.AppSetting("Domain") + src.coupon_img));
+            Mapper.CreateMap<t_user_coupon, UserCouponVM>()
+                .ForMember(desc => desc.begin_time, opt => opt.MapFrom(src => src.begin_time == null ? "" : ((DateTime)src.begin_time).ToString("yyyy-MM-dd")))
+                .ForMember(desc => desc.end_time, opt => opt.MapFrom(src => src.end_time == null ? "" : ((DateTime)src.end_time).ToString("yyyy-MM-dd")))
+                .ForMember(desc => desc.coupon_name, opt => opt.MapFrom(src => ContentHelper.GetCouponName(src.coupon_id)));
 
 
         }

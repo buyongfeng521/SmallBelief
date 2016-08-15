@@ -48,8 +48,8 @@
                                 <a href="javascript:" onclick="viewUser(@item.ID)">查看</a>
                                 &nbsp;&nbsp;
                                 <a href="javascript:" class="text-success" onclick="applyCoupon(@item.ID,@item.user_phone)">分配优惠卷</a>
-                                @*&nbsp;&nbsp;
-                                <a href="javascript:" class="text-info">查看优惠卷</a>*@
+                                &nbsp;&nbsp;
+                                <a href="javascript:" class="text-info" onclick="viewCoupon(@item.ID,@item.user_phone,'@item.user_name')">查看优惠卷</a>
                             </td>
                         </tr>
                     }
@@ -150,6 +150,60 @@
     </div>
 </div>
 
+<!-- View -->
+<div class="modal fade" id="modalView" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">用户优惠券信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">用户名：</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static" id="lbUserName"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">电话：</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static" id="lbUserPhone"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-bordered" id="tblCoupon">
+                    <tr>
+                        <th>1</th>
+                        <th>1</th>
+                        <th>1</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function viewUser(id){
         if(id){
@@ -164,6 +218,23 @@
                 }
             });
         }
+    }
+
+    function viewCoupon(id,user_phone,user_name){
+        $("#lbUserName").html(user_name);
+        $("#lbUserPhone").html(user_phone);
+        $("#tblCoupon").html("");
+
+        $("#tblCoupon").append("<tr><th>优惠卷名称</th><th>开始时间</th><th>失效时间</th></tr>");
+
+        $.get("/User/GetUserCouponBy",{"id":id},function(data){
+            for(var i=0;i<data.length;data++){
+                var row = "<tr>" + "<td>" + data[i].coupon_name + "</td>" + "<td>" + data[i].begin_time + "</td>" + "<td>" + data[i].end_time + "</td>" + "</tr>";
+                $("#tblCoupon").append(row);
+            }
+        });
+
+        $("#modalView").modal("show");
     }
 </script>
 
@@ -186,5 +257,8 @@
     }
 
 </script>
+
+
+
 
 

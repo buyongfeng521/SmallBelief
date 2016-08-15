@@ -2,6 +2,7 @@
 using Model;
 using Model.DTOModel;
 using Model.FormatModel;
+using Model.ViewModel;
 using OperationManager.Models;
 using System;
 using System.Collections.Generic;
@@ -93,6 +94,21 @@ namespace OperationManager.Controllers
             userDto.last_login_time = ((DateTime)user.last_login_time).ToString("yyyy-MM-dd");
 
             return Json(userDto, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult GetUserCouponBy(int id = 0)
+        {
+            if (id > 0)
+            {
+                List<t_user_coupon> listCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetListByDesc(c => c.user_id == id, c => c.begin_time);
+                if (listCoupon.Count > 0)
+                {
+                    return Json(DTOHelper.Map<List<UserCouponVM>>(listCoupon), JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return null;
         }
 
 

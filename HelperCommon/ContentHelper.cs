@@ -139,8 +139,27 @@ namespace HelperCommon
                 }
             }
 
+           
+            
             return result;
         }
+
+
+        public static string GetCouponName(int? coupon_id = 0)
+        {
+            string result = "";
+            if (coupon_id > 0)
+            {
+                t_coupon model = OperateContext.EFBLLSession.t_couponBLL.GetModelBy(c=>c.coupon_id == coupon_id);
+                if(model != null)
+                {
+                    result = model.coupon_name;
+                }
+            }
+            return result;
+        }
+
+
 
 
     }
