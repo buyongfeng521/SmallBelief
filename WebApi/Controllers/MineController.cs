@@ -675,8 +675,8 @@ namespace WebApi.Controllers
         /// <summary>
         /// 获取寝室号根据区号和楼号
         /// </summary>
-        /// <param name="area"></param>
-        /// <param name="building"></param>
+        /// <param name="area">区号</param>
+        /// <param name="building">楼号</param>
         /// <returns></returns>
         [HttpGet]
         public RetInfo<List<string>> AddressRoomGet(string area, string building)
@@ -698,6 +698,64 @@ namespace WebApi.Controllers
 
             return ret;
         }
+
+        /// <summary>
+        /// 获取楼层根据区号和楼号
+        /// </summary>
+        /// <param name="area">区号</param>
+        /// <param name="building">楼号</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<string>> AddressFloorGet(string area, string building)
+        {
+            RetInfo<List<string>> ret = new RetInfo<List<string>>();
+
+            try
+            {
+                string sql = "select distinct [floor] from t_room where area = @area and building = @building order by [floor]";
+                List<string> listFloor = DapperContext<t_room>.DapperBLL.QueryListSql(sql, new { area = area, building = building }).Select(r => r.floor).ToList();
+                ret.Data = listFloor;
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 获取寝室号根据区号和楼号和楼层
+        /// </summary>
+        /// <param name="area">区号</param>
+        /// <param name="building">楼号</param>
+        /// <param name="floor">楼层</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<string>> AddressRoomGetByFloor(string area, string building, string floor)
+        {
+            RetInfo<List<string>> ret = new RetInfo<List<string>>();
+
+            try
+            {
+                string sql = "select room_num from t_room where area = @area and building = @building and [floor] = @floor order by room_num";
+                List<string> listFloor = DapperContext<t_room>.DapperBLL.QueryListSql(sql, new { area = area, building = building,floor = floor }).Select(r => r.room_num).ToList();
+                ret.Data = listFloor;
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+                Logger.WriteExceptionLog(ex);
+            }
+
+
+            return ret;
+        }
+
 
         /// <summary>
         /// 全部订单

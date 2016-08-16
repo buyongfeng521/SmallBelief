@@ -219,6 +219,7 @@
           <Property Name="room_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="area" Type="nvarchar" MaxLength="10" />
           <Property Name="building" Type="nvarchar" MaxLength="20" />
+          <Property Name="floor" Type="varchar" MaxLength="10" />
           <Property Name="room_num" Type="nvarchar" MaxLength="20" />
           <Property Name="note" Type="nvarchar" MaxLength="50" />
         </EntityType>
@@ -697,6 +698,7 @@
           <Property Name="building" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="room_num" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="floor" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="t_setting">
           <Key>
@@ -1079,6 +1081,7 @@
           <EntitySetMapping Name="t_room">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_room">
               <MappingFragment StoreEntitySet="t_room">
+                <ScalarProperty Name="floor" ColumnName="floor" />
                 <ScalarProperty Name="note" ColumnName="note" />
                 <ScalarProperty Name="room_num" ColumnName="room_num" />
                 <ScalarProperty Name="building" ColumnName="building" />

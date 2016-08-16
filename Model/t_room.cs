@@ -19,5 +19,6 @@ namespace Model
         public string building { get; set; }
         public string room_num { get; set; }
         public string note { get; set; }
+        public string floor { get; set; }
     }
 }
