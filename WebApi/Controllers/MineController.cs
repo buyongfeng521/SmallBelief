@@ -448,12 +448,12 @@ namespace WebApi.Controllers
                                     editModel.building = building;
                                     editModel.room_num = room_num;
                                     editModel.address = "浙江理工大学" + area + building + room_num;
-                                    is_default = is_default == true ? true : false;
+                                    editModel.is_default = is_default == true ? true : false;
                                     if (OperateContext.EFBLLSession.t_user_addressBLL.Modify(editModel))
                                     {
                                         if (editModel.is_default == true)
                                         {
-                                            string upSql = "update t_user_address set is_default = 1 where address_id <> @address_id and user_id = @user_id";
+                                            string upSql = "update t_user_address set is_default = 0 where address_id <> @address_id and user_id = @user_id";
                                             DapperContext<t_user_address>.DapperBLL.ExecuteSql(upSql, new { address_id = editModel.address_id, user_id = editModel.user_id });
                                         }
 
