@@ -228,7 +228,7 @@
         $("#tblCoupon").append("<tr><th>优惠卷名称</th><th>开始时间</th><th>失效时间</th></tr>");
 
         $.get("/User/GetUserCouponBy",{"id":id},function(data){
-            for(var i=0;i<data.length;data++){
+            for(var i=0;i<data.length;i++){
                 var row = "<tr>" + "<td>" + data[i].coupon_name + "</td>" + "<td>" + data[i].begin_time + "</td>" + "<td>" + data[i].end_time + "</td>" + "</tr>";
                 $("#tblCoupon").append(row);
             }
