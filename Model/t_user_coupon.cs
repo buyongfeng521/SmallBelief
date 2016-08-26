@@ -17,6 +17,7 @@ namespace Model
         public int uc_id { get; set; }
         public Nullable<int> user_id { get; set; }
         public Nullable<int> coupon_id { get; set; }
+        public Nullable<int> coupon_type { get; set; }
         public string coupon_img { get; set; }
         public Nullable<decimal> condition_amount { get; set; }
         public Nullable<decimal> coupon_amount { get; set; }
@@ -24,6 +25,5 @@ namespace Model
         public Nullable<System.DateTime> end_time { get; set; }
         public Nullable<bool> is_use { get; set; }
         public Nullable<System.DateTime> use_time { get; set; }
-        public Nullable<int> coupon_type { get; set; }
     }
 }

@@ -73,6 +73,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_recommend_goodsDAL : EFDALBase<t_recommend_goods>
+    {
+    }
+
 	public partial class t_roomDAL : EFDALBase<t_room>
     {
     }

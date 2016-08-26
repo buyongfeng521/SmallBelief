@@ -15,6 +15,7 @@ namespace Model
     public partial class t_coupon
     {
         public int coupon_id { get; set; }
+        public Nullable<int> coupon_type { get; set; }
         public string coupon_name { get; set; }
         public string coupon_img { get; set; }
         public Nullable<decimal> condition_amount { get; set; }
@@ -22,6 +23,5 @@ namespace Model
         public Nullable<int> valid_days { get; set; }
         public Nullable<bool> is_del { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
-        public Nullable<int> coupon_type { get; set; }
     }
 }

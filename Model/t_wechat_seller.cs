@@ -18,7 +18,7 @@ namespace Model
         public string we_name { get; set; }
         public Nullable<int> we_star { get; set; }
         public string we_img { get; set; }
-        public string we_desc { get; set; }
         public Nullable<int> sort { get; set; }
+        public string we_desc { get; set; }
     }
 }

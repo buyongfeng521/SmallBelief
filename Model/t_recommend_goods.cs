@@ -12,13 +12,12 @@ namespace Model
     using System;
     using System.Collections.Generic;
     
-    public partial class t_room
+    public partial class t_recommend_goods
     {
-        public int room_id { get; set; }
-        public string area { get; set; }
-        public string building { get; set; }
-        public string floor { get; set; }
-        public string room_num { get; set; }
-        public string note { get; set; }
+        public int rg_id { get; set; }
+        public Nullable<int> goods_id { get; set; }
+        public Nullable<int> sort { get; set; }
+    
+        public virtual t_goods t_goods { get; set; }
     }
 }

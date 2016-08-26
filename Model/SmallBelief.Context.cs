@@ -41,13 +41,14 @@ namespace Model
         public virtual DbSet<t_order_info> t_order_info { get; set; }
         public virtual DbSet<t_province> t_province { get; set; }
         public virtual DbSet<t_psw_code> t_psw_code { get; set; }
+        public virtual DbSet<t_recommend_goods> t_recommend_goods { get; set; }
         public virtual DbSet<t_room> t_room { get; set; }
         public virtual DbSet<t_setting> t_setting { get; set; }
+        public virtual DbSet<t_shipping_blacklist> t_shipping_blacklist { get; set; }
         public virtual DbSet<t_user> t_user { get; set; }
         public virtual DbSet<t_user_address> t_user_address { get; set; }
         public virtual DbSet<t_user_code> t_user_code { get; set; }
         public virtual DbSet<t_user_coupon> t_user_coupon { get; set; }
         public virtual DbSet<t_wechat_seller> t_wechat_seller { get; set; }
-        public virtual DbSet<t_shipping_blacklist> t_shipping_blacklist { get; set; }
     }
 }

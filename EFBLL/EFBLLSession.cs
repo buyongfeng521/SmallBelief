@@ -251,6 +251,21 @@ namespace EFBLL
         }
 
         
+        private t_recommend_goodsBLL t_recommend_goodsbll;
+        public t_recommend_goodsBLL t_recommend_goodsBLL
+        {
+	        get
+	        {
+		        if(t_recommend_goodsbll == null)
+		        {
+			        t_recommend_goodsbll = new t_recommend_goodsBLL();
+		        }
+		        return t_recommend_goodsbll;
+	        }
+	        set{}
+        }
+
+        
         private t_roomBLL t_roombll;
         public t_roomBLL t_roomBLL
         {

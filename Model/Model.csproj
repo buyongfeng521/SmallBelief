@@ -140,6 +140,9 @@
     <Compile Include="t_psw_code.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_recommend_goods.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_room.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>

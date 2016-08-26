@@ -138,6 +138,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_recommend_goodsBLL : EFBLLBase<t_recommend_goods>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_recommend_goodsDAL();
+        }
+    }
+
 	public partial class t_roomBLL : EFBLLBase<t_room>
     {
 		protected override void SetDAL()

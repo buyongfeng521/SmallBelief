@@ -114,8 +114,9 @@ namespace OperationManager.Controllers
         [HttpGet]
         public ActionResult GoodsRecommendList(string keywords = "")
         {
+            List<t_recommend_goods> listReGoods = OperateContext.EFBLLSession.t_recommend_goodsBLL.GetListBy(g => g.t_goods.goods_name.Contains(keywords), g => g.sort);
 
-            return View();
+            return View(listReGoods);
         }
 
 

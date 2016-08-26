@@ -1,4 +1,4 @@
-﻿
+﻿@model List<Model.t_recommend_goods>
 @{
     ViewBag.Title = "推荐商品列表";
     Layout = "~/Views/_Layout.cshtml";
@@ -46,9 +46,9 @@
                         i++;
                         <tr>
                             <td>@i</td>
-                            <td>@item.goods_name</td>
+                            <td>@item.t_goods.goods_name</td>
                             <td>
-                                @if (item.is_hot == true)
+                                @if (item.t_goods.is_hot == true)
                                 {
                                     <i class="glyphicon glyphicon-ok text-success"></i>
                                 }
@@ -58,7 +58,7 @@
                                 }
                             </td>
                             <td>
-                                @if (item.is_best == true)
+                                @if (item.t_goods.is_best == true)
                                 {
                                     <i class="glyphicon glyphicon-ok text-success"></i>
                                 }
@@ -68,7 +68,7 @@
                                 }
                             </td>
                             <td>
-                                @if (item.is_new == true)
+                                @if (item.t_goods.is_new == true)
                                 {
                                     <i class="glyphicon glyphicon-ok text-success"></i>
                                 }
@@ -78,7 +78,7 @@
                                 }
                             </td>
                             <td>
-                                @if (item.is_activity == true)
+                                @if (item.t_goods.is_activity == true)
                                 {
                                     <i class="glyphicon glyphicon-ok text-success"></i>
                                 }
@@ -87,10 +87,10 @@
                                     <i class="glyphicon glyphicon-remove text-danger"></i>
                                 }
                             </td>
-                            <td>@item.goods_number</td>
-                            <td>@item.goods_lock_number</td>
+                            <td>@item.t_goods.goods_number</td>
+                            <td>@item.t_goods.goods_lock_number</td>
                             <td>
-                                @if (item.is_on_sale == true)
+                                @if (item.t_goods.is_on_sale == true)
                                 {
                                     <i class="glyphicon glyphicon-ok text-success"></i>
                                 }
@@ -100,7 +100,7 @@
                                 }
                             </td>
                             <td>
-                                <a href="javascript:" onclick="del(@item.goods_id)">删除</a>
+                                <a href="javascript:" onclick="del(@item.rg_id)">删除</a>
                             </td>
                         </tr>
                     }
