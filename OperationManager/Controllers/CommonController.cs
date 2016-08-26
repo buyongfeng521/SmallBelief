@@ -51,6 +51,21 @@ namespace OperationManager.Controllers
             //return Json(listDTO,JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public ActionResult GetCategoryDtoBy(int cat_type = 0)
+        {
+            if (cat_type >= 0)
+            {
+                List<t_category> listCat = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c=>c.cat_type == cat_type);
+                if (listCat.Count > 0)
+                {
+                    return Json(DTOHelper.Map<List<CategoryDTO>>(listCat),JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return null;
+        }
+
 
 	}
 }

@@ -219,6 +219,10 @@
     <Content Include="Views\Goods\CatTypeList.cshtml" />
     <Content Include="Views\SOPartial\PartialMenu.cshtml" />
     <Content Include="Views\Goods\RecommendGoods.cshtml" />
+    <Content Include="Views\Settings\Blacklist.cshtml" />
+    <Content Include="Views\Goods\GoodsHotList.cshtml" />
+    <Content Include="Views\Goods\GoodsBestList.cshtml" />
+    <Content Include="Views\Goods\GoodsRecommendList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

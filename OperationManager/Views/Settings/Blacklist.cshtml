@@ -1,0 +1,172 @@
+﻿@model List<Model.t_shipping_blacklist>
+@{
+    ViewBag.Title = "地址黑名单";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<!--head-->
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">地址黑名单</h3>
+    </div>
+</div>
+
+<!--content-->
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("Blacklist", "Settings", FormMethod.Get, new { @class = "form-inline" }))
+        {
+            <div class="form-group">
+                <label class="sr-only">keywords</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" maxlength="20">
+            </div>
+            <button class="btn btn-default">搜索</button>
+
+            <a href="javascript:" class="btn btn-info pull-right" onclick="add()">增加黑名单</a>
+        }
+        <hr />
+        <div class="dataTable_wrapper">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>编号</th>
+                    <th>区域</th>
+                    <th>楼号</th>
+                    <th>楼层</th>
+                    <th>操作</th>
+                </tr>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.area</td>
+                            <td>@item.building</td>
+                            <td>@item.floor</td>
+                            <td>
+                                <a href="javascript:" class="text-danger" onclick="del(@item.sb_id)">删除</a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalBlacklist" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">黑名单详情</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmBlacklist">
+                    <div class="form-group">
+                        <label>区域：</label>
+                        @Html.DropDownList("ddlArea", ViewBag.SelArea as IEnumerable<SelectListItem>, new { @class="form-control"})
+                    </div>
+                    <div class="form-group">
+                        <label>楼号：</label>
+                        @Html.DropDownList("ddlBuilding", ViewBag.SelBuilding as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label>楼层：</label>
+                        @Html.DropDownList("ddlFloor", ViewBag.SelFloor as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="save()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    function add() {
+        $("#modalBlacklist").modal("show");
+    }
+
+    function save() {
+        var url = "/Settings/BlacklistAdd";
+
+        $.post(url, $("#frmBlacklist").serialize(), function (data) {
+            $.procAjaxData(data, function () {
+                location.href = "/Settings/Blacklist";
+            });
+        });
+    }
+
+    function del(id) {
+        if (id) {
+            if (confirm("确定删除?")) {
+                var url = "/Settings/BlacklistDelete";
+                $.post(url, { "id": id },function(data){
+                    $.procAjaxData(data, function () {
+                        location.href = "/Settings/Blacklist";
+                    });
+                });
+            }
+        }
+    }
+</script>
+
+
+<script>
+    $(function () {
+        $("#ddlArea").change(function () {
+            var p = $("#ddlArea").val();
+            $("#ddlBuilding").get(0).selectedIndex = 0;
+            if (p) {
+                $("#ddlBuilding").empty();
+
+                var url = "/Settings/BlacklistBuildingGet?area=" + p;
+                $.get(url, function (data) {
+
+                    $.each(data, function (i, n) {
+                        
+                        if (i == 0) {
+                            $("#ddlFloor").get(0).selectedIndex = 0;
+                            $("#ddlFloor").empty();
+                            var urlFloor = "/Settings/BlacklistFloorGet?area=" + p + "&building=" + n;
+                            $.get(urlFloor, function (floorData) {
+                                $.each(floorData, function (j, m) {
+                                    $("#ddlFloor").append("<option value='" + m + "'>" + m + "</option>");
+                                });
+                            });
+                        }
+                        
+                        $("#ddlBuilding").append("<option value='" + n + "'>" + n + "</option>");
+                    });
+                });
+            }
+        });
+
+        $("#ddlBuilding").change(function () {
+            var p = $("#ddlArea").val();
+            var b = $("#ddlBuilding").val();
+            
+            $("#ddlFloor").get(0).selectedIndex = 0;
+            $("#ddlFloor").empty();
+            var urlFloor = "/Settings/BlacklistFloorGet?area=" + p + "&building=" + b;
+
+            $.get(urlFloor, function (floorData) {
+                $.each(floorData, function (j, m) {
+                    $("#ddlFloor").append("<option value='" + m + "'>" + m + "</option>");
+                });
+            });
+
+        });
+    });
+</script>
+

@@ -141,7 +141,6 @@ namespace WebApi.Controllers
 
         /// <summary>
         /// 首页
-        ///    
         /// click_type(0:不可点击,1:分类,2:商品,3:URL)   
         /// click_value(点击值)
         /// </summary>

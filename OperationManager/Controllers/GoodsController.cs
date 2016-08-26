@@ -25,19 +25,25 @@ namespace OperationManager.Controllers
         #region 商品
 
         [HttpGet]
-        public ActionResult GoodsList(int? index = 1, string keywords = "", int ddlCatType = -1)
+        public ActionResult GoodsList(int? index = 1, string keywords = "", int ddlCatType = -1, int ddlCat = 0)
         {
             //1.0 where
             Expression<Func<t_goods, bool>> where = g => g.goods_name.Contains(keywords);
             if (ddlCatType != -1)
             {
-                where = where.And(g=>g.t_category.cat_type == ddlCatType);
+                where = where.And(g => g.t_category.cat_type == ddlCatType);
             }
+            if (ddlCat > 0)
+            {
+                where = where.And(g => g.cat_id == ddlCat);
+            }
+
+
             //2.0 Pager
             int pageSize = 20;
             int totalCount = OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(where);
             int pageIndex = index ?? 1;
-            List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(where,g=>g.goods_id);
+            List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(where, g => g.goods_id);
             PagedList<t_goods> mPage = listGoods.AsQueryable().ToPagedList(pageIndex, pageSize);
 
             mPage.TotalItemCount = totalCount;
@@ -46,8 +52,80 @@ namespace OperationManager.Controllers
             ViewBag.Keywords = keywords;
             ViewBag.CatTypeSelList = SelectHelper.GetCategoryTypeSelListPlus(ddlCatType.ToString());
 
+
+            ViewBag.ListCat = SelectHelper.GetCategoryPlusSelListBy(ddlCatType, ddlCat.ToString());
+
+            //int cat_type_id = 0;
+            //ViewBag.ListCatType = SelectHelper.GetCategoryTypeSelList(out cat_type_id);
+            //ViewBag.ListCat = SelectHelper.GetCategorySelList(cat_type_id);
+
+            //ViewBag.ListCatType = SelectHelper.GetCategoryTypeSelList(ddlCatType.ToString());
+            //ddlCatType.ToString(), cat_id.ToString()
+            
+
             return View(mPage);
         }
+
+
+
+        [HttpGet]
+        public ActionResult GoodsHotList(int? index = 1, string keywords = "")
+        {
+            //1.0 where
+            Expression<Func<t_goods, bool>> where = g =>g.is_hot == true && g.goods_name.Contains(keywords);
+
+            //2.0 Pager
+            int pageSize = 20;
+            int totalCount = OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(where);
+            int pageIndex = index ?? 1;
+            List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(where, g => g.goods_id);
+            PagedList<t_goods> mPage = listGoods.AsQueryable().ToPagedList(pageIndex, pageSize);
+
+            mPage.TotalItemCount = totalCount;
+            mPage.CurrentPageIndex = (int)(index ?? 1);
+            //3.0 Result
+            ViewBag.Keywords = keywords;
+
+            return View(mPage);
+        }
+
+
+        [HttpGet]
+        public ActionResult GoodsBestList(int? index = 1, string keywords = "")
+        {
+            //1.0 where
+            Expression<Func<t_goods, bool>> where = g => g.is_best == true && g.goods_name.Contains(keywords);
+
+            //2.0 Pager
+            int pageSize = 20;
+            int totalCount = OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(where);
+            int pageIndex = index ?? 1;
+            List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(where, g => g.goods_id);
+            PagedList<t_goods> mPage = listGoods.AsQueryable().ToPagedList(pageIndex, pageSize);
+
+            mPage.TotalItemCount = totalCount;
+            mPage.CurrentPageIndex = (int)(index ?? 1);
+            //3.0 Result
+            ViewBag.Keywords = keywords;
+
+            return View(mPage);
+        }
+
+        [HttpGet]
+        public ActionResult GoodsRecommendList(string keywords = "")
+        {
+
+            return View();
+        }
+
+
+        public ActionResult GoodsRecommendDelete(int id = 0)
+        {
+            return View();
+        }
+
+
+
 
         [HttpGet]
         public ActionResult GoodsAdd(int goods_id = 0)
@@ -472,12 +550,19 @@ namespace OperationManager.Controllers
 
         #region 商品分类
         [HttpGet]
-        public ActionResult CategoryList(string keywords = "")
+        public ActionResult CategoryList(string keywords = "", int ddlCatType = -1)
         {
             Expression<Func<t_category, bool>> where = c => c.cat_name.Contains(keywords);
+            if (ddlCatType != -1)
+            {
+                where = where.And(c=>c.cat_type == ddlCatType);
+            }
+
             List<t_category> listCat = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(where);
 
             ViewBag.TypeList = SelectHelper.GetCategoryTypeSelList();
+
+            ViewBag.CatTypeSelList = SelectHelper.GetCategoryTypeSelListPlus(ddlCatType.ToString());
 
             ViewBag.Keywords = keywords;
             return View(listCat);
@@ -771,7 +856,7 @@ namespace OperationManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult WechatAdd(int we_id = 0, string we_name = "", int we_star = 0, HttpPostedFileBase we_img = null, string we_desc = "")
+        public ActionResult WechatAdd(int we_id = 0, string we_name = "", int we_star = 0, int sort = 0,HttpPostedFileBase we_img = null, string we_desc = "")
         {
             AjaxMsg ajax = new AjaxMsg();
             //1.0 check
@@ -794,6 +879,7 @@ namespace OperationManager.Controllers
                     }
                     editModel.we_name = we_name;
                     editModel.we_star = we_star;
+                    editModel.sort = sort;
                     if (!string.IsNullOrEmpty(strImg))
                     {
                         editModel.we_img = strImg;
@@ -833,6 +919,7 @@ namespace OperationManager.Controllers
                 {
                     we_name = we_name.Trim(),
                     we_star = we_star,
+                    sort = sort,
                     we_img = strImg,
                     we_desc = we_desc
                 };

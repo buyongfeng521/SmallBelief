@@ -98,13 +98,27 @@ namespace HelperCommon
             return result;
         }
 
+        public static SelectList GetCategoryPlusSelListBy(int cat_type_id, string selectValue)
+        {
+            //SelectList result = null;
+
+            List<t_category> listType = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_id > 0 && c.cat_type == cat_type_id, c => c.sort);
+            listType.Insert(0, new t_category() { cat_id = 0, cat_name = "全部分类" });
+
+            SelectList result = new SelectList(listType, "cat_id", "cat_name", selectValue);
+
+            //SelectList result = new SelectList(listType, "cat_type_id", "type_name", selectedValue);
+
+            return result;
+        }
+
         //分类（包含全部）
         public static SelectList GetCategoryPlusSelList()
         {
             SelectList result = null;
 
             List<t_category> listType = OperateContext.EFBLLSession.t_categoryBLL.GetListBy(c => c.cat_id > 0, c => c.sort);
-         
+
             listType.Insert(0, new t_category() { cat_id = 0, cat_name = "全部分类" });
             result = new SelectList(listType, "cat_id", "cat_name");
 

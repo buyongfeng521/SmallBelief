@@ -91,6 +91,10 @@
 
                     </div>
                     <div class="form-group">
+                        <label>排序：</label>
+                        <input type="number" class="form-control" id="sort" name="sort" placeholder="排序"/>
+                    </div>
+                    <div class="form-group">
                         <label>描述</label>
                         <textarea class="form-control" rows="3" id="we_desc" name="we_desc"></textarea>
                     </div>
@@ -122,6 +126,7 @@
         $("#we_id").val("0");
         $("#we_name").val("");
         $("#we_star").val("");
+        $("#sort").val("0");
         $("#we_desc").text("");
         $("#divImg").attr("style", "display:none");
 
@@ -137,6 +142,7 @@
                     $("#we_id").val(data.we_id);
                     $("#we_name").val(data.we_name);
                     $("#we_star").val(data.we_star);
+                    $("#sort").val(data.sort);
                     $("#we_desc").text(data.we_desc);
                     $("#divImg").attr("style", "display:block");
                     //alert(data.we_img);

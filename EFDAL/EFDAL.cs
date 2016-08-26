@@ -81,6 +81,10 @@ namespace EFDAL
     {
     }
 
+	public partial class t_shipping_blacklistDAL : EFDALBase<t_shipping_blacklist>
+    {
+    }
+
 	public partial class t_userDAL : EFDALBase<t_user>
     {
     }

@@ -1,35 +1,28 @@
-﻿@using Webdiyer.WebControls.Mvc;
-@model PagedList<Model.t_goods>
+﻿
 @{
-    ViewBag.Title = "商品列表";
+    ViewBag.Title = "推荐商品列表";
     Layout = "~/Views/_Layout.cshtml";
 }
 
 <!--head-->
 <div class="row">
     <div class="col-lg-12">
-        <h3 class="page-header">商品列表</h3>
+        <h3 class="page-header">推荐商品列表</h3>
     </div>
 </div>
 
 <!--content-->
 <div class="row">
     <div class="col-lg-12">
-        @using (Html.BeginForm("GoodsList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
+        @using (Html.BeginForm("GoodsRecommendList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
         {
             <div class="form-group">
                 <label class="sr-only">keywords</label>
                 <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">
             </div>
-            <div class="form-group">
-                <label class="sr-only">分类</label>
-                @*<input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">*@
-                @Html.DropDownList("ddlCatType", ViewBag.CatTypeSelList as IEnumerable<SelectListItem>, new { @class="form-control"})
-                @Html.DropDownList("ddlCat", ViewBag.ListCat as IEnumerable<SelectListItem>, new { @class = "form-control" })
-            </div>
             <button class="btn btn-default">搜索</button>
 
-            <a href="/Goods/GoodsAdd" class="btn btn-info pull-right">增加商品</a>
+            <a href="javascript:" class="btn btn-info pull-right">增加推荐商品</a>
         }
         <hr />
         <div class="dataTable_wrapper">
@@ -60,7 +53,7 @@
                                     <i class="glyphicon glyphicon-ok text-success"></i>
                                 }
                                 else
-                                { 
+                                {
                                     <i class="glyphicon glyphicon-remove text-danger"></i>
                                 }
                             </td>
@@ -107,39 +100,12 @@
                                 }
                             </td>
                             <td>
-                                <a href="/Goods/GoodsAdd?goods_id=@item.goods_id">修改</a>
-                                &nbsp;&nbsp;
-                                @if (item.is_on_sale == true)
-                                {
-                                    <a href="javascript:" class="text-danger" onclick="down(@item.goods_id)">下架</a>
-                                }
-                                else
-                                { 
-                                    <a href="javascript:" class="text-success" onclick="up(@item.goods_id)">上架</a>    
-                                }
-                                
-                                &nbsp;&nbsp;
                                 <a href="javascript:" onclick="del(@item.goods_id)">删除</a>
                             </td>
                         </tr>
                     }
                 }
             </table>
-
-            <div class="text-center">
-                <nav>
-                    @Html.Pager(Model, new PagerOptions
-                    {
-                        PageIndexParameterName = "index",
-                        ContainerTagName = "ul",
-                        CssClass = "pagination",
-
-                        CurrentPagerItemWrapperFormatString = "<li class=\"active\"><a href=\"javascript:form.submit();\">{0}</a></li>",
-                        PagerItemWrapperFormatString = "<li>{0}</li>",
-                        Id = "bootstrappager"
-                    })
-                </nav>
-            </div>
 
         </div>
     </div>
@@ -149,59 +115,16 @@
 <script>
     function del(id) {
         if (confirm("确定删除？")) {
-            var url = "/Goods/GoodsDelete";
+            var url = "/Goods/GoodsRecommendDelete";
             $.post(url, { "id": id }, function (data) {
                 $.procAjaxData(data, function () {
-                    location.href = "/Goods/GoodsList";
+                    location.href = window.location.href;
                 })
             });
         }
     }
 
-    function up(id){
-        if(confirm("确定上架？")){
-            var url = "/Goods/GoodsUp";
-            $.post(url,{"id":id},function(data){
-                $.procAjaxData(data,function(){
-                    location.href = "/Goods/GoodsList";
-                })
-            })
-        }
-    }
 
-    function down(id){
-        if(confirm("确定下架？")){
-            var url = "/Goods/GoodsDown";
-            $.post(url,{"id":id},function(data){
-                $.procAjaxData(data,function(){
-                    location.href = "/Goods/GoodsList";
-                })
-            })
-        }
-    }
-
-</script>
-
-
-<script>
-    $(function () {
-        $("#ddlCatType").change(function () {
-            var p = $("#ddlCatType").val();
-
-            $("#ddlCat").get(0).selectedIndex = 0;
-            $("#ddlCat").empty();
-            var urlCat = "/Common/GetCategoryDtoBy?cat_type=" + p;
-            $.get(urlCat, function (Data) {
-                $("#ddlCat").append("<option value='0'>全部分类</option>");
-                if(Data){
-                    $.each(Data, function (j, m) {
-                        $("#ddlCat").append("<option value='" + m["cat_id"] + "'>" + m["cat_name"] + "</option>");
-                    });
-                }
-            });
-
-        });
-    })
 </script>
 
 

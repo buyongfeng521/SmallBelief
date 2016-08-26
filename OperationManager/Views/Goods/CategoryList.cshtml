@@ -20,6 +20,10 @@
                 <label class="sr-only">keywords</label>
                 <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">
             </div>
+            <div class="form-group">
+                <label class="sr-only">分类</label>
+                @Html.DropDownList("ddlCatType", ViewBag.CatTypeSelList as IEnumerable<SelectListItem>, new { @class="form-control"})
+            </div>
             <button class="btn btn-default">搜索</button>
 
             <a href="javascript:" class="btn btn-info pull-right" onclick="addCat()" >增加分类</a>
@@ -29,6 +33,7 @@
             <table class="table table-bordered table-hover">
                 <tr>
                     <th>编号</th>
+                    <th>分类类型</th>
                     <th>分类名称</th>
                     <th>分类描述</th>
                     <th>创建时间</th>
@@ -42,6 +47,7 @@
                             i++;
                             <tr>
                                 <td>@i</td>
+                                <td>@HelperCommon.ContentHelper.GetCatTypeName(item.cat_type)</td>
                                 <td>@item.cat_name</td>
                                 <td>@item.cat_note</td>
                                 <td>@item.add_time</td>
@@ -143,7 +149,7 @@
         var urlProcess = "/Goods/CategoryProcess";
         $.post(urlProcess, $("#frmCat").serialize(), function (data) {
             $.procAjaxData(data, function () {
-                location.href = "/Goods/CategoryList";
+                location.href = window.location.href;
             });
         });
     }
@@ -158,7 +164,7 @@
             var url = "/Goods/CategoryDelete";
             $.post(url, { "id": id }, function (data) {
                 $.procAjaxData(data, function () {
-                    location.href = "/Goods/CategoryList";
+                    location.href = window.location.href;
                 })
             })
         }

@@ -160,6 +160,21 @@ namespace HelperCommon
         }
 
 
+        public static string GetCatTypeName(int? cat_type = 0)
+        {
+            string result = "";
+            if (cat_type >= 0)
+            {
+                t_category_type model = OperateContext.EFBLLSession.t_category_typeBLL.GetModelBy(c=>c.cat_type_id == cat_type);
+                if (model != null)
+                {
+                    result = model.type_name;
+                }
+            }
+            return result;
+        }
+
+
 
 
     }

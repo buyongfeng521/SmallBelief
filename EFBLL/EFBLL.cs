@@ -154,6 +154,14 @@ namespace EFBLL
         }
     }
 
+	public partial class t_shipping_blacklistBLL : EFBLLBase<t_shipping_blacklist>
+    {
+		protected override void SetDAL()
+        {
+            dal = new t_shipping_blacklistDAL();
+        }
+    }
+
 	public partial class t_userBLL : EFBLLBase<t_user>
     {
 		protected override void SetDAL()

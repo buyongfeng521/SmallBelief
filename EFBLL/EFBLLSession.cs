@@ -281,6 +281,21 @@ namespace EFBLL
         }
 
         
+        private t_shipping_blacklistBLL t_shipping_blacklistbll;
+        public t_shipping_blacklistBLL t_shipping_blacklistBLL
+        {
+	        get
+	        {
+		        if(t_shipping_blacklistbll == null)
+		        {
+			        t_shipping_blacklistbll = new t_shipping_blacklistBLL();
+		        }
+		        return t_shipping_blacklistbll;
+	        }
+	        set{}
+        }
+
+        
         private t_userBLL t_userbll;
         public t_userBLL t_userBLL
         {

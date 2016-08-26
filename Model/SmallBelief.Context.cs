@@ -48,5 +48,6 @@ namespace Model
         public virtual DbSet<t_user_code> t_user_code { get; set; }
         public virtual DbSet<t_user_coupon> t_user_coupon { get; set; }
         public virtual DbSet<t_wechat_seller> t_wechat_seller { get; set; }
+        public virtual DbSet<t_shipping_blacklist> t_shipping_blacklist { get; set; }
     }
 }

@@ -148,6 +148,12 @@
                             <label class="control-label" id="address"></label>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">详细信息：</label>
+                        <div class="col-sm-10">
+                            <label class="control-label" id="order_info_detail"></label>
+                        </div>
+                    </div>
                     <hr />
                     <table class="table table-bordered" id="tblOrderGoods">
                         <tr>
@@ -182,6 +188,10 @@
                 $("#consignee").html(data.consignee);
                 $("#mobile").html(data.mobile);
                 $("#address").html(data.address);
+
+                //var info_detail = data.order_sn + ";" + data.order_amount + "元;" + data.consignee + ";" + data.mobile;
+                var info_detail = data.consignee + "；" + data.mobile + "；" + data.order_amount + "元；" + data.address;
+                $("#order_info_detail").html(info_detail);
 
                 //alert(data.order_goods.length);
 

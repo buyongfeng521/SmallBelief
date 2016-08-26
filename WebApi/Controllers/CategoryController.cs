@@ -149,7 +149,7 @@ namespace WebApi.Controllers
 
             try
             {
-                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => g.cat_id == cat_id && g.is_on_sale == true, g => g.goods_id);
+                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(g => g.cat_id == cat_id && g.is_on_sale == true, g => g.sort);
 
                 ret.Data = DTOHelper.Map<List<GoodsDTO>>(listGoods);
                 ret.status = true;
@@ -175,7 +175,7 @@ namespace WebApi.Controllers
 
             try
             {
-                List<t_wechat_seller> listSeller = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetListBy(s => s.we_id > 0);
+                List<t_wechat_seller> listSeller = OperateContext.EFBLLSession.t_wechat_sellerBLL.GetListBy(s => s.we_id > 0,s=>s.sort);
                 ret.Data = DTOHelper.Map<List<WechatSellerDTO>>(listSeller);
                 ret.status = true;
             }

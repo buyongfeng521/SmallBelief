@@ -12,13 +12,12 @@ namespace Model
     using System;
     using System.Collections.Generic;
     
-    public partial class t_wechat_seller
+    public partial class t_shipping_blacklist
     {
-        public int we_id { get; set; }
-        public string we_name { get; set; }
-        public Nullable<int> we_star { get; set; }
-        public string we_img { get; set; }
-        public string we_desc { get; set; }
-        public Nullable<int> sort { get; set; }
+        public int sb_id { get; set; }
+        public string area { get; set; }
+        public string building { get; set; }
+        public string floor { get; set; }
+        public Nullable<System.DateTime> add_time { get; set; }
     }
 }

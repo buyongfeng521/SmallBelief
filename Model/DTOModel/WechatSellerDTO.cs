@@ -12,6 +12,7 @@ namespace Model.DTOModel
         public string we_name { get; set; }
         public string we_star { get; set; }
         public string we_img { get; set; }
+        public int sort { get; set; }
         public string we_desc { get; set; }
     }
 }

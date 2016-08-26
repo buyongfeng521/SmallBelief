@@ -297,5 +297,124 @@ namespace OperationManager.Controllers
 
 
 
+        [HttpGet]
+        public ActionResult Blacklist()
+        {
+            List<t_shipping_blacklist> shipping = OperateContext.EFBLLSession.t_shipping_blacklistBLL.GetListBy(s=>s.sb_id > 0);
+
+            //List<t_room> listRoom = OperateContext.EFBLLSession.t_roomBLL.GetListBy();
+
+            string sqlArea = "select distinct area from t_room  order by Area";
+            List<string> listArea = DapperContext<t_room>.DapperBLL.QueryListSql(sqlArea, null).Select(r => r.area).ToList();
+            SelectList selArea = new SelectList(listArea);
+
+            string sqlBuilding = "select distinct building from t_room where area = @area order by building";
+            List<string> listBuilding = DapperContext<t_room>.DapperBLL.QueryListSql(sqlBuilding, new { area = listArea[0] }).Select(r => r.building).ToList();
+            SelectList selBuilding = new SelectList(listBuilding);
+
+            string sqlFloor = "select distinct floor from t_room where area = @area and building = @building order by floor";
+            List<string> listFloor = DapperContext<t_room>.DapperBLL.QueryListSql(sqlFloor, new { area = listArea[0], building = listBuilding[0] }).Select(r => r.floor).ToList();
+            SelectList selFloor = new SelectList(listFloor);
+
+
+            ViewBag.SelArea = selArea;
+            ViewBag.SelBuilding = selBuilding;
+            ViewBag.SelFloor = selFloor;
+
+
+            return View(shipping);
+        }
+
+        [HttpPost]
+        public ActionResult BlacklistAdd(string ddlArea, string ddlBuilding, string ddlFloor)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            if (string.IsNullOrEmpty(ddlArea))
+            {
+                ajax.Msg = "区域不能为空";
+                return Json(ajax);
+            }
+            if (string.IsNullOrEmpty(ddlBuilding))
+            {
+                ajax.Msg = "楼号不能为空";
+                return Json(ajax);
+            }
+            if (string.IsNullOrEmpty(ddlFloor))
+            {
+                ajax.Msg = "楼层不能为空";
+                return Json(ajax);
+            }
+
+            if (OperateContext.EFBLLSession.t_shipping_blacklistBLL.GetCountBy(s => s.area == ddlArea && s.building == ddlBuilding && s.floor == ddlFloor) <= 0)
+            {
+                t_shipping_blacklist addModel = new t_shipping_blacklist() 
+                {
+                    area = ddlArea,
+                    building = ddlBuilding,
+                    floor = ddlFloor,
+                    add_time = DateTime.Now
+                };
+
+                if (OperateContext.EFBLLSession.t_shipping_blacklistBLL.Add(addModel))
+                {
+                    ajax.Msg = "成功";
+                    ajax.Status = "ok";
+                }
+                else
+                {
+                    ajax.Msg = "失败";
+                }
+            }
+            else
+            {
+                ajax.Msg = "已存在";
+            }
+
+            return Json(ajax);
+        }
+
+        
+
+
+        [HttpPost]
+        public ActionResult BlacklistDelete(int id = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            if (id > 0)
+            {
+                if (OperateContext.EFBLLSession.t_shipping_blacklistBLL.DeleteBy(d => d.sb_id == id))
+                {
+                    ajax.Msg = CommonBasicMsg.DelSuc;
+                    ajax.Status = "ok";
+                }
+            }
+
+            return Json(ajax);
+        }
+
+
+        [HttpGet]
+        public ActionResult BlacklistBuildingGet(string area)
+        {
+            string sqlBuilding = "select distinct building from t_room where area = @area order by building";
+            List<string> listBuilding = DapperContext<t_room>.DapperBLL.QueryListSql(sqlBuilding, new { area = area }).Select(r => r.building).ToList();
+            //SelectList selBuilding = new SelectList(listBuilding);
+            return Json(listBuilding, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult BlacklistFloorGet(string area, string building)
+        {
+            string sqlFloor = "select distinct floor from t_room where area = @area and building = @building order by floor";
+            List<string> listFloor = DapperContext<t_room>.DapperBLL.QueryListSql(sqlFloor, new { area = area, building = building }).Select(r => r.floor).ToList();
+            //SelectList selFloor = new SelectList(listFloor);
+
+            return Json(listFloor, JsonRequestBehavior.AllowGet);
+        }
+
+
+
 	}
 }

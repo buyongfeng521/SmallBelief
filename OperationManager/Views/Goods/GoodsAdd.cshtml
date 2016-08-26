@@ -78,7 +78,6 @@
                             {
                                 <input type="radio" name="is_pre_sale" value="0" checked> <span>否</span>
                             }
-                            
                         </label>
                     </div>
                     <div class="form-group">
@@ -304,7 +303,24 @@
 
 
 <script>
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+    function getRedirectUrl() {
+        var url = GetQueryString("url");
+        if (url) {
+            return url;
+        }
+        return "/Goods/GoodsList";
+    }
+
     $(function () {
+        
+        
+
         $("#cat_type_id").change(function () {
             var p = $("#cat_type_id").val();
             $("#cat_id").get(0).selectedIndex = 0;

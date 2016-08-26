@@ -146,6 +146,9 @@
     <Compile Include="t_setting.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_shipping_blacklist.cs">
+      <DependentUpon>SmallBelief.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_user.cs">
       <DependentUpon>SmallBelief.tt</DependentUpon>
     </Compile>

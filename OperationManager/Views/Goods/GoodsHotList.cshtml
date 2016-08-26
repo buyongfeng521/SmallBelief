@@ -1,31 +1,26 @@
 ﻿@using Webdiyer.WebControls.Mvc;
 @model PagedList<Model.t_goods>
 @{
-    ViewBag.Title = "商品列表";
+    ViewBag.Title = "热销商品";
     Layout = "~/Views/_Layout.cshtml";
 }
+
 
 <!--head-->
 <div class="row">
     <div class="col-lg-12">
-        <h3 class="page-header">商品列表</h3>
+        <h3 class="page-header">热销商品</h3>
     </div>
 </div>
 
 <!--content-->
 <div class="row">
     <div class="col-lg-12">
-        @using (Html.BeginForm("GoodsList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
+        @using (Html.BeginForm("GoodsHotList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
         {
             <div class="form-group">
                 <label class="sr-only">keywords</label>
                 <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">
-            </div>
-            <div class="form-group">
-                <label class="sr-only">分类</label>
-                @*<input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">*@
-                @Html.DropDownList("ddlCatType", ViewBag.CatTypeSelList as IEnumerable<SelectListItem>, new { @class="form-control"})
-                @Html.DropDownList("ddlCat", ViewBag.ListCat as IEnumerable<SelectListItem>, new { @class = "form-control" })
             </div>
             <button class="btn btn-default">搜索</button>
 
@@ -60,7 +55,7 @@
                                     <i class="glyphicon glyphicon-ok text-success"></i>
                                 }
                                 else
-                                { 
+                                {
                                     <i class="glyphicon glyphicon-remove text-danger"></i>
                                 }
                             </td>
@@ -114,10 +109,10 @@
                                     <a href="javascript:" class="text-danger" onclick="down(@item.goods_id)">下架</a>
                                 }
                                 else
-                                { 
-                                    <a href="javascript:" class="text-success" onclick="up(@item.goods_id)">上架</a>    
+                                {
+                                    <a href="javascript:" class="text-success" onclick="up(@item.goods_id)">上架</a>
                                 }
-                                
+
                                 &nbsp;&nbsp;
                                 <a href="javascript:" onclick="del(@item.goods_id)">删除</a>
                             </td>
@@ -152,7 +147,7 @@
             var url = "/Goods/GoodsDelete";
             $.post(url, { "id": id }, function (data) {
                 $.procAjaxData(data, function () {
-                    location.href = "/Goods/GoodsList";
+                    location.href = window.location.href;
                 })
             });
         }
@@ -163,7 +158,7 @@
             var url = "/Goods/GoodsUp";
             $.post(url,{"id":id},function(data){
                 $.procAjaxData(data,function(){
-                    location.href = "/Goods/GoodsList";
+                    location.href = window.location.href;
                 })
             })
         }
@@ -174,34 +169,10 @@
             var url = "/Goods/GoodsDown";
             $.post(url,{"id":id},function(data){
                 $.procAjaxData(data,function(){
-                    location.href = "/Goods/GoodsList";
+                    location.href = window.location.href;
                 })
             })
         }
     }
 
 </script>
-
-
-<script>
-    $(function () {
-        $("#ddlCatType").change(function () {
-            var p = $("#ddlCatType").val();
-
-            $("#ddlCat").get(0).selectedIndex = 0;
-            $("#ddlCat").empty();
-            var urlCat = "/Common/GetCategoryDtoBy?cat_type=" + p;
-            $.get(urlCat, function (Data) {
-                $("#ddlCat").append("<option value='0'>全部分类</option>");
-                if(Data){
-                    $.each(Data, function (j, m) {
-                        $("#ddlCat").append("<option value='" + m["cat_id"] + "'>" + m["cat_name"] + "</option>");
-                    });
-                }
-            });
-
-        });
-    })
-</script>
-
-
