@@ -175,6 +175,26 @@ namespace HelperCommon
         }
 
 
+        public static string GetFloorByRoom(string room)
+        {
+            string result = "";
+
+            if (!string.IsNullOrEmpty(room))
+            {
+                if (room.Length == 3)
+                {
+                    result = room.Substring(0, 1);
+                }
+                else if (room.Length == 4)
+                {
+                    result = room.Substring(0, 2);
+                }
+            }
+
+            return result;
+        }
+
+
 
 
     }

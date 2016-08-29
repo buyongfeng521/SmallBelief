@@ -161,9 +161,10 @@ namespace WebApi.Controllers
         /// 获得商品明细根据ID
         /// </summary>
         /// <param name="goods_id">商品ID</param>
+        /// <param name="token">用户token</param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<GoodsDetailDTO> GoodsDetailGet(int goods_id)
+        public RetInfo<GoodsDetailDTO> GoodsDetailGet(int goods_id,string token = "")
         {
             RetInfo<GoodsDetailDTO> ret = new RetInfo<GoodsDetailDTO>();
 
@@ -173,7 +174,18 @@ namespace WebApi.Controllers
                 t_goods model = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == goods_id);
                 if (model != null)
                 {
-                    dto.goods = DTOHelper.Map<GoodsDTO>(model);
+                    GoodsDTO goodsDTO= DTOHelper.Map<GoodsDTO>(model);
+                    goodsDTO.default_address_limit = "";
+                    //普通订单地址黑名单限制
+                    if (model.is_pre_sale == false)
+                    {
+                        if (APIHelper.IsBlacklist(token))
+                        {
+                            goodsDTO.default_address_limit = CommonBasicMsg.VoidDefaultAddress;
+                        }
+                    }
+
+                    dto.goods = goodsDTO;//DTOHelper.Map<GoodsDTO>(model);
                     List<t_goods_gallery> listGallery = OperateContext.EFBLLSession.t_goods_galleryBLL.GetListBy(g => g.goods_id == model.goods_id);
                     List<GoodsGalleryDTO> listGalleryDTO = DTOHelper.Map<List<GoodsGalleryDTO>>(listGallery);
                     dto.gallery = listGalleryDTO.Select(g => g.img).ToArray();

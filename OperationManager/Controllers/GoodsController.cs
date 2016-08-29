@@ -116,13 +116,70 @@ namespace OperationManager.Controllers
         {
             List<t_recommend_goods> listReGoods = OperateContext.EFBLLSession.t_recommend_goodsBLL.GetListBy(g => g.t_goods.goods_name.Contains(keywords), g => g.sort);
 
+            ViewBag.ListAllType = SelectHelper.GetCategoryPlusSelList();
+
             return View(listReGoods);
         }
 
+        [HttpPost]
+        public ActionResult GoodsRecommendAdd(string clickGoods = "", int sort = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
 
+            //1.0 check
+            if (string.IsNullOrEmpty(clickGoods))
+            {
+                ajax.Msg = "商品不能为空";
+                return Json(ajax);
+            }
+            int iGoodsID = 0;
+            int.TryParse(clickGoods, out iGoodsID);
+            if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_id == iGoodsID) <= 0)
+            {
+                ajax.Msg = CommonBasicMsg.VoidGoods;
+                return Json(ajax);
+            }
+            if (OperateContext.EFBLLSession.t_recommend_goodsBLL.GetCountBy(g => g.goods_id == iGoodsID) > 0)
+            {
+                ajax.Msg = "此推荐商品已存在";
+                return Json(ajax);
+            }
+            //2.0 do
+            t_recommend_goods addModel = new t_recommend_goods() 
+            {
+                goods_id = iGoodsID,
+                sort = sort
+            };
+            if (OperateContext.EFBLLSession.t_recommend_goodsBLL.Add(addModel))
+            {
+                ajax.Msg = CommonBasicMsg.AddSuc;
+                ajax.Status = "ok";
+            }
+            else
+            {
+                ajax.Msg = CommonBasicMsg.AddFail;
+            }
+
+            return Json(ajax);
+        }
+
+        [HttpPost]
         public ActionResult GoodsRecommendDelete(int id = 0)
         {
-            return View();
+            AjaxMsg ajax = new AjaxMsg();
+            ajax.Msg = CommonBasicMsg.DelFail;
+
+            if (id > 0)
+            {
+                if (OperateContext.EFBLLSession.t_recommend_goodsBLL.DeleteBy(r => r.rg_id == id))
+                {
+                    ajax.Msg = CommonBasicMsg.DelSuc;
+                    ajax.Status = "ok";
+                }
+            }
+
+
+            return Json(ajax) ;
         }
 
 

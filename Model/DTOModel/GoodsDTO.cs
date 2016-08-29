@@ -30,5 +30,8 @@ namespace Model.DTOModel
         public bool is_on_sale { get; set; }
         public bool is_del { get; set; }
         public DateTime add_time { get; set; }
+
+        public string default_address_limit { get; set; }
+
     }
 }

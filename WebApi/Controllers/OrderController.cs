@@ -304,12 +304,24 @@ namespace WebApi.Controllers
             if (user != null)
             {
                 bool flag = true;
+                bool isBlacklist = false;
                 List<t_cart> listCart = OperateContext.EFBLLSession.t_cartBLL.GetListByDesc(c => c.user_id == user.ID && c.cart_type == cart_type, c => c.cart_id);
                 listCart.ForEach(item =>
                 {
                     t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == item.goods_id);
                     if (goods != null)
                     {
+
+                        //普通订单地址黑名单限制
+                        if (goods.is_pre_sale == false)
+                        {
+                            if (APIHelper.IsBlacklist(token))
+                            {
+                                isBlacklist = true;
+                            }
+                        }
+
+
                         if ((goods.goods_number - goods.goods_lock_number) < item.goods_number)
                         {
                             flag = false;
@@ -318,6 +330,13 @@ namespace WebApi.Controllers
                         }
                     }
                 });
+
+                //黑名单
+                if (isBlacklist)
+                {
+                    ret.msg = CommonBasicMsg.VoidDefaultAddress;
+                    return ret;
+                }
                 //是否生成
                 if (flag == false)
                 {
@@ -529,6 +548,17 @@ namespace WebApi.Controllers
                 t_goods goods = OperateContext.EFBLLSession.t_goodsBLL.GetModelBy(g => g.goods_id == goods_id);
                 if (goods != null)
                 {
+                    //普通订单地址黑名单限制
+                    if (goods.is_pre_sale == false)
+                    {
+                        if (APIHelper.IsBlacklist(token))
+                        {
+                            ret.msg =  CommonBasicMsg.VoidDefaultAddress;
+                            return ret;
+                        }
+                    }
+
+
                     if ((goods.goods_number - goods.goods_lock_number) < number)
                     {
                         CartDTO dto = new CartDTO();

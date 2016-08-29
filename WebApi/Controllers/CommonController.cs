@@ -1,6 +1,7 @@
 ﻿using Common;
 using HelperCommon;
 using Model;
+using Model.CommonModel;
 using Model.DTOModel;
 using Model.FormatModel;
 using System;
@@ -66,6 +67,46 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 默认地址是否在黑名单
+        /// </summary>
+        /// <param name="token">用户token</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<object> IsAdressBlack(string token)
+        {
+            RetInfo<object> ret = new RetInfo<object>();
+            ret.Data = false;
+            try
+            {
+                t_user user = APIHelper.LoginUser(token);
+                if (user != null)
+                {
+                    t_user_address userAddress = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.user_id == user.ID && a.is_default == true);
+                    if (userAddress != null)
+                    {
+                        string floor = ContentHelper.GetFloorByRoom(userAddress.room_num);
+                        if (OperateContext.EFBLLSession.t_shipping_blacklistBLL.GetCountBy(s => s.area == userAddress.area && s.building == userAddress.building && s.floor == floor) > 0)
+                        {
+                            ret.status = true;
+                            ret.Data = true;
+                        }
+                    }
+                }
+                else
+                {
+                    ret.msg = CommonBasicMsg.NoLogin;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteExceptionLog(ex);
                 ret.msg = ex.ToString();
             }
 

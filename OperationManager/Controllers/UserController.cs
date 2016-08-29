@@ -85,6 +85,51 @@ namespace OperationManager.Controllers
             return Json(ajax);
         }
 
+        [HttpPost]
+        public ActionResult ApplyCouponAll(int ddlCouponAllID = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            t_coupon coupon = OperateContext.EFBLLSession.t_couponBLL.GetModelBy(c => c.coupon_id == ddlCouponAllID);
+            if (coupon != null)
+            {
+                List<t_user> listUser = OperateContext.EFBLLSession.t_userBLL.GetListBy(u => u.ID > 0);
+                bool flag = true;
+                listUser.ForEach(data =>
+                {
+                    t_user_coupon addCoupon = new t_user_coupon()
+                    {
+                        user_id = data.ID,
+                        coupon_id = coupon.coupon_id,
+                        coupon_type = coupon.coupon_type,
+                        coupon_img = coupon.coupon_img,
+                        condition_amount = coupon.condition_amount,
+                        coupon_amount = coupon.coupon_amount,
+                        begin_time = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00")),
+                        end_time = DateTime.Parse(DateTime.Now.AddDays((int)coupon.valid_days).ToString("yyyy-MM-dd 00:00:00")),
+                        is_use = false,
+                        use_time = null
+                    };
+                    if (!OperateContext.EFBLLSession.t_user_couponBLL.Add(addCoupon))
+                    {
+                        flag = false;
+                    }
+                });
+
+                if (flag)
+                {
+                    ajax.Msg = "成功";
+                    ajax.Status = "ok";
+                }
+            }
+            else
+            {
+                ajax.Msg = "该优惠券不存在";
+            }
+
+            return Json(ajax);
+        }
+
         [HttpGet]
         public ActionResult GetUserBy(int id = 0)
         {

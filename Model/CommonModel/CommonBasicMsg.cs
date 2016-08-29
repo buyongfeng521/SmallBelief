@@ -36,6 +36,7 @@ namespace Model.CommonModel
         public const string VoidUser = "无效用户";
         public const string VoidAddress = "无效地址";
         public const string NoAccess = "无权限操作";
+        public const string VoidDefaultAddress = "默认地址不支持配送";
         
 
         //Login

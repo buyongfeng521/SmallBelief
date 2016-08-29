@@ -122,5 +122,35 @@ namespace HelperCommon
         }
 
 
+        /// <summary>
+        /// 是否黑名单
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static bool IsBlacklist(string token = "")
+        {
+            bool result = false;
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                t_user user = APIHelper.LoginUser(token);
+                if (user != null)
+                {
+                    t_user_address userAddress = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.user_id == user.ID && a.is_default == true);
+                    if (userAddress != null)
+                    {
+                        string floor = ContentHelper.GetFloorByRoom(userAddress.room_num);
+                        if (OperateContext.EFBLLSession.t_shipping_blacklistBLL.GetCountBy(s => s.area == userAddress.area && s.building == userAddress.building && s.floor == floor) > 0)
+                        {
+                            result = true;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
     }
 }
