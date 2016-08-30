@@ -65,6 +65,8 @@ namespace HelperCommon
                 .ForMember(desc => desc.begin_time, opt => opt.MapFrom(src => src.begin_time == null ? "" : ((DateTime)src.begin_time).ToString("yyyy-MM-dd")))
                 .ForMember(desc => desc.end_time, opt => opt.MapFrom(src => src.end_time == null ? "" : ((DateTime)src.end_time).ToString("yyyy-MM-dd")))
                 .ForMember(desc => desc.coupon_name, opt => opt.MapFrom(src => ContentHelper.GetCouponName(src.coupon_id)));
+            Mapper.CreateMap<t_goods, OrderStatisticsVM>()
+                .ForMember(desc => desc.order_goods_count, opt => opt.MapFrom(src => APIHelper.OrderGoodsCount(src.goods_id)));
 
 
         }

@@ -87,6 +87,38 @@ namespace OperationManager.Controllers
             return View(mPage);
         }
 
+        [HttpGet]
+        public ActionResult OrderStatistics(int? index = 1,string keywords = "", int ddlCatType = -1)
+        { 
+            //1.0 where
+            Expression<Func<t_goods, bool>> where = g => g.goods_name.Contains(keywords);
+            if (ddlCatType != -1)
+            {
+                where = where.And(g => g.t_category.cat_type == ddlCatType);
+            }
+            //2.0 do
+            int pageSize = 20;
+            int totalCount = OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(where);
+            int pageIndex = index ?? 1;
+
+            List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetPageList(pageIndex, pageSize, where, g => g.goods_id);
+            List<OrderStatisticsVM> listVM = DTOHelper.Map<List<OrderStatisticsVM>>(listGoods);
+
+            
+            PagedList<OrderStatisticsVM> mPage = listVM.AsQueryable().ToPagedList(pageIndex, pageSize);
+
+
+            mPage.TotalItemCount = totalCount;
+            mPage.CurrentPageIndex = (int)(index ?? 1);
+
+            //3.0 result
+            ViewBag.Keywords = keywords;
+            ViewBag.CatTypeSelList = SelectHelper.GetCategoryTypeSelListPlus(ddlCatType.ToString());
+
+            return View(mPage);
+
+        }
+
         /// <summary>
         /// 获得订单详情
         /// </summary>

@@ -38,8 +38,8 @@ namespace Model.CommonModel
         public const string NoAccess = "无权限操作";
         //您所在的默认地址暂时不能提供及时送达服务。
         //阿宅撩妹去了，暂时不能进行配送。
-        public const string VoidDefaultAddressGoods = "您所在的默认地址暂时不能提供及时送达服务。";
-        public const string VoidDefaultAddress = "阿宅撩妹去了，暂时不能进行配送。";
+        public const string VoidDefaultAddressGoods = "您所在的默认地址暂时不能提供及时送达服务";
+        public const string VoidDefaultAddress = "阿宅撩妹去了，暂时不能进行配送";
         
 
         //Login

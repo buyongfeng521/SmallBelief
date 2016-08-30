@@ -1,0 +1,74 @@
+﻿
+@using Webdiyer.WebControls.Mvc;
+@using Model.CommonModel;
+@model PagedList<Model.ViewModel.OrderStatisticsVM>
+@{
+    ViewBag.Title = "OrderStatistics";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<!--head-->
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">订单统计</h3>
+    </div>
+</div>
+
+<!--content-->
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("OrderStatistics", "Order", FormMethod.Get, new { @class = "form-inline" }))
+        {
+            <div class="form-group">
+                <label class="sr-only">keywords</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="产品名称" value="@ViewBag.Keywords" maxlength="20">
+            </div>
+            <div class="form-group">
+                <label class="sr-only">分类</label>
+                @Html.DropDownList("ddlCatType", ViewBag.CatTypeSelList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+            </div>
+            <button class="btn btn-default">搜索</button>
+        }
+        <hr />
+        <div class="dataTable_wrapper">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>编号</th>
+                    <th>商品名称</th>
+                    <th>商品库存</th>
+                    <th>下单数量</th>
+                </tr>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.goods_name</td>
+                            <td>@item.goods_number</td>
+                            <td>@item.order_goods_count</td>
+                        </tr>
+                    }
+                }
+            </table>
+
+            <div class="text-center">
+                <nav>
+                    @Html.Pager(Model, new PagerOptions
+                    {
+                        PageIndexParameterName = "index",
+                        ContainerTagName = "ul",
+                        CssClass = "pagination",
+
+                        CurrentPagerItemWrapperFormatString = "<li class=\"active\"><a href=\"javascript:form.submit();\">{0}</a></li>",
+                        PagerItemWrapperFormatString = "<li>{0}</li>",
+                        Id = "bootstrappager"
+                    })
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+

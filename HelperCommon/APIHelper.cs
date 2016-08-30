@@ -152,5 +152,20 @@ namespace HelperCommon
         }
 
 
+
+        public static int OrderGoodsCount(int goods_id = 0)
+        {
+            int result = 0;
+
+            DateTime beginDt = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00"));
+            DateTime endDt = DateTime.Parse(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd 00:00:00"));
+            result = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(o => o.goods_id == goods_id && o.t_order_info.pay_status == 1 && o.t_order_info.add_time >= beginDt && o.t_order_info.add_time < endDt).Sum(o => (int)o.goods_number);
+
+
+            return result;
+        }
+
+
+
     }
 }

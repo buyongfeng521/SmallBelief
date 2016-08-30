@@ -170,6 +170,7 @@
     <Compile Include="ViewModel\CouponVM.cs" />
     <Compile Include="ViewModel\OrderDetailViewModel.cs" />
     <Compile Include="ViewModel\OrderGoodsViewModel.cs" />
+    <Compile Include="ViewModel\OrderStatisticsVM.cs" />
     <Compile Include="ViewModel\UserCouponVM.cs" />
   </ItemGroup>
   <ItemGroup>
