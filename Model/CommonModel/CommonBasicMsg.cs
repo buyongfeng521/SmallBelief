@@ -36,7 +36,10 @@ namespace Model.CommonModel
         public const string VoidUser = "无效用户";
         public const string VoidAddress = "无效地址";
         public const string NoAccess = "无权限操作";
-        public const string VoidDefaultAddress = "默认地址不支持配送";
+        //您所在的默认地址暂时不能提供及时送达服务。
+        //阿宅撩妹去了，暂时不能进行配送。
+        public const string VoidDefaultAddressGoods = "您所在的默认地址暂时不能提供及时送达服务。";
+        public const string VoidDefaultAddress = "阿宅撩妹去了，暂时不能进行配送。";
         
 
         //Login

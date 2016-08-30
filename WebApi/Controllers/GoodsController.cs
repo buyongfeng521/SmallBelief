@@ -181,7 +181,7 @@ namespace WebApi.Controllers
                     {
                         if (APIHelper.IsBlacklist(token))
                         {
-                            goodsDTO.default_address_limit = CommonBasicMsg.VoidDefaultAddress;
+                            goodsDTO.default_address_limit = CommonBasicMsg.VoidDefaultAddressGoods;
                         }
                     }
 
