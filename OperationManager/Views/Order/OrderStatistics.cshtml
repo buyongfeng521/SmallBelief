@@ -3,7 +3,7 @@
 @using Model.CommonModel;
 @model PagedList<Model.ViewModel.OrderStatisticsVM>
 @{
-    ViewBag.Title = "OrderStatistics";
+    ViewBag.Title = "订单统计";
     Layout = "~/Views/_Layout.cshtml";
 }
 
@@ -28,6 +28,7 @@
                 @Html.DropDownList("ddlCatType", ViewBag.CatTypeSelList as IEnumerable<SelectListItem>, new { @class = "form-control" })
             </div>
             <button class="btn btn-default">搜索</button>
+            <a class="btn btn-success" href="javascript:" onclick="exportExl()">导出</a>
         }
         <hr />
         <div class="dataTable_wrapper">
@@ -72,3 +73,12 @@
     </div>
 </div>
 
+
+
+<script>
+    function exportExl() {
+        var keywords = $("#keywords").val();
+        var ddlCatType = $("#ddlCatType").val();
+        location.href = "/Order/OrderStatisticsExcel?keywords=" + keywords + "&ddlCatType=" + ddlCatType;
+    }
+</script>

@@ -12,6 +12,9 @@ using System.Web;
 using System.Web.Mvc;
 using Webdiyer.WebControls.Mvc;
 using Common;
+using NPOI.SS.UserModel;
+using NPOI.HSSF.UserModel;
+using System.IO;
 
 namespace OperationManager.Controllers
 {
@@ -117,6 +120,51 @@ namespace OperationManager.Controllers
 
             return View(mPage);
 
+        }
+
+        [HttpGet]
+        public ActionResult OrderStatisticsExcel(string keywords = "", int ddlCatType = -1)
+        {
+            //1.0 where
+            Expression<Func<t_goods, bool>> where = g => g.goods_name.Contains(keywords);
+            if (ddlCatType != -1)
+            {
+                where = where.And(g => g.t_category.cat_type == ddlCatType);
+            }
+            //2.0 do
+            List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(where, g => g.goods_id);
+            List<OrderStatisticsVM> listVM = DTOHelper.Map<List<OrderStatisticsVM>>(listGoods);
+
+
+            //创建Excel文件的对象
+            NPOI.HSSF.UserModel.HSSFWorkbook book = new NPOI.HSSF.UserModel.HSSFWorkbook();
+            //添加一个sheet
+            NPOI.SS.UserModel.ISheet sheet = book.CreateSheet("统计");
+
+            //给sheet1添加第一行的头部标题
+            NPOI.SS.UserModel.IRow rowHeader = sheet.CreateRow(0);
+            rowHeader.CreateCell(0).SetCellValue("编号");
+            rowHeader.CreateCell(1).SetCellValue("商品名称");
+            rowHeader.CreateCell(2).SetCellValue("商品库存");
+            rowHeader.CreateCell(3).SetCellValue("今日下单商品数");
+
+            ////将数据逐步写入sheet1各个行
+            for (int i = 0; i < listVM.Count; i++)
+            {
+                NPOI.SS.UserModel.IRow rowtemp = sheet.CreateRow(i + 1);
+                rowtemp.CreateCell(0).SetCellValue((i + 1).ToString());
+                rowtemp.CreateCell(1).SetCellValue(listVM[i].goods_name.ToString());
+                rowtemp.CreateCell(2).SetCellValue(listVM[i].goods_number.ToString());
+                rowtemp.CreateCell(3).SetCellValue(listVM[i].order_goods_count.ToString());
+            }
+            // 写入到客户端 
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            book.Write(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            DateTime dt = DateTime.Now;
+            string dateTime = dt.ToString("yyMMddHHmmssfff");
+            string fileName = "统计" + dateTime + ".xls";
+            return File(ms, "application/vnd.ms-excel", fileName);
         }
 
         /// <summary>

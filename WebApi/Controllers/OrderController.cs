@@ -52,7 +52,10 @@ namespace WebApi.Controllers
                         dto.cart = DTOHelper.Map<List<CartDTO>>(listCart);
                     }
 
-                    List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetPageListDesc(1, 6, g => g.is_del == false && g.is_on_sale == true, g => g.sort);
+                    //List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetPageListDesc(1, 6, g => g.is_del == false && g.is_on_sale == true, g => g.sort);
+                    List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(g => g.is_del == false && g.is_on_sale == true && g.t_recommend_goods.Where(r => r.goods_id == g.goods_id).Count() > 0, g => g.sort);
+                    
+
                     dto.goods = DTOHelper.Map<List<GoodsDTO>>(listGoods);
                     ret.Data = dto;
                     ret.status = true;

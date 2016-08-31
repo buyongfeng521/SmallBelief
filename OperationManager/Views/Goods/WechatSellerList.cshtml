@@ -32,6 +32,7 @@
                     <th>微商名称</th>
                     <th>星级</th>
                     <th>描述</th>
+                    <th>排序</th>
                     <th>操作</th>
                 </tr>
                 @{
@@ -44,6 +45,7 @@
                             <td>@item.we_name</td>
                             <td>@item.we_star</td>
                             <td>@item.we_desc</td>
+                            <td>@item.sort</td>
                             <td>
                                 <a href="javascript:" onclick="edit(@item.we_id)">修改</a>
                                 &nbsp;&nbsp;
