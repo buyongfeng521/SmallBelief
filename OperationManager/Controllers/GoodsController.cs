@@ -523,6 +523,7 @@ namespace OperationManager.Controllers
                 if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_id == id) > 0)
                 {
                     string sqlDel = @"delete from t_goods_gallery where goods_id = @goods_id
+                                    delete from t_cart where goods_id = @goods_id
                                     delete from t_goods where goods_id = @goods_id";
                     if (DapperContext<t_goods>.DapperBLL.ExecuteSql(sqlDel, new { goods_id = id }))
                     {
