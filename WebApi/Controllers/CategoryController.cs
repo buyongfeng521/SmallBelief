@@ -1,6 +1,7 @@
 ﻿using Common;
 using HelperCommon;
 using Model;
+using Model.CommonModel;
 using Model.DTOModel;
 using Model.FormatModel;
 using System;
@@ -143,7 +144,7 @@ namespace WebApi.Controllers
         /// <param name="cat_id"></param>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<List<GoodsDTO>> CategoryGoodsGetBy(int cat_id)
+        public RetInfo<List<GoodsDTO>> CategoryGoodsGetBy(int cat_id,string token = "")
         {
             RetInfo<List<GoodsDTO>> ret = new RetInfo<List<GoodsDTO>>();
 
@@ -151,7 +152,23 @@ namespace WebApi.Controllers
             {
                 List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(g => g.cat_id == cat_id && g.is_on_sale == true, g => g.sort);
 
-                ret.Data = DTOHelper.Map<List<GoodsDTO>>(listGoods);
+                List<GoodsDTO> listGoodsDTO = DTOHelper.Map<List<GoodsDTO>>(listGoods);
+
+                listGoodsDTO.ForEach(goodsDTO =>
+                {
+                    goodsDTO.default_address_limit = "";
+                    //普通订单地址黑名单限制
+                    if (goodsDTO.is_pre_sale == false)
+                    {
+                        if (APIHelper.IsBlacklist(token))
+                        {
+                            goodsDTO.default_address_limit = CommonBasicMsg.VoidDefaultAddressGoods;
+                        }
+                    }
+                });
+
+
+                ret.Data = listGoodsDTO;//DTOHelper.Map<List<GoodsDTO>>(listGoods);
                 ret.status = true;
             }
             catch (Exception ex)

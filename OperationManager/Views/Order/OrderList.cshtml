@@ -144,8 +144,12 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">地址：</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-4">
                             <label class="control-label" id="address"></label>
+                        </div>
+                        <label class="col-sm-2 control-label">期望送达时间：</label>
+                        <div class="col-sm-4">
+                            <label class="control-label" id="expect_shipping_time"></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -188,16 +192,22 @@
                 $("#consignee").html(data.consignee);
                 $("#mobile").html(data.mobile);
                 $("#address").html(data.address);
+                $("#expect_shipping_time").html(data.expect_shipping_time);
 
-                //var info_detail = data.order_sn + ";" + data.order_amount + "元;" + data.consignee + ";" + data.mobile;
-                var info_detail = data.consignee + "；" + data.mobile + "；" + data.order_amount + "元；" + data.address;
-                $("#order_info_detail").html(info_detail);
+                
 
                 //alert(data.order_goods.length);
+                var strGoods = "";
 
                 for(var i=0;i<data.order_goods.length; i++){
                     $("#tblOrderGoods").append(createRow(data.order_goods[i]));
+                    strGoods +=(data.order_goods[i].goods_name + "x" + data.order_goods[i].goods_number) + "；";
                 }
+
+                //var info_detail = data.order_sn + ";" + data.order_amount + "元;" + data.consignee + ";" + data.mobile;
+                var info_detail = data.consignee + "；" + data.mobile + "；" + data.address + "；" + strGoods;
+                $("#order_info_detail").html(info_detail);
+
                 //$("#tblOrderGoods").append(createRow(data.order_goods[0]));
 
                 $("#modalDetail").modal("show");   

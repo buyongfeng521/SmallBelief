@@ -15,6 +15,7 @@ namespace Model.ViewModel
         public string consignee{get;set;}
         public string mobile{get;set;}
         public string address{get;set;}
+        public string expect_shipping_time { get; set; }
 
         public List<OrderGoodsViewModel> order_goods { get; set; }
 

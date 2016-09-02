@@ -188,6 +188,7 @@ namespace OperationManager.Controllers
                     vm.consignee = order.consignee;
                     vm.mobile = order.mobile;
                     vm.address = order.address;
+                    vm.expect_shipping_time = order.expect_shipping_time;
                     List<t_order_goods> listOrderGoods = OperateContext.EFBLLSession.t_order_goodsBLL.GetListBy(g=>g.order_id == order.order_id);
                     vm.order_goods = DTOHelper.Map<List<OrderGoodsViewModel>>(listOrderGoods);
                 }
