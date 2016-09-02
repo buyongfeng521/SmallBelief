@@ -126,7 +126,7 @@ namespace OperationManager.Controllers
         public ActionResult OrderStatisticsExcel(string keywords = "", int ddlCatType = -1)
         {
             //1.0 where
-            Expression<Func<t_goods, bool>> where = g => g.goods_name.Contains(keywords);
+            Expression<Func<t_goods, bool>> where = g =>g.is_on_sale == true && g.goods_name.Contains(keywords);
             if (ddlCatType != -1)
             {
                 where = where.And(g => g.t_category.cat_type == ddlCatType);
