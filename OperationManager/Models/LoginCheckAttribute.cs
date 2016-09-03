@@ -16,10 +16,13 @@ namespace OperationManager.Models
             //a 校验用户是否登录
             if (!OperateHelper.IsLogin())
             {
-                if (filterContext.ActionDescriptor.IsDefined(typeof(AjaxRequestAttribute), false)
-                    || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AjaxRequestAttribute), false))
+                bool flag = filterContext.HttpContext.Request.IsAjaxRequest();
+
+                //if (filterContext.ActionDescriptor.IsDefined(typeof(AjaxRequestAttribute), false)
+                //    || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AjaxRequestAttribute), false))
+                if(flag)
                 {
-                    filterContext.Result = OperateContext.RedirectAjax("nologin", "登陆失效", null, "/Admin/Home/Login");
+                    filterContext.Result = OperateContext.RedirectAjax("nologin", "登陆失效", null, "/Home/Login");
                 }
                 else
                 {
