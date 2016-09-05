@@ -575,7 +575,7 @@ namespace WebApi.Controllers
                     {
                         //List<t_user_coupon> listCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetListByDesc(a => a.user_id == user.ID, a => a.end_time);
                         //使用过的不显示？
-                        List<t_user_coupon> listCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetListByDesc(a => a.user_id == user.ID && a.is_use == false, a => a.end_time);
+                        List<t_user_coupon> listCoupon = OperateContext.EFBLLSession.t_user_couponBLL.GetListByDesc(a => a.user_id == user.ID && a.is_use == false && a.end_time > DateTime.Now, a => a.end_time);
                         if (listCoupon.Count > 0)
                         {
                             //i 及时送达

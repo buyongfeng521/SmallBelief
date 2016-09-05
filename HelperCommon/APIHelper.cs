@@ -78,6 +78,14 @@ namespace HelperCommon
                             OperateContext.EFBLLSession.t_goodsBLL.Modify(goods);
                         }
                     });
+                    //发送短信
+                    string strBegin_time = "9月10日";
+                    string strContent = "{\"begin_time\":\"" + strBegin_time + "\",\"begin_days\":\"7\"}";
+                    if (SMSHelper.SendMsgByTaoBao(order.mobile, strContent, "SMS_14276243"))
+                    { 
+                        
+                    }
+
                 }
                 
             }
