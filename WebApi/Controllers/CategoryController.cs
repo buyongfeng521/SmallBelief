@@ -216,7 +216,7 @@ namespace WebApi.Controllers
 
             try
             {
-                List<t_goods> listSeller = OperateContext.EFBLLSession.t_goodsBLL.GetListByDesc(g => g.is_del == false && g.is_on_sale == true && g.we_id == we_id, g => g.goods_id);
+                List<t_goods> listSeller = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(g => g.is_del == false && g.is_on_sale == true && g.we_id == we_id, g => g.sort);
                 ret.Data = DTOHelper.Map<List<GoodsDTO>>(listSeller);
                 ret.status = true;
             }
