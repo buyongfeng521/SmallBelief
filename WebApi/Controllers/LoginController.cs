@@ -173,12 +173,21 @@ namespace WebApi.Controllers
 
 
 
+
+
                             if (OperateContext.EFBLLSession.t_userBLL.Add(user) && OperateContext.EFBLLSession.t_user_codeBLL.Modify(userCode))
                             {
                                 ret.status = true;
                                 ret.msg = "注册成功";
                                 user.user_img = user.user_img == null?null:ConfigurationHelper.AppSetting("Domain") + user.user_img;
                                 ret.Data = DTOHelper.Map<UserDTO>(user);
+                                //Send Msg
+                                //欢迎使用浙理宅货，我们已将一张${coupon_money}元优惠券赠送给你，快去使用吧。${begin_time}起，连续${begin_days}天，多种优惠券根本停不下来哦。浙理宅货，只为浙理的你。
+                                string strMoney = "10";
+                                string strBeginTime = "9月10日";
+                                string strDays = "7";
+                                string strContent = "{\"coupon_money\":\"" + strMoney + "\",\"begin_time\":\"" +strBeginTime + "\",\"begin_days\":\"" + strDays + "\"}";
+                                SMSHelper.SendMsgByTaoBao(user_phone, strContent, "SMS_14237074 ");
 
                                 //优惠券
                                 t_setting reg_coupon_model = OperateContext.EFBLLSession.t_settingBLL.GetModelBy(s => s.set_key == "reg_coupon");
