@@ -377,6 +377,28 @@ namespace WebApi.Controllers
                 int uc_id = obj.uc_id;
                 string expect_shipping_time = obj.expect_shipping_time;
 
+                //时间点限制
+                //a 普通24点-6点
+                if (cart_type == 0)
+                {
+                    if (DateTime.Now.Hour >= 0 && DateTime.Now.Hour < 6)
+                    //if(DateTime.Now.Hour >= 20)
+                    {
+                        ret.msg = "小宅已休息";
+                        return ret;
+                    }
+                }
+                //b 预购23点-6点
+                if (cart_type == 1)
+                {
+                    if ((DateTime.Now.Hour >= 0 && DateTime.Now.Hour < 6) || DateTime.Now.Hour == 23)
+                    //if (DateTime.Now.Hour >= 20)
+                    {
+                        ret.msg = "小宅已休息";
+                        return ret;
+                    }
+                }
+
                 if (APIHelper.IsLogin(token))
                 {
                     t_user_address address = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.address_id == address_id);
@@ -615,6 +637,29 @@ namespace WebApi.Controllers
                 int address_id = obj.address_id;
                 int uc_id = obj.uc_id;
                 string expect_shipping_time = obj.expect_shipping_time;
+
+
+                //时间点限制
+                //a 普通24点-6点
+                if (order_type == 0)
+                {
+                    if (DateTime.Now.Hour >= 0 && DateTime.Now.Hour < 6)
+                    //if (DateTime.Now.Hour >= 20)
+                    {
+                        ret.msg = "小宅已休息";
+                        return ret;
+                    }
+                }
+                //b 预购23点-6点
+                if (order_type == 1)
+                {
+                    if ((DateTime.Now.Hour >= 0 && DateTime.Now.Hour < 6) || DateTime.Now.Hour == 23)
+                    //if (DateTime.Now.Hour >= 20)
+                    {
+                        ret.msg = "小宅已休息";
+                        return ret;
+                    }
+                }
 
 
                 if (APIHelper.IsLogin(token))
