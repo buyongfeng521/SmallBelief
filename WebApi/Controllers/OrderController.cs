@@ -399,6 +399,18 @@ namespace WebApi.Controllers
                     }
                 }
 
+                //普通订单地址黑名单限制
+                if (cart_type == 0)
+                {
+                    if (APIHelper.IsBlackAddress(address_id))
+                    {
+                        ret.msg = CommonBasicMsg.VoidDefaultAddress;
+                        return ret;
+                    }
+                }
+
+
+
                 if (APIHelper.IsLogin(token))
                 {
                     t_user_address address = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.address_id == address_id);
@@ -639,6 +651,7 @@ namespace WebApi.Controllers
                 string expect_shipping_time = obj.expect_shipping_time;
 
 
+                #region 时间点限制
                 //时间点限制
                 //a 普通24点-6点
                 if (order_type == 0)
@@ -659,7 +672,21 @@ namespace WebApi.Controllers
                         ret.msg = "小宅已休息";
                         return ret;
                     }
+                } 
+                #endregion
+
+                
+
+                //普通订单地址黑名单限制
+                if (order_type == 0)
+                {
+                    if (APIHelper.IsBlackAddress(address_id))
+                    {
+                        ret.msg = CommonBasicMsg.VoidDefaultAddress;
+                        return ret;
+                    }
                 }
+
 
 
                 if (APIHelper.IsLogin(token))

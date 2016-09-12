@@ -181,6 +181,7 @@ namespace OperationManager.Controllers
                 t_order_info order = OperateContext.EFBLLSession.t_order_infoBLL.GetModelBy(o=>o.order_id == id);
                 if (order != null)
                 {
+                    vm.user_phone = ContentHelper.GetUserPhone((int)order.user_id);
                     vm.order_sn = order.order_sn;
                     vm.order_status_content = ContentHelper.GetOrderStatusMsg(order.order_status,order.pay_status);
                     vm.order_amount = (decimal)order.order_amount;

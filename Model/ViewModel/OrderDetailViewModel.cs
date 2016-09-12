@@ -8,6 +8,7 @@ namespace Model.ViewModel
 {
     public class OrderDetailViewModel
     {
+        public string user_phone { get; set; }
         public string order_sn{get;set;}
         public string order_status_content{get;set;}
         public decimal order_amount{get;set;}

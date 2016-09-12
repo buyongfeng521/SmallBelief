@@ -159,6 +159,28 @@ namespace HelperCommon
             return result;
         }
 
+        /// <summary>
+        /// 是否黑名单
+        /// </summary>
+        /// <param name="address_id">地址ID</param>
+        /// <returns></returns>
+        public static bool IsBlackAddress(int address_id)
+        {
+            bool result = false;
+
+            t_user_address userAddress = OperateContext.EFBLLSession.t_user_addressBLL.GetModelBy(a => a.address_id == address_id);
+            if (userAddress != null)
+            {
+                string floor = ContentHelper.GetFloorByRoom(userAddress.room_num);
+                if (OperateContext.EFBLLSession.t_shipping_blacklistBLL.GetCountBy(s => s.area == userAddress.area && s.building == userAddress.building && s.floor == floor) > 0)
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
 
 
         public static int OrderGoodsCount(int goods_id = 0)

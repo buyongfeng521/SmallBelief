@@ -194,6 +194,23 @@ namespace HelperCommon
             return result;
         }
 
+        /// <summary>
+        /// 获得用户手机号码
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        public static string GetUserPhone(int user_id)
+        {
+            string result = "";
+
+            t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u=>u.ID == user_id);
+            if (user != null)
+            {
+                result = user.user_phone;
+            }
+
+            return result;
+        }
 
 
 
