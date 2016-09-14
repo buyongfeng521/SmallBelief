@@ -42,7 +42,7 @@ namespace OperationManager.Controllers
         public ActionResult OrderList(int? index = 1, string keywords = "",int ddlOrderStatus = 0,int ddlOrderType = 0)
         {
             //1.0 where
-            Expression<Func<t_order_info, bool>> where = o => (o.consignee.Contains(keywords) || o.order_sn.Contains(keywords));
+            Expression<Func<t_order_info, bool>> where = o => (o.consignee.Contains(keywords) || o.order_sn.Contains(keywords)) && o.pay_status != 0;
             //a OrderType
             if (ddlOrderType == (int)Enums.OrderTypePlus.普通订单)
             {

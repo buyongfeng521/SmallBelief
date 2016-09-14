@@ -298,9 +298,10 @@ namespace OperationManager.Controllers
 
 
         [HttpGet]
-        public ActionResult Blacklist()
+        public ActionResult Blacklist(string s_area = "", string s_building = "", string s_floor = "")
         {
-            List<t_shipping_blacklist> shipping = OperateContext.EFBLLSession.t_shipping_blacklistBLL.GetListBy(s=>s.sb_id > 0);
+            List<t_shipping_blacklist> shipping = OperateContext.EFBLLSession.t_shipping_blacklistBLL.GetListBy(s => s.area.Contains(s_area) && s.building.Contains(s_building) && s.floor.Contains(s_floor));
+
 
             //List<t_room> listRoom = OperateContext.EFBLLSession.t_roomBLL.GetListBy();
 
@@ -321,7 +322,9 @@ namespace OperationManager.Controllers
             ViewBag.SelBuilding = selBuilding;
             ViewBag.SelFloor = selFloor;
 
-
+            ViewBag.s_area = s_area;
+            ViewBag.s_building = s_building;
+            ViewBag.s_floor = s_floor;
             return View(shipping);
         }
 

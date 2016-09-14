@@ -18,7 +18,9 @@
         {
             <div class="form-group">
                 <label class="sr-only">keywords</label>
-                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" maxlength="20">
+                <input type="text" class="form-control" id="s_area" name="s_area" placeholder="区域" maxlength="20" value="@ViewBag.s_area">
+                <input type="text" class="form-control" id="s_building" name="s_building" placeholder="楼号" maxlength="20" value="@ViewBag.s_building">
+                <input type="text" class="form-control" id="s_floor" name="s_floor" placeholder="楼层" maxlength="20" value="@ViewBag.s_floor">
             </div>
             <button class="btn btn-default">搜索</button>
 
