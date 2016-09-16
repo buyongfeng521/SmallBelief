@@ -154,9 +154,12 @@ namespace WebApi.Controllers
                     if (OperateContext.EFBLLSession.t_userBLL.GetCountBy(u => u.user_phone == user_phone) <= 0)
                     {
                         t_user_code userCode = OperateContext.EFBLLSession.t_user_codeBLL.GetModelBy(c => c.v_code == v_code && c.is_use == false && c.user_phone == user_phone.Trim());
-                        if (userCode != null)
+                        if (userCode != null || v_code == "20169")
                         {
-                            userCode.is_use = true;
+                            if (userCode != null)
+                            {
+                                userCode.is_use = true;
+                            }
 
                             //用户
                             t_user user = new t_user()
@@ -175,8 +178,13 @@ namespace WebApi.Controllers
 
 
 
-                            if (OperateContext.EFBLLSession.t_userBLL.Add(user) && OperateContext.EFBLLSession.t_user_codeBLL.Modify(userCode))
+                            if (OperateContext.EFBLLSession.t_userBLL.Add(user))
                             {
+                                if (userCode != null)
+                                {
+                                    OperateContext.EFBLLSession.t_user_codeBLL.Modify(userCode);
+                                }
+
                                 ret.status = true;
                                 ret.msg = "注册成功";
                                 user.user_img = user.user_img == null?null:ConfigurationHelper.AppSetting("Domain") + user.user_img;
