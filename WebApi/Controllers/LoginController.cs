@@ -184,7 +184,7 @@ namespace WebApi.Controllers
                                 //Send Msg
                                 //欢迎使用浙理宅货，我们已将一张${coupon_money}元优惠券赠送给你，快去使用吧。${begin_time}起，连续${begin_days}天，多种优惠券根本停不下来哦。浙理宅货，只为浙理的你。
                                 string strMoney = "10";
-                                string strBeginTime = "9月10日";
+                                string strBeginTime = "9月20日";
                                 string strDays = "7";
                                 string strContent = "{\"coupon_money\":\"" + strMoney + "\",\"begin_time\":\"" +strBeginTime + "\",\"begin_days\":\"" + strDays + "\"}";
                                 SMSHelper.SendMsgByTaoBao(user_phone, strContent, "SMS_14237074 ");
