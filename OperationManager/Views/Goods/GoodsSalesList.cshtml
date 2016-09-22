@@ -1,0 +1,206 @@
+﻿
+@{
+    ViewBag.Title = "促销商品列表";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<!--head-->
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">促销商品列表</h3>
+    </div>
+</div>
+<!--content-->
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("GoodsSalesList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
+        {
+            <div class="form-group">
+                <label class="sr-only">keywords</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">
+            </div>
+            <button class="btn btn-default">搜索</button>
+
+            <a href="javascript:" class="btn btn-info pull-right" onclick="add()">增加促销商品</a>
+        }
+        <hr />
+        <div class="dataTable_wrapper">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>编号</th>
+                    <th>商品名称</th>
+                    <th>是否热销</th>
+                    <th>是否明星</th>
+                    <th>是否新品</th>
+                    <th>推荐排序</th>
+                    <th>操作</th>
+                </tr>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.t_goods.goods_name</td>
+                            <td>
+                                @if (item.t_goods.is_hot == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (item.t_goods.is_best == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (item.t_goods.is_new == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>@item.sort</td>
+                            <td>
+                                <a href="javascript:" onclick="del(@item.rg_id)">删除</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<!--ReGoods-->
+<div class="modal fade" id="modalReGoods">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="frmReGoods">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">商品：</label>
+                        <div class="col-sm-10">
+                            <div class="form-inline">
+                                <div id="divClickGoods" style="display:inline-block">
+                                    @Html.Hidden("clickGoods")
+                                    <a class="btn btn-success" href="javascript:void(0);" onclick="show('1')">选择</a>
+                                    <label id="lbClickGoods">
+                                        @HelperCommon.ContentHelper.GetGoodsName(0)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">排序：</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="sort" name="sort" placeholder="排序" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="save()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--GoodsSelect-->
+<div class="modal fade" id="modalGoods" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">商品选择 (双击选定商品)</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-inline">
+                                <div class="row">
+                                    @Html.Hidden("hideGoodsType")
+                                    <div class="col-md-3 col-sm-3">
+                                        @Html.DropDownList("ddlType2", ViewBag.ListAllType as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <input type="text" id="keywords2" name="keywords2" class="form-control" value="" placeholder="关键字">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <button type="button" class="btn btn-default" onclick="SearchGoods2()">搜索</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <select multiple style="height:400px" class="form-control" id="selSource2"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/Common/GoodsCommon2.js"></script>
+<script src="~/Scripts/Common/GoodsSelector.js"></script>
+<script>
+    function add() {
+        $("#modalReGoods").modal("show");
+    }
+
+    function save() {
+        var url = "/Goods/GoodsSalesAdd";
+        $.post(url, $("#frmReGoods").serialize(), function (data) {
+            $.procAjaxData(data, function () {
+                location.href = window.location.href;
+            })
+        });
+    }
+
+
+    function del(id) {
+        if (confirm("确定删除？")) {
+            var url = "/Goods/GoodsSalesDelete";
+            $.post(url, { "id": id }, function (data) {
+                $.procAjaxData(data, function () {
+                    location.href = window.location.href;
+                })
+            });
+        }
+    }
+
+
+</script>
+

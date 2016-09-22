@@ -231,6 +231,14 @@
           <Property Name="room_num" Type="nvarchar" MaxLength="20" />
           <Property Name="note" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="t_sales_goods">
+          <Key>
+            <PropertyRef Name="sg_id" />
+          </Key>
+          <Property Name="sg_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="goods_id" Type="int" />
+          <Property Name="sort" Type="int" />
+        </EntityType>
         <EntityType Name="t_setting">
           <Key>
             <PropertyRef Name="id" />
@@ -401,6 +409,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_t_sales_goods_t_goods">
+          <End Role="t_goods" Type="Self.t_goods" Multiplicity="0..1" />
+          <End Role="t_sales_goods" Type="Self.t_sales_goods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_goods">
+              <PropertyRef Name="goods_id" />
+            </Principal>
+            <Dependent Role="t_sales_goods">
+              <PropertyRef Name="goods_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="SmallBeliefModelStoreContainer">
           <EntitySet Name="t_ad" EntityType="Self.t_ad" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_admin_user" EntityType="Self.t_admin_user" Schema="dbo" store:Type="Tables" />
@@ -420,6 +440,7 @@
           <EntitySet Name="t_psw_code" EntityType="Self.t_psw_code" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_recommend_goods" EntityType="Self.t_recommend_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_room" EntityType="Self.t_room" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_sales_goods" EntityType="Self.t_sales_goods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_setting" EntityType="Self.t_setting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_shipping_blacklist" EntityType="Self.t_shipping_blacklist" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_user" EntityType="Self.t_user" Schema="dbo" store:Type="Tables" />
@@ -455,6 +476,10 @@
             <End Role="t_goods" EntitySet="t_goods" />
             <End Role="t_recommend_goods" EntitySet="t_recommend_goods" />
           </AssociationSet>
+          <AssociationSet Name="FK_t_sales_goods_t_goods" Association="Self.FK_t_sales_goods_t_goods">
+            <End Role="t_goods" EntitySet="t_goods" />
+            <End Role="t_sales_goods" EntitySet="t_sales_goods" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -479,6 +504,7 @@
           <EntitySet Name="t_psw_code" EntityType="SmallBeliefModel.t_psw_code" />
           <EntitySet Name="t_recommend_goods" EntityType="SmallBeliefModel.t_recommend_goods" />
           <EntitySet Name="t_room" EntityType="SmallBeliefModel.t_room" />
+          <EntitySet Name="t_sales_goods" EntityType="SmallBeliefModel.t_sales_goods" />
           <EntitySet Name="t_setting" EntityType="SmallBeliefModel.t_setting" />
           <EntitySet Name="t_shipping_blacklist" EntityType="SmallBeliefModel.t_shipping_blacklist" />
           <EntitySet Name="t_user" EntityType="SmallBeliefModel.t_user" />
@@ -509,6 +535,10 @@
           <AssociationSet Name="FK_t_recommend_goods_t_goods" Association="SmallBeliefModel.FK_t_recommend_goods_t_goods">
             <End Role="t_goods" EntitySet="t_goods" />
             <End Role="t_recommend_goods" EntitySet="t_recommend_goods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_sales_goods_t_goods" Association="SmallBeliefModel.FK_t_sales_goods_t_goods">
+            <End Role="t_goods" EntitySet="t_goods" />
+            <End Role="t_sales_goods" EntitySet="t_sales_goods" />
           </AssociationSet>
           <AssociationSet Name="FK_t_order_goods_t_order_info" Association="SmallBeliefModel.FK_t_order_goods_t_order_info">
             <End Role="t_order_info" EntitySet="t_order_info" />
@@ -660,6 +690,7 @@
           <NavigationProperty Name="t_category" Relationship="SmallBeliefModel.FK_t_goods_t_category" FromRole="t_goods" ToRole="t_category" />
           <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
           <NavigationProperty Name="t_recommend_goods" Relationship="SmallBeliefModel.FK_t_recommend_goods_t_goods" FromRole="t_goods" ToRole="t_recommend_goods" />
+          <NavigationProperty Name="t_sales_goods" Relationship="SmallBeliefModel.FK_t_sales_goods_t_goods" FromRole="t_goods" ToRole="t_sales_goods" />
         </EntityType>
         <EntityType Name="t_goods_gallery">
           <Key>
@@ -752,6 +783,15 @@
           <Property Name="floor" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="room_num" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="t_sales_goods">
+          <Key>
+            <PropertyRef Name="sg_id" />
+          </Key>
+          <Property Name="sg_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="goods_id" Type="Int32" />
+          <Property Name="sort" Type="Int32" />
+          <NavigationProperty Name="t_goods" Relationship="SmallBeliefModel.FK_t_sales_goods_t_goods" FromRole="t_sales_goods" ToRole="t_goods" />
         </EntityType>
         <EntityType Name="t_setting">
           <Key>
@@ -909,6 +949,18 @@
               <PropertyRef Name="goods_id" />
             </Principal>
             <Dependent Role="t_recommend_goods">
+              <PropertyRef Name="goods_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_sales_goods_t_goods">
+          <End Type="SmallBeliefModel.t_goods" Role="t_goods" Multiplicity="0..1" />
+          <End Type="SmallBeliefModel.t_sales_goods" Role="t_sales_goods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_goods">
+              <PropertyRef Name="goods_id" />
+            </Principal>
+            <Dependent Role="t_sales_goods">
               <PropertyRef Name="goods_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -1172,6 +1224,15 @@
                 <ScalarProperty Name="building" ColumnName="building" />
                 <ScalarProperty Name="area" ColumnName="area" />
                 <ScalarProperty Name="room_id" ColumnName="room_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_sales_goods">
+            <EntityTypeMapping TypeName="SmallBeliefModel.t_sales_goods">
+              <MappingFragment StoreEntitySet="t_sales_goods">
+                <ScalarProperty Name="sort" ColumnName="sort" />
+                <ScalarProperty Name="goods_id" ColumnName="goods_id" />
+                <ScalarProperty Name="sg_id" ColumnName="sg_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

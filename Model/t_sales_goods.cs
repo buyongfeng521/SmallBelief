@@ -15,10 +15,10 @@ namespace Model
 using System;
     using System.Collections.Generic;
     
-public partial class t_recommend_goods
+public partial class t_sales_goods
 {
 
-    public int rg_id { get; set; }
+    public int sg_id { get; set; }
 
     public Nullable<int> goods_id { get; set; }
 

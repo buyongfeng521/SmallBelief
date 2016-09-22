@@ -111,6 +111,7 @@ namespace OperationManager.Controllers
             return View(mPage);
         }
 
+        #region 推荐商品
         [HttpGet]
         public ActionResult GoodsRecommendList(string keywords = "")
         {
@@ -145,7 +146,7 @@ namespace OperationManager.Controllers
                 return Json(ajax);
             }
             //2.0 do
-            t_recommend_goods addModel = new t_recommend_goods() 
+            t_recommend_goods addModel = new t_recommend_goods()
             {
                 goods_id = iGoodsID,
                 sort = sort
@@ -179,8 +180,84 @@ namespace OperationManager.Controllers
             }
 
 
-            return Json(ajax) ;
+            return Json(ajax);
+        } 
+        #endregion
+
+
+
+        #region Sales Goods
+        [HttpGet]
+        public ActionResult GoodsSalesList(string keywords = "")
+        {
+            List<t_sales_goods> listReGoods = OperateContext.EFBLLSession.t_sales_goodsBLL.GetListBy(g => g.t_goods.goods_name.Contains(keywords), g => g.sort);
+
+            ViewBag.ListAllType = SelectHelper.GetCategoryPlusSelList();
+
+            return View(listReGoods);
         }
+
+        [HttpPost]
+        public ActionResult GoodsSalesAdd(string clickGoods = "", int sort = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+
+            //1.0 check
+            if (string.IsNullOrEmpty(clickGoods))
+            {
+                ajax.Msg = "商品不能为空";
+                return Json(ajax);
+            }
+            int iGoodsID = 0;
+            int.TryParse(clickGoods, out iGoodsID);
+            if (OperateContext.EFBLLSession.t_goodsBLL.GetCountBy(g => g.goods_id == iGoodsID) <= 0)
+            {
+                ajax.Msg = CommonBasicMsg.VoidGoods;
+                return Json(ajax);
+            }
+            if (OperateContext.EFBLLSession.t_sales_goodsBLL.GetCountBy(g => g.goods_id == iGoodsID) > 0)
+            {
+                ajax.Msg = "此推荐商品已存在";
+                return Json(ajax);
+            }
+            //2.0 do
+            t_sales_goods addModel = new t_sales_goods()
+            {
+                goods_id = iGoodsID,
+                sort = sort
+            };
+            if (OperateContext.EFBLLSession.t_sales_goodsBLL.Add(addModel))
+            {
+                ajax.Msg = CommonBasicMsg.AddSuc;
+                ajax.Status = "ok";
+            }
+            else
+            {
+                ajax.Msg = CommonBasicMsg.AddFail;
+            }
+
+            return Json(ajax);
+        }
+
+        [HttpPost]
+        public ActionResult GoodsSalesDelete(int id = 0)
+        {
+            AjaxMsg ajax = new AjaxMsg();
+            ajax.Msg = CommonBasicMsg.DelFail;
+
+            if (id > 0)
+            {
+                if (OperateContext.EFBLLSession.t_sales_goodsBLL.DeleteBy(r => r.sg_id == id))
+                {
+                    ajax.Msg = CommonBasicMsg.DelSuc;
+                    ajax.Status = "ok";
+                }
+            }
+
+
+            return Json(ajax);
+        } 
+        #endregion
 
 
 

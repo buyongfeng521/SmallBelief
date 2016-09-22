@@ -1,6 +1,9 @@
 ﻿
+
+
  
  
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +14,7 @@ namespace EFBLL
     public class EFBLLSession
     {
         
+
         private t_adBLL t_adbll;
         public t_adBLL t_adBLL
         {
@@ -26,6 +30,7 @@ namespace EFBLL
         }
 
         
+
         private t_admin_userBLL t_admin_userbll;
         public t_admin_userBLL t_admin_userBLL
         {
@@ -41,6 +46,7 @@ namespace EFBLL
         }
 
         
+
         private t_areaBLL t_areabll;
         public t_areaBLL t_areaBLL
         {
@@ -56,6 +62,7 @@ namespace EFBLL
         }
 
         
+
         private t_bannerBLL t_bannerbll;
         public t_bannerBLL t_bannerBLL
         {
@@ -71,6 +78,7 @@ namespace EFBLL
         }
 
         
+
         private t_cartBLL t_cartbll;
         public t_cartBLL t_cartBLL
         {
@@ -86,6 +94,7 @@ namespace EFBLL
         }
 
         
+
         private t_categoryBLL t_categorybll;
         public t_categoryBLL t_categoryBLL
         {
@@ -101,6 +110,7 @@ namespace EFBLL
         }
 
         
+
         private t_category_typeBLL t_category_typebll;
         public t_category_typeBLL t_category_typeBLL
         {
@@ -116,6 +126,7 @@ namespace EFBLL
         }
 
         
+
         private t_cityBLL t_citybll;
         public t_cityBLL t_cityBLL
         {
@@ -131,6 +142,7 @@ namespace EFBLL
         }
 
         
+
         private t_commentBLL t_commentbll;
         public t_commentBLL t_commentBLL
         {
@@ -146,6 +158,7 @@ namespace EFBLL
         }
 
         
+
         private t_couponBLL t_couponbll;
         public t_couponBLL t_couponBLL
         {
@@ -161,6 +174,7 @@ namespace EFBLL
         }
 
         
+
         private t_goodsBLL t_goodsbll;
         public t_goodsBLL t_goodsBLL
         {
@@ -176,6 +190,7 @@ namespace EFBLL
         }
 
         
+
         private t_goods_galleryBLL t_goods_gallerybll;
         public t_goods_galleryBLL t_goods_galleryBLL
         {
@@ -191,6 +206,7 @@ namespace EFBLL
         }
 
         
+
         private t_order_goodsBLL t_order_goodsbll;
         public t_order_goodsBLL t_order_goodsBLL
         {
@@ -206,6 +222,7 @@ namespace EFBLL
         }
 
         
+
         private t_order_infoBLL t_order_infobll;
         public t_order_infoBLL t_order_infoBLL
         {
@@ -221,6 +238,7 @@ namespace EFBLL
         }
 
         
+
         private t_provinceBLL t_provincebll;
         public t_provinceBLL t_provinceBLL
         {
@@ -236,6 +254,7 @@ namespace EFBLL
         }
 
         
+
         private t_psw_codeBLL t_psw_codebll;
         public t_psw_codeBLL t_psw_codeBLL
         {
@@ -251,6 +270,7 @@ namespace EFBLL
         }
 
         
+
         private t_recommend_goodsBLL t_recommend_goodsbll;
         public t_recommend_goodsBLL t_recommend_goodsBLL
         {
@@ -266,6 +286,7 @@ namespace EFBLL
         }
 
         
+
         private t_roomBLL t_roombll;
         public t_roomBLL t_roomBLL
         {
@@ -281,6 +302,23 @@ namespace EFBLL
         }
 
         
+
+        private t_sales_goodsBLL t_sales_goodsbll;
+        public t_sales_goodsBLL t_sales_goodsBLL
+        {
+	        get
+	        {
+		        if(t_sales_goodsbll == null)
+		        {
+			        t_sales_goodsbll = new t_sales_goodsBLL();
+		        }
+		        return t_sales_goodsbll;
+	        }
+	        set{}
+        }
+
+        
+
         private t_settingBLL t_settingbll;
         public t_settingBLL t_settingBLL
         {
@@ -296,6 +334,7 @@ namespace EFBLL
         }
 
         
+
         private t_shipping_blacklistBLL t_shipping_blacklistbll;
         public t_shipping_blacklistBLL t_shipping_blacklistBLL
         {
@@ -311,6 +350,7 @@ namespace EFBLL
         }
 
         
+
         private t_userBLL t_userbll;
         public t_userBLL t_userBLL
         {
@@ -326,6 +366,7 @@ namespace EFBLL
         }
 
         
+
         private t_user_addressBLL t_user_addressbll;
         public t_user_addressBLL t_user_addressBLL
         {
@@ -341,6 +382,7 @@ namespace EFBLL
         }
 
         
+
         private t_user_codeBLL t_user_codebll;
         public t_user_codeBLL t_user_codeBLL
         {
@@ -356,6 +398,7 @@ namespace EFBLL
         }
 
         
+
         private t_user_couponBLL t_user_couponbll;
         public t_user_couponBLL t_user_couponBLL
         {
@@ -371,6 +414,7 @@ namespace EFBLL
         }
 
         
+
         private t_wechat_sellerBLL t_wechat_sellerbll;
         public t_wechat_sellerBLL t_wechat_sellerBLL
         {
@@ -386,6 +430,7 @@ namespace EFBLL
         }
 
         
+
     }
 
 }
