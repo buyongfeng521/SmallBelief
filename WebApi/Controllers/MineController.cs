@@ -568,6 +568,12 @@ namespace WebApi.Controllers
 
             try
             {
+                ////ios传递
+                //if (type == null)
+                //{
+                //    type = 0;
+                //}
+
                 if (APIHelper.IsLogin(token))
                 {
                     t_user user = OperateContext.EFBLLSession.t_userBLL.GetModelBy(u => u.token == token.Trim());
