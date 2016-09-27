@@ -88,18 +88,21 @@ namespace WebApi.Controllers
             return ret;
         }
 
+
+
+
         /// <summary>
-        /// 获得明星商品
+        /// 获得促销商品
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public RetInfo<List<GoodsDTO>> GoodsBestListGet()
+        public RetInfo<List<GoodsDTO>> GoodsActivityListGet()
         {
             RetInfo<List<GoodsDTO>> ret = new RetInfo<List<GoodsDTO>>();
 
             try
             {
-                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(g => g.is_del == false && g.is_best == true, g => g.sort);
+                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(g => g.is_del == false && g.is_activity == true, g => g.sort);
                 if (listGoods.Count > 0)
                 {
                     List<GoodsDTO> listGoodsDTO = DTOHelper.MapList<GoodsDTO>(listGoods);
@@ -121,6 +124,9 @@ namespace WebApi.Controllers
 
             return ret;
         }
+
+
+
 
         /// <summary>
         /// 获得促销秒杀商品

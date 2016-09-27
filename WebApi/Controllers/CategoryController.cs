@@ -97,7 +97,7 @@ namespace WebApi.Controllers
 
             try
             {
-                List<t_category_type> listCatType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0, c => c.cat_type_id);
+                List<t_category_type> listCatType = OperateContext.EFBLLSession.t_category_typeBLL.GetListBy(c => c.cat_type_id >= 0 && c.type_name != "首页促销", c => c.cat_type_id);
 
                 ret.Data = DTOHelper.Map<List<CatTypeDTO>>(listCatType);
                 ret.status = true;

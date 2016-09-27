@@ -240,6 +240,7 @@
     <Content Include="Views\Goods\GoodsRecommendList.cshtml" />
     <Content Include="Views\Order\OrderStatistics.cshtml" />
     <Content Include="Views\Goods\GoodsSalesList.cshtml" />
+    <Content Include="Views\Goods\GoodsActivityList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,172 @@
+﻿@using Webdiyer.WebControls.Mvc;
+@model PagedList<Model.t_goods>
+@{
+    ViewBag.Title = "促销秒杀商品";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<!--head-->
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">促销秒杀商品</h3>
+    </div>
+</div>
+<!--content-->
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("GoodsActivityList", "Goods", FormMethod.Get, new { @class = "form-inline" }))
+        {
+            <div class="form-group">
+                <label class="sr-only">keywords</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" placeholder="关键字" value="@ViewBag.Keywords" maxlength="20">
+            </div>
+            <button class="btn btn-default">搜索</button>
+
+            <a href="/Goods/GoodsAdd" class="btn btn-info pull-right">增加商品</a>
+        }
+        <hr />
+        <div class="dataTable_wrapper">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>编号</th>
+                    <th>商品名称</th>
+                    <th>是否热销</th>
+                    <th>是否明星</th>
+                    <th>是否新品</th>
+                    <th>是否促销</th>
+                    <th>库存</th>
+                    <th>锁定库存</th>
+                    <th>是否上架</th>
+                    <th>操作</th>
+                </tr>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.goods_name</td>
+                            <td>
+                                @if (item.is_hot == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (item.is_best == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (item.is_new == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (item.is_activity == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>@item.goods_number</td>
+                            <td>@item.goods_lock_number</td>
+                            <td>
+                                @if (item.is_on_sale == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                }
+                            </td>
+                            <td>
+                                <a href="/Goods/GoodsAdd?goods_id=@item.goods_id">修改</a>
+                                &nbsp;&nbsp;
+                                @if (item.is_on_sale == true)
+                                {
+                                    <a href="javascript:" class="text-danger" onclick="down(@item.goods_id)">下架</a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:" class="text-success" onclick="up(@item.goods_id)">上架</a>
+                                }
+                                &nbsp;&nbsp;
+                                <a href="javascript:" onclick="del(@item.goods_id)">删除</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <div class="text-center">
+                <nav>
+                    @Html.Pager(Model, new PagerOptions
+                    {
+                        PageIndexParameterName = "index",
+                        ContainerTagName = "ul",
+                        CssClass = "pagination",
+
+                        CurrentPagerItemWrapperFormatString = "<li class=\"active\"><a href=\"javascript:form.submit();\">{0}</a></li>",
+                        PagerItemWrapperFormatString = "<li>{0}</li>",
+                        Id = "bootstrappager"
+                    })
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function del(id) {
+        if (confirm("确定删除？")) {
+            var url = "/Goods/GoodsDelete";
+            $.post(url, { "id": id }, function (data) {
+                $.procAjaxData(data, function () {
+                    location.href = window.location.href;
+                })
+            });
+        }
+    }
+
+    function up(id){
+        if(confirm("确定上架？")){
+            var url = "/Goods/GoodsUp";
+            $.post(url,{"id":id},function(data){
+                $.procAjaxData(data,function(){
+                    location.href = window.location.href;
+                })
+            })
+        }
+    }
+
+    function down(id){
+        if(confirm("确定下架？")){
+            var url = "/Goods/GoodsDown";
+            $.post(url,{"id":id},function(data){
+                $.procAjaxData(data,function(){
+                    location.href = window.location.href;
+                })
+            })
+        }
+    }
+
+</script>
