@@ -72,6 +72,7 @@
     <Compile Include="DTOModel\OrderInfoDTO.cs" />
     <Compile Include="DTOModel\UserAddressDTO.cs" />
     <Compile Include="DTOModel\UserDTO.cs" />
+    <Compile Include="DTOModel\VersionDTO.cs" />
     <Compile Include="DTOModel\WechatSellerDTO.cs" />
     <Compile Include="FormatModel\AjaxMsg.cs" />
     <Compile Include="FormatModel\RetInfo.cs" />
