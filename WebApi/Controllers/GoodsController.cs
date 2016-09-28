@@ -125,7 +125,39 @@ namespace WebApi.Controllers
             return ret;
         }
 
+        /// <summary>
+        /// 获得精品商品
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public RetInfo<List<GoodsDTO>> GoodsBestListGet()
+        {
+            RetInfo<List<GoodsDTO>> ret = new RetInfo<List<GoodsDTO>>();
 
+            try
+            {
+                List<t_goods> listGoods = OperateContext.EFBLLSession.t_goodsBLL.GetListBy(g => g.is_del == false && g.is_best == true, g => g.sort);
+                if (listGoods.Count > 0)
+                {
+                    List<GoodsDTO> listGoodsDTO = DTOHelper.MapList<GoodsDTO>(listGoods);
+
+                    ret.Data = listGoodsDTO;
+                    ret.recordCount = listGoodsDTO.Count;
+                    ret.msg = Message.Suc;
+                }
+                else
+                {
+                    ret.msg = Message.NullData;
+                }
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.msg = ex.ToString();
+            }
+
+            return ret;
+        }
 
 
         /// <summary>
