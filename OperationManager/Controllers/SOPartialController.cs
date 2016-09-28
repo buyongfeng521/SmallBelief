@@ -30,7 +30,7 @@ namespace OperationManager.Controllers
         {
             //add
             //a 分类
-            ViewBag.ListCat = SelectHelper.GetCategorySelList();
+            ViewBag.ListCat = SelectHelper.GetCategoryTypeSelList();
             ViewBag.ListAllType = SelectHelper.GetCategoryPlusSelList();
             //b 点击类型
             ViewBag.ListClickType = SelectHelper.GetEnumSelectListItem(Enums.ClickType.不可点击);
@@ -46,7 +46,7 @@ namespace OperationManager.Controllers
                 //a 分类
                 if (iType == (int)Enums.ClickType.分类)
                 {
-                    ViewBag.ListCat = SelectHelper.GetCategorySelListBy(clickValue);
+                    ViewBag.ListCat = SelectHelper.GetCategoryTypeSelList(clickValue);
                 }
                 //b 点击类型
                 ViewBag.ListClickType = SelectHelper.GetEnumSelectListItem(Enums.ClickType.不可点击, iType.ToString());
