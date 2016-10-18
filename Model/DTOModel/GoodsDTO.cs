@@ -14,6 +14,7 @@ namespace Model.DTOModel
         public string goods_name { get; set; }
         public decimal goods_price { get; set; }
         public int goods_number { get; set; }
+        public int goods_number_virtual { get; set; }
         //public int goods_lock_number { get; set; }
         public string goods_unit { get; set; }
         public string goods_img { get; set; }

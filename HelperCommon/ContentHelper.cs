@@ -10,6 +10,19 @@ namespace HelperCommon
 {
     public class ContentHelper
     {
+
+        public static int GetGoodsNumberVirtual()
+        {
+            int result = 1;
+            string strMultiple = ConfigurationHelper.AppSetting("GoodsNumberMultiple");
+            int iMultiple = 1;
+            if (int.TryParse(strMultiple, out iMultiple))
+            {
+                result = iMultiple;
+            }
+            return result;
+        }
+
         /// <summary>
         /// 获得产品名称 根据ID
         /// </summary>

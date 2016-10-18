@@ -79,12 +79,12 @@ namespace HelperCommon
                         }
                     });
                     //发送短信
-                    string strBegin_time = "9月20日";
-                    string strContent = "{\"begin_time\":\"" + strBegin_time + "\",\"begin_days\":\"7\"}";
-                    if (SMSHelper.SendMsgByTaoBao(order.mobile, strContent, "SMS_14276243"))
-                    { 
+                    //string strBegin_time = "9月20日";
+                    //string strContent = "{\"begin_time\":\"" + strBegin_time + "\",\"begin_days\":\"7\"}";
+                    //if (SMSHelper.SendMsgByTaoBao(order.mobile, strContent, "SMS_14276243"))
+                    //{ 
                         
-                    }
+                    //}
 
                 }
                 
