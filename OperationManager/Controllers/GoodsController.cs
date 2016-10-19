@@ -295,7 +295,7 @@ namespace OperationManager.Controllers
 
                 ViewBag.ListWechat = SelectHelper.GetWechatSellerList();
 
-                return View(new t_goods());
+                return View(new t_goods() { goods_multiple = 1});
             }
             else
             {
@@ -318,7 +318,7 @@ namespace OperationManager.Controllers
         [HttpPost]
         public ActionResult GoodsAdd(int goods_id = 0,string goods_name = "", int cat_id = 0,int we_id = 0, string shop_price = "", string goods_number = "",string goods_unit = "",
             HttpPostedFileBase goods_img = null, string is_on_sale = "", string is_hot = "", string is_best = "", string is_new = "", string is_activity = "", string is_pre_sale = "",
-            int? sort = null, string goods_brief = "", string goods_brief2 = "")
+            int? sort = null, string goods_brief = "", string goods_brief2 = "",int goods_multiple = 1)
         {
             AjaxMsg ajax = new AjaxMsg();
             
@@ -354,6 +354,11 @@ namespace OperationManager.Controllers
             if (iGoods_number < 0)
             {
                 ajax.Msg = "商品库存不能负数";
+                return Json(ajax);
+            }
+            if (goods_multiple < 1)
+            {
+                ajax.Msg = "虚拟库存倍数错误";
                 return Json(ajax);
             }
             
@@ -403,6 +408,7 @@ namespace OperationManager.Controllers
                     editModel.is_activity = is_activity == "true" ? true : false;
                     editModel.goods_brief = goods_brief.Trim();
                     editModel.goods_brief2 = goods_brief2.Trim();
+                    editModel.goods_multiple = goods_multiple;
                     if (OperateContext.EFBLLSession.t_goodsBLL.Modify(editModel))
                     {
                         ajax.Data = editModel.goods_id;
@@ -461,7 +467,8 @@ namespace OperationManager.Controllers
                     goods_desc = "",
                     sort = sort == null?0:sort,
                     is_del = false,
-                    add_time = DateTime.Now
+                    add_time = DateTime.Now,
+                    goods_multiple = goods_multiple
                 };
                 if (OperateContext.EFBLLSession.t_goodsBLL.Add(goodsModel))
                 {

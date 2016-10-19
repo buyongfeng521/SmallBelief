@@ -127,6 +127,7 @@
           <Property Name="goods_name" Type="nvarchar" MaxLength="200" />
           <Property Name="goods_price" Type="decimal" Precision="18" Scale="2" />
           <Property Name="goods_number" Type="int" />
+          <Property Name="goods_multiple" Type="int" />
           <Property Name="goods_lock_number" Type="int" />
           <Property Name="goods_unit" Type="nvarchar" MaxLength="10" />
           <Property Name="goods_img" Type="nvarchar" MaxLength="200" />
@@ -691,6 +692,7 @@
           <NavigationProperty Name="t_goods_gallery" Relationship="SmallBeliefModel.FK_t_goods_gallery_t_goods" FromRole="t_goods" ToRole="t_goods_gallery" />
           <NavigationProperty Name="t_recommend_goods" Relationship="SmallBeliefModel.FK_t_recommend_goods_t_goods" FromRole="t_goods" ToRole="t_recommend_goods" />
           <NavigationProperty Name="t_sales_goods" Relationship="SmallBeliefModel.FK_t_sales_goods_t_goods" FromRole="t_goods" ToRole="t_sales_goods" />
+          <Property Name="goods_multiple" Type="Int32" />
         </EntityType>
         <EntityType Name="t_goods_gallery">
           <Key>
@@ -1108,6 +1110,7 @@
           <EntitySetMapping Name="t_goods">
             <EntityTypeMapping TypeName="SmallBeliefModel.t_goods">
               <MappingFragment StoreEntitySet="t_goods">
+                <ScalarProperty Name="goods_multiple" ColumnName="goods_multiple" />
                 <ScalarProperty Name="add_time" ColumnName="add_time" />
                 <ScalarProperty Name="is_del" ColumnName="is_del" />
                 <ScalarProperty Name="is_on_sale" ColumnName="is_on_sale" />
