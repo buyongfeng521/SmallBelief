@@ -466,18 +466,21 @@ namespace WebApi.Controllers
                                     {
                                         if (data.t_goods.is_on_sale == true)
                                         {
-                                            if ((data.t_goods.goods_number - data.t_goods.goods_lock_number) > 0)
+                                            if (data.goods_number > 0)
                                             {
-                                                t_order_goods orderGoods = new t_order_goods()
+                                                if ((data.t_goods.goods_number - data.t_goods.goods_lock_number) > 0)
                                                 {
-                                                    //order_id = order.order_id,
-                                                    goods_id = data.goods_id,
-                                                    goods_name = data.t_goods.goods_name,
-                                                    goods_number = (data.t_goods.goods_number - data.t_goods.goods_lock_number) > data.goods_number ? data.goods_number : (data.t_goods.goods_number - data.t_goods.goods_lock_number),
-                                                    market_price = data.market_price,
-                                                    goods_price = data.goods_price
-                                                };
-                                                listOrderGoods.Add(orderGoods);
+                                                    t_order_goods orderGoods = new t_order_goods()
+                                                    {
+                                                        //order_id = order.order_id,
+                                                        goods_id = data.goods_id,
+                                                        goods_name = data.t_goods.goods_name,
+                                                        goods_number = (data.t_goods.goods_number - data.t_goods.goods_lock_number) > data.goods_number ? data.goods_number : (data.t_goods.goods_number - data.t_goods.goods_lock_number),
+                                                        market_price = data.market_price,
+                                                        goods_price = data.goods_price
+                                                    };
+                                                    listOrderGoods.Add(orderGoods);
+                                                }
                                             }
                                         }
                                     });
@@ -696,6 +699,13 @@ namespace WebApi.Controllers
                             ret.msg = CommonBasicMsg.VoidDefaultAddress;
                             return ret;
                         }
+                    }
+
+                    //数量检测
+                    if (number <= 0)
+                    {
+                        ret.msg = "数量不能为0";
+                        return ret;
                     }
 
 
